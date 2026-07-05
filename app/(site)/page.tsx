@@ -1,6 +1,6 @@
 import { Hero } from "@/components/home/Hero";
 import { Stats } from "@/components/home/Stats";
-import { Benefits } from "@/components/home/Benefits";
+import { MembershipBenefits } from "@/components/common/MembershipBenefits";
 import { JoinCta } from "@/components/home/JoinCta";
 import { Testimonials } from "@/components/home/Testimonials";
 import { NewsSection } from "@/components/home/NewsSection";
@@ -22,7 +22,7 @@ export default async function HomePage() {
     <>
       <Hero />
       <Stats stats={stats} />
-      <Benefits />
+      <MembershipBenefits />
       <JoinCta />
       <Testimonials testimonials={testimonials} />
       <NewsSection news={news} />

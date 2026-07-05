@@ -28,7 +28,12 @@ export function CinematicLoader() {
     const logo = logoRef.current;
     if (!container || !canvas || !logo) return;
 
+    const shownAt = Date.now();
     const finish = () => {
+      if (Date.now() - shownAt < 2500) {
+        setTimeout(finish, 2500 - (Date.now() - shownAt));
+        return;
+      }
       sessionStorage.setItem(SESSION_KEY, "1");
       gsap.to(container, {
         opacity: 0,

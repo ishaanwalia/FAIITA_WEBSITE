@@ -11,7 +11,7 @@ export function JoinCta() {
           For State IT Associations
         </span>
         <h2 className="max-w-2xl text-balance font-display text-3xl font-bold tracking-tight text-navy-900 sm:text-4xl">
-          Bring your state association into India&apos;s largest IT trade network
+          Bring your state association into India&apos;s largest <span className="gradient-text-navy">IT trade</span> network
         </h2>
         <p className="max-w-xl text-balance text-navy-900/70">
           Membership takes minutes to start and connects your members to

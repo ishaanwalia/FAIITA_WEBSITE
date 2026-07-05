@@ -1,47 +1,64 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
-import { ComposableMap, Geographies, Geography, createCoordinates } from "@vnedyalk0v/react19-simple-maps";
-import { ArrowRight, Building2, MapPin, Users, X } from "lucide-react";
+import { ArrowRight, Building2, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { RegionDataValue } from "react-datamaps-india";
 import type { StateMapPoint } from "@/types";
 
-// Real India state-boundary topojson (pinned commit — stable, won't change unexpectedly).
-const GEO_URL = "https://cdn.jsdelivr.net/gh/udit-001/india-maps-data@ef25ebc/topojson/india.json";
+// This library touches `window` at module scope, so it must never be part of
+// the server bundle — load it purely on the client.
+const DatamapsIndia = dynamic(() => import("react-datamaps-india"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex min-h-[420px] items-center justify-center text-sm text-muted-foreground">
+      Loading map…
+    </div>
+  ),
+});
 
-const COVERED_FILL = "#F2921D"; // saffron — every FAIITA-covered state
-const UNCOVERED_FILL = "#F1F5F9"; // near-white for anything not in our dataset (e.g. small UTs)
-const BORDER_COLOR = "#0B2A4A"; // navy grid/border lines, per theme
+const COVERED_FILL = "#F2921D";
+const COVERED_HOVER = "#D97A0E";
+const UNCOVERED_FILL = "#F1F5F9";
+const BORDER_COLOR = "#0B2A4A";
 
-// Different India geojson sources use different property keys for the state name —
-// check the common ones so this keeps working regardless of which the CDN file uses.
-function getGeoStateName(properties: Record<string, unknown>): string {
-  const candidates = ["st_nm", "ST_NM", "NAME_1", "st_name", "State", "name"];
-  for (const key of candidates) {
-    const val = properties[key];
-    if (typeof val === "string" && val.length > 0) return val;
+function HoverCard({ value }: { value: RegionDataValue & { name?: string } }) {
+  if (!value?.memberCount) {
+    return <span className="text-xs text-white/60">{value?.name}</span>;
   }
-  return "";
-}
-
-function normalize(name: string) {
-  return name.toLowerCase().replace(/[^a-z]/g, "");
+  return (
+    <div className="text-left">
+      <p className="text-sm font-semibold text-white">{value.name}</p>
+      <p className="text-xs text-white/60">
+        {Number(value.memberCount).toLocaleString("en-IN")} members · Click below for details
+      </p>
+    </div>
+  );
 }
 
 export function IndiaMap({ states }: { states: StateMapPoint[] }) {
   const [active, setActive] = useState<StateMapPoint | null>(null);
-  const [hovered, setHovered] = useState<string | null>(null);
   const [region, setRegion] = useState<string>("All");
   const [view, setView] = useState<"map" | "list">("map");
 
   const regions = useMemo(() => ["All", ...Array.from(new Set(states.map((s) => s.region)))], [states]);
   const filtered = region === "All" ? states : states.filter((s) => s.region === region);
-  const activeStateNames = useMemo(() => new Set(filtered.map((s) => normalize(s.stateName))), [filtered]);
 
-  const findState = (geoName: string) =>
-    states.find((s) => normalize(s.stateName) === normalize(geoName));
+  const regionData = useMemo(() => {
+    const data: Record<string, RegionDataValue> = {};
+    for (const s of filtered) {
+      data[s.stateName] = {
+        value: s.memberCount,
+        memberCount: s.memberCount,
+        name: s.stateName,
+      };
+    }
+    return data;
+  }, [filtered]);
+
+  const findState = (name?: string) => (name ? states.find((s) => s.stateName === name) : undefined);
 
   return (
     <div className="relative">
@@ -77,79 +94,25 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
             view === "list" && "hidden lg:block"
           )}
         >
-          <ComposableMap
-            projection="geoMercator"
-            projectionConfig={{ center: createCoordinates(83, 22.5), scale: 1000 }}
-            width={700}
-            height={720}
-            className="h-full w-full min-h-[360px] sm:min-h-[480px]"
-          >
-            <Geographies geography={GEO_URL}>
-              {({ geographies }) =>
-                geographies.map((geo) => {
-                  const geoName = getGeoStateName(geo.properties as Record<string, unknown>);
-                  const match = findState(geoName);
-                  const isCovered = activeStateNames.has(normalize(geoName));
-                  const isHovered = hovered === geoName;
-
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      onMouseEnter={() => setHovered(geoName)}
-                      onMouseLeave={() => setHovered((h) => (h === geoName ? null : h))}
-                      onClick={() => match && setActive(match)}
-                      style={{
-                        default: {
-                          fill: isCovered ? COVERED_FILL : UNCOVERED_FILL,
-                          stroke: BORDER_COLOR,
-                          strokeWidth: 0.75,
-                          outline: "none",
-                          opacity: isCovered ? 0.85 : 1,
-                          transition: "fill 0.15s ease, opacity 0.15s ease",
-                        },
-                        hover: {
-                          fill: isCovered ? COVERED_FILL : "#E2E8F0",
-                          stroke: BORDER_COLOR,
-                          strokeWidth: 1,
-                          outline: "none",
-                          opacity: 1,
-                          cursor: match ? "pointer" : "default",
-                        },
-                        pressed: {
-                          fill: COVERED_FILL,
-                          stroke: BORDER_COLOR,
-                          strokeWidth: 1,
-                          outline: "none",
-                        },
-                      }}
-                    />
-                  );
-                })
-              }
-            </Geographies>
-          </ComposableMap>
-
-          <AnimatePresence>
-            {hovered && !active && findState(hovered) && (
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="pointer-events-none absolute bottom-5 left-5 rounded-xl border border-navy-700/10 bg-navy-800 px-4 py-2.5 text-white shadow-xl"
-              >
-                {(() => {
-                  const s = findState(hovered)!;
-                  return (
-                    <>
-                      <p className="text-sm font-semibold">{s.stateName}</p>
-                      <p className="text-xs text-white/60">{s.memberCount.toLocaleString("en-IN")} members · Click for details</p>
-                    </>
-                  );
-                })()}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <div className="min-h-[360px] sm:min-h-[480px] [&_svg]:h-auto [&_svg]:w-full">
+            <DatamapsIndia
+              regionData={regionData}
+              hoverComponent={HoverCard}
+              onClick={(name: string) => {
+                const match = findState(name);
+                if (match) setActive(match);
+              }}
+              mapLayout={{
+                startColor: COVERED_FILL,
+                endColor: COVERED_FILL,
+                hoverColor: COVERED_HOVER,
+                noDataColor: UNCOVERED_FILL,
+                borderColor: BORDER_COLOR,
+                hoverBorderColor: BORDER_COLOR,
+                hoverTitle: "Members",
+              }}
+            />
+          </div>
 
           <div className="absolute right-5 top-5 flex items-center gap-2 rounded-xl border border-border bg-white/90 px-3 py-2 shadow-sm">
             <span className="h-2 w-2 rounded-full" style={{ background: COVERED_FILL }} />
@@ -162,7 +125,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
             <StateDetailCard state={active} onClose={() => setActive(null)} />
           ) : (
             <div className="rounded-3xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-              Select a state on the map to view its association details, or browse the full list below.
+              Select a state on the map, or from the list below, to view its association details.
             </div>
           )}
 
@@ -171,8 +134,6 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
               <button
                 key={s.id}
                 onClick={() => setActive(s)}
-                onMouseEnter={() => setHovered(s.stateName)}
-                onMouseLeave={() => setHovered((h) => (h === s.stateName ? null : h))}
                 className={cn(
                   "flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors",
                   active?.id === s.id ? "bg-navy-700 text-white" : "hover:bg-secondary"
@@ -196,18 +157,13 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
 
 function StateDetailCard({ state, onClose }: { state: StateMapPoint; onClose: () => void }) {
   return (
-    <motion.div
-      key={state.id}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="relative rounded-3xl border border-border bg-card p-7"
-    >
+    <div className="relative rounded-3xl border border-border bg-card p-7">
       <button
         onClick={onClose}
         className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary"
         aria-label="Close details"
       >
-        <X className="h-4 w-4" />
+        ×
       </button>
       <span className="inline-flex items-center gap-1.5 rounded-full bg-saffron-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-navy-900">
         {state.region} Zone
@@ -232,8 +188,8 @@ function StateDetailCard({ state, onClose }: { state: StateMapPoint; onClose: ()
         href={`/about/state-associations/${state.slug}`}
         className="link-underline mt-6 flex items-center gap-1.5 text-sm font-semibold text-navy-700"
       >
-        <MapPin className="h-3.5 w-3.5" /> View full state profile <ArrowRight className="h-3.5 w-3.5" />
+        <ArrowRight className="h-3.5 w-3.5" /> View full state profile
       </Link>
-    </motion.div>
+    </div>
   );
 }

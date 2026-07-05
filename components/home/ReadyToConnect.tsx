@@ -9,7 +9,7 @@ export function ReadyToConnect() {
       <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-saffron-500/10 blur-3xl" aria-hidden />
       <div className="container-page relative flex flex-col items-center gap-6 text-center">
         <h2 className="max-w-2xl text-balance font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
-          Ready to Connect with India&apos;s 100+ Member Associations?
+          Ready to Connect with India&apos;s 100+ <span className="gradient-text">Member Associations</span>?
         </h2>
         <p className="max-w-xl text-balance text-white/60">
           Whether you represent a state association or a channel partner

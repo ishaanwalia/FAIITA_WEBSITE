@@ -48,10 +48,10 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-background text-foreground font-body font-medium antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    @apply font-display font-bold;
   }
   ::selection {
     @apply bg-saffron-500/30 text-navy-900;
@@ -104,6 +104,10 @@
 
   .gradient-text {
     @apply bg-gradient-to-r from-saffron-300 via-saffron-400 to-saffron-500 bg-clip-text text-transparent;
+  }
+
+  .gradient-text-navy {
+    @apply bg-gradient-to-r from-navy-900 via-navy-700 to-navy-500 bg-clip-text text-transparent;
   }
 }
 

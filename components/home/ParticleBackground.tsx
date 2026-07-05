@@ -12,8 +12,7 @@ export function ParticleBackground() {
     if (!ctx) return;
 
     let animId: number;
-    let nodes: { x: number; y: number; vx: number; vy: number }[] = [];
-    let connections: number[][] = [];
+    let nodes: { x: number; y: number; vx: number; vy: number; size: number; opacity: number }[] = [];
 
     const setup = () => {
       canvas.width = canvas.offsetWidth;
@@ -25,18 +24,9 @@ export function ParticleBackground() {
         y: Math.random() * canvas.height,
         vx: (Math.random() - 0.5) * 0.4,
         vy: (Math.random() - 0.5) * 0.4,
+        size: Math.random() * 1.5 + 0.8,
+        opacity: Math.random() * 0.4 + 0.2,
       }));
-
-      // Computed once, not every frame — the moving endpoints still look organic
-      // since we redraw using each node's *current* position each frame.
-      connections = [];
-      for (let i = 0; i < count; i++) {
-        for (let j = i + 1; j < count; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          if (Math.sqrt(dx * dx + dy * dy) < 160) connections.push([i, j]);
-        }
-      }
     };
 
     setup();
@@ -46,15 +36,6 @@ export function ParticleBackground() {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = "rgba(242, 146, 29, 0.12)";
-      ctx.lineWidth = 1;
-      connections.forEach(([i, j]) => {
-        ctx.beginPath();
-        ctx.moveTo(nodes[i].x, nodes[i].y);
-        ctx.lineTo(nodes[j].x, nodes[j].y);
-        ctx.stroke();
-      });
-
       nodes.forEach((n) => {
         n.x += n.vx;
         n.y += n.vy;
@@ -62,8 +43,8 @@ export function ParticleBackground() {
         if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
 
         ctx.beginPath();
-        ctx.arc(n.x, n.y, 1.6, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(242, 146, 29, 0.5)";
+        ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(242, 146, 29, ${n.opacity})`;
         ctx.fill();
       });
 

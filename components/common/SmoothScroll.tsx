@@ -23,19 +23,21 @@ function GsapSync() {
 }
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
-  const [enabled, setEnabled] = useState(false);
+  const [smooth, setSmooth] = useState(false);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isNarrow = window.matchMedia("(max-width: 768px)").matches;
-    // Skip Lenis on mobile / reduced-motion — native scroll performs better there.
-    setEnabled(!prefersReduced && !isNarrow);
+    // Skip smoothing on mobile / reduced-motion — native scroll performs better there.
+    setSmooth(!prefersReduced && !isNarrow);
   }, []);
 
-  if (!enabled) return <>{children}</>;
-
+  // Always the same wrapper component across renders (never swap between a
+  // fragment and ReactLenis) — swapping component types here would force
+  // React to unmount/remount every child, including the intro loader,
+  // mid-animation. Only the smoothing strength changes.
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.2, syncTouch: false }}>
+    <ReactLenis root options={{ lerp: smooth ? 0.1 : 1, duration: smooth ? 1.2 : 0, syncTouch: false }}>
       <GsapSync />
       {children}
     </ReactLenis>

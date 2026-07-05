@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { MemberAssociationsGrid } from "@/components/about/MemberAssociationsGrid";
+import { MembershipBenefits } from "@/components/common/MembershipBenefits";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -34,6 +35,8 @@ export default async function MemberAssociationsPage() {
           <MemberAssociationsGrid members={members} />
         </div>
       </section>
+
+      <MembershipBenefits eyebrow="Why Join" />
     </>
   );
 }
