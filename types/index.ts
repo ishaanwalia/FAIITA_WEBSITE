@@ -46,6 +46,7 @@ export type EventItem = {
   city: string;
   state: string;
   startDate: Date;
+  coverImage: string | null;
 };
 
 export type StateMapPoint = {
