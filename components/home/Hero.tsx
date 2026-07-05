@@ -8,7 +8,7 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
-  show: (delay = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] } }),
+  show: (delay = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] as const } }),
 };
 
 const HEADLINE = "Federation of All India Information Technology Associations";
