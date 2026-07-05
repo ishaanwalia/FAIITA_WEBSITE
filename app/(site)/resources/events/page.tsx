@@ -6,6 +6,7 @@ import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { EventCalendar } from "@/components/common/EventCalendar";
 import { formatDate, formatDateShort } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
@@ -36,7 +37,15 @@ export default async function EventsPage() {
       </section>
       <SectionDivider type="curve" className="bg-navy-800" />
 
-      <section className="bg-background pb-20 pt-4">
+      <section className="bg-background pb-8 pt-4">
+        <div className="container-page">
+          <ScrollReveal direction="scale">
+            <EventCalendar events={events} />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section className="bg-background pb-20 pt-8">
         <div className="container-page">
           <h2 className="font-display text-xl font-bold text-navy-800">Upcoming</h2>
           <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">

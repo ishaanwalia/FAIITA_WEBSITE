@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
@@ -7,6 +8,12 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { formatDateShort } from "@/lib/utils";
 import type { EventItem } from "@/types";
+
+const EVENT_IMAGES = [
+  "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80",
+  "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80",
+  "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&q=80",
+];
 
 export function EventsSection({ events }: { events: EventItem[] }) {
   return (
@@ -28,27 +35,35 @@ export function EventsSection({ events }: { events: EventItem[] }) {
             return (
               <ScrollReveal key={e.id} direction="up" delay={i * 0.08}>
                 <TiltCard maxTilt={6} className="h-full">
-                  <GlassCard variant="light" className="flex h-full flex-col">
-                    <div className="flex items-start justify-between">
-                      <div className="flex h-14 w-14 flex-col items-center justify-center rounded-xl bg-navy-700 text-white">
-                        <span className="font-mono text-lg font-bold leading-none">{d.day}</span>
-                        <span className="text-[10px] font-medium uppercase tracking-wide">{d.month}</span>
+                  <GlassCard variant="light" className="flex h-full flex-col overflow-hidden !p-0">
+                    <div className="relative h-32 w-full shrink-0 overflow-hidden">
+                      <Image
+                        src={e.coverImage ?? EVENT_IMAGES[i % EVENT_IMAGES.length]}
+                        alt=""
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute left-3 top-3 flex h-12 w-12 flex-col items-center justify-center rounded-xl bg-navy-800/90 text-white backdrop-blur-sm">
+                        <span className="font-mono text-base font-bold leading-none">{d.day}</span>
+                        <span className="text-[9px] font-medium uppercase tracking-wide">{d.month}</span>
                       </div>
-                      <span className="rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-600">
+                      <span className="absolute right-3 top-3 rounded-full bg-saffron-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-navy-900">
                         {e.category}
                       </span>
                     </div>
-                    <h3 className="mt-5 font-display text-lg font-semibold leading-snug text-navy-800">
-                      {e.title}
-                    </h3>
-                    <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <MapPin className="h-3.5 w-3.5" /> {e.city}, {e.state}
-                    </p>
-                    <Button asChild variant="link" className="mt-4 h-auto justify-start px-0 text-navy-700">
-                      <Link href="/resources/events">
-                        Learn More <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                    </Button>
+                    <div className="flex flex-1 flex-col p-6">
+                      <h3 className="font-display text-lg font-semibold leading-snug text-navy-800">
+                        {e.title}
+                      </h3>
+                      <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <MapPin className="h-3.5 w-3.5" /> {e.city}, {e.state}
+                      </p>
+                      <Button asChild variant="link" className="mt-4 h-auto justify-start px-0 text-navy-700">
+                        <Link href="/resources/events">
+                          Learn More <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </Button>
+                    </div>
                   </GlassCard>
                 </TiltCard>
               </ScrollReveal>

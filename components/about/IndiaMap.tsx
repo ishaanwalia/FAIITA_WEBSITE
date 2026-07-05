@@ -18,14 +18,8 @@ const OUTLINE = [
 ];
 const CENTER: [number, number] = [45, 45];
 
-const regionColors: Record<string, string> = {
-  North: "#F2921D",
-  South: "#0F8B5F",
-  East: "#3F6C97",
-  West: "#EAB308",
-  Central: "#A9C4DC",
-  "North-East": "#F472B6",
-};
+const COVERED_COLOR = "#F2921D"; // saffron — every FAIITA-covered state
+const GRID_COLOR = "#0B2A4A"; // navy grid lines, per theme
 
 function outlinePath() {
   return `M ${OUTLINE.map(([x, y]) => `${x},${y}`).join(" L ")} Z`;
@@ -78,30 +72,23 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
       <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
         <div
           className={cn(
-            "relative overflow-hidden rounded-3xl border border-border bg-navy-800 p-4",
+            "relative overflow-hidden rounded-3xl border border-border bg-white p-4",
             view === "list" && "hidden lg:block"
           )}
         >
           <svg viewBox="-5 -5 110 110" className="h-full w-full min-h-[480px]" aria-hidden={false} role="img" aria-label="Interactive map of India showing FAIITA state associations">
-            <defs>
-              <radialGradient id="mapGlow" cx="50%" cy="45%" r="65%">
-                <stop offset="0%" stopColor="#123A61" />
-                <stop offset="100%" stopColor="#071C33" />
-              </radialGradient>
-            </defs>
-
-            {/* faceted low-poly fill */}
+            {/* faceted low-poly grid — white fill, navy grid lines */}
             {facets.map((f) => (
               <polygon
                 key={f.id}
                 points={`${CENTER[0]},${CENTER[1]} ${f.a[0]},${f.a[1]} ${f.b[0]},${f.b[1]}`}
-                fill="url(#mapGlow)"
-                stroke="#1E4A75"
+                fill={f.id % 2 === 0 ? "#FFFFFF" : "#F7F9FC"}
+                stroke={GRID_COLOR}
+                strokeOpacity="0.25"
                 strokeWidth="0.15"
-                opacity={f.id % 2 === 0 ? 0.95 : 0.8}
               />
             ))}
-            <path d={outlinePath()} fill="none" stroke="#F2921D" strokeOpacity="0.4" strokeWidth="0.3" />
+            <path d={outlinePath()} fill="none" stroke={GRID_COLOR} strokeOpacity="0.55" strokeWidth="0.35" />
 
             {/* connective lines between nearby state nodes, echoing the federation-network signature */}
             {filtered.map((s, i) =>
@@ -112,9 +99,9 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
                   y1={s.mapY}
                   x2={t.mapX}
                   y2={t.mapY}
-                  stroke="#F2921D"
+                  stroke={COVERED_COLOR}
                   strokeWidth="0.1"
-                  opacity="0.15"
+                  opacity="0.2"
                 />
               ))
             )}
@@ -128,7 +115,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
                   key={s.id}
                   className="cursor-pointer"
                   onMouseEnter={() => setHovered(s.id)}
-                  onMouseLeave={() => setHovered(null)}
+                  onMouseLeave={() => setHovered((h) => (h === s.id ? null : h))}
                   onClick={() => setActive(s)}
                   tabIndex={0}
                   role="button"
@@ -136,13 +123,13 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
                   onKeyDown={(e) => e.key === "Enter" && setActive(s)}
                 >
                   {(isHovered || isActive) && (
-                    <circle cx={s.mapX} cy={s.mapY} r={r + 2} fill={regionColors[s.region]} opacity="0.25" className="animate-pulse-ring origin-center" />
+                    <circle cx={s.mapX} cy={s.mapY} r={r + 2} fill={COVERED_COLOR} opacity="0.25" className="animate-pulse-ring origin-center" />
                   )}
                   <circle
                     cx={s.mapX}
                     cy={s.mapY}
                     r={r}
-                    fill={regionColors[s.region] ?? "#F2921D"}
+                    fill={COVERED_COLOR}
                     stroke="#ffffff"
                     strokeWidth={isActive ? 0.5 : 0.25}
                     opacity={isHovered || isActive ? 1 : 0.85}
@@ -158,7 +145,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="pointer-events-none absolute bottom-5 left-5 rounded-xl border border-white/10 bg-navy-900/95 px-4 py-2.5 text-white shadow-xl"
+                className="pointer-events-none absolute bottom-5 left-5 rounded-xl border border-navy-700/10 bg-navy-800 px-4 py-2.5 text-white shadow-xl"
               >
                 {(() => {
                   const s = filtered.find((x) => x.id === hovered);
@@ -166,7 +153,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
                   return (
                     <>
                       <p className="text-sm font-semibold">{s.stateName}</p>
-                      <p className="text-xs text-white/50">{s.memberCount.toLocaleString("en-IN")} members · Click for details</p>
+                      <p className="text-xs text-white/60">{s.memberCount.toLocaleString("en-IN")} members · Click for details</p>
                     </>
                   );
                 })()}
@@ -174,13 +161,9 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
             )}
           </AnimatePresence>
 
-          <div className="absolute right-5 top-5 flex flex-col gap-1.5 rounded-xl border border-white/10 bg-navy-900/80 p-3">
-            {Object.entries(regionColors).map(([name, color]) => (
-              <div key={name} className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-wide text-white/60">
-                <span className="h-2 w-2 rounded-full" style={{ background: color }} />
-                {name}
-              </div>
-            ))}
+          <div className="absolute right-5 top-5 flex items-center gap-2 rounded-xl border border-border bg-white/90 px-3 py-2 shadow-sm">
+            <span className="h-2 w-2 rounded-full" style={{ background: COVERED_COLOR }} />
+            <span className="text-[10px] font-medium uppercase tracking-wide text-navy-700/70">FAIITA Covered State</span>
           </div>
         </div>
 
@@ -199,7 +182,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
                 key={s.id}
                 onClick={() => setActive(s)}
                 onMouseEnter={() => setHovered(s.id)}
-                onMouseLeave={() => setHovered(null)}
+                onMouseLeave={() => setHovered((h) => (h === s.id ? null : h))}
                 className={cn(
                   "flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors",
                   active?.id === s.id ? "bg-navy-700 text-white" : "hover:bg-secondary"
@@ -236,10 +219,7 @@ function StateDetailCard({ state, onClose }: { state: StateMapPoint; onClose: ()
       >
         <X className="h-4 w-4" />
       </button>
-      <span
-        className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white"
-        style={{ background: regionColors[state.region] }}
-      >
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-saffron-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-navy-900">
         {state.region} Zone
       </span>
       <h3 className="mt-4 font-display text-2xl font-bold text-navy-800">{state.stateName}</h3>

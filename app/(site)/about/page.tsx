@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Compass, Layers, ShieldCheck, Users2 } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
+import { TextReveal } from "@/components/common/TextReveal";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
@@ -43,12 +44,17 @@ export default async function AboutPage() {
     <>
       <section className="bg-navy-800 py-24">
         <div className="container-page">
-          <SectionHeading
-            eyebrow="About Us"
-            title="One Federation, Twenty-Nine States"
-            description="FAIITA brings together India's state-level IT associations into a single national voice — advocating for policy, enabling growth, and connecting 50,000+ channel partners."
-            light
+          <span className="section-eyebrow">About Us</span>
+          <TextReveal
+            text="One Federation, Twenty-Nine States"
+            as="h1"
+            className="mt-3 max-w-3xl text-balance font-display text-3xl font-bold tracking-tight text-white sm:text-4xl"
           />
+          <p className="mt-4 max-w-2xl text-balance leading-relaxed text-white/65">
+            FAIITA brings together India's state-level IT associations into a
+            single national voice — advocating for policy, enabling growth,
+            and connecting 50,000+ channel partners.
+          </p>
         </div>
       </section>
 

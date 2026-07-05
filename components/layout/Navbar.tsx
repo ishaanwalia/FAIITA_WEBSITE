@@ -126,7 +126,7 @@ export function Navbar() {
         </nav>
 
         <div className="hidden lg:block">
-          <MagneticButton asChild variant="accent" size="default" clipped>
+          <MagneticButton asChild variant="accent" size="default">
             <Link href="/contact">Join FAIITA</Link>
           </MagneticButton>
         </div>
@@ -161,7 +161,7 @@ export function Navbar() {
                 <MobileNavGroup key={item.label} item={item} />
               ))}
               <motion.div variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}>
-                <MagneticButton asChild variant="accent" clipped className="mt-4 w-full">
+                <MagneticButton asChild variant="accent" className="mt-4 w-full">
                   <Link href="/contact">Join FAIITA</Link>
                 </MagneticButton>
               </motion.div>

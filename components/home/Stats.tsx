@@ -1,11 +1,11 @@
 "use client";
 
-
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import gsap from "gsap";
 import * as Icons from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
+import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import type { StatItem } from "@/types";
 
@@ -50,14 +50,19 @@ export function Stats({ stats }: { stats: StatItem[] }) {
             const Icon = (Icons as unknown as Record<string, Icons.LucideIcon>)[stat.icon ?? "Sparkles"] ?? Icons.Sparkles;
             const numeric = parseInt(stat.value.replace(/[^0-9]/g, ""), 10) || 0;
             return (
-              <GlassCard key={stat.id} variant="dark" className="text-center">
-                <Icon className="mx-auto h-6 w-6 text-saffron-400" />
-                <div className="stat-figure mt-4 text-3xl font-bold text-white sm:text-4xl">
-                  <KineticCount value={numeric} />
-                  {stat.suffix}
-                </div>
-                <p className="mt-2 text-xs font-medium uppercase tracking-wide text-white/50">{stat.label}</p>
-              </GlassCard>
+              <TiltCard key={stat.id} maxTilt={10}>
+                <GlassCard
+                  variant="dark"
+                  className="text-center shadow-[0_8px_30px_rgba(0,0,0,0.35)] ring-1 ring-white/5"
+                >
+                  <Icon className="mx-auto h-6 w-6 text-saffron-400" />
+                  <div className="stat-figure mt-4 text-3xl font-bold text-white sm:text-4xl">
+                    <KineticCount value={numeric} />
+                    {stat.suffix}
+                  </div>
+                  <p className="mt-2 text-xs font-medium uppercase tracking-wide text-white/50">{stat.label}</p>
+                </GlassCard>
+              </TiltCard>
             );
           })}
         </div>

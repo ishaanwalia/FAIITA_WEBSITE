@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
@@ -7,6 +8,13 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import type { NewsItem } from "@/types";
+
+// Placeholder editorial imagery until real cover photos are added per article.
+const NEWS_IMAGES = [
+  "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=1200&q=80",
+  "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+  "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+];
 
 export function NewsSection({ news }: { news: NewsItem[] }) {
   const [lead, ...rest] = news;
@@ -32,8 +40,13 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                 href={`/resources/news/${lead.slug}`}
                 className="group relative flex h-full min-h-[340px] flex-col justify-end overflow-hidden rounded-2xl bg-navy-800 p-8"
               >
-                <div className="absolute inset-0 bg-network-grid opacity-20" />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/40 to-transparent" />
+                <Image
+                  src={lead.coverImage ?? NEWS_IMAGES[0]}
+                  alt=""
+                  fill
+                  className="object-cover opacity-40 transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/50 to-navy-900/20" />
                 <div className="relative">
                   <Badge variant="accent">{lead.category}</Badge>
                   <h3 className="mt-4 max-w-lg text-balance font-display text-2xl font-bold text-white sm:text-3xl">
@@ -54,16 +67,26 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
               <ScrollReveal key={n.id} direction="right" delay={i * 0.1} className="flex-1">
                 <TiltCard maxTilt={5} className="h-full">
                   <Link href={`/resources/news/${n.slug}`} className="group block h-full">
-                    <GlassCard variant="light" className="flex h-full flex-col justify-between">
-                      <div>
-                        <Badge variant="outline">{n.category}</Badge>
-                        <h4 className="mt-3 font-display text-base font-semibold leading-snug text-navy-800">
-                          {n.title}
-                        </h4>
+                    <GlassCard variant="light" className="flex h-full flex-col overflow-hidden !p-0">
+                      <div className="relative h-28 w-full shrink-0 overflow-hidden">
+                        <Image
+                          src={n.coverImage ?? NEWS_IMAGES[(i + 1) % NEWS_IMAGES.length]}
+                          alt=""
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
                       </div>
-                      <div className="mt-4 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        {formatDate(n.publishedAt)}
-                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      <div className="flex flex-1 flex-col justify-between p-5">
+                        <div>
+                          <Badge variant="outline">{n.category}</Badge>
+                          <h4 className="mt-3 font-display text-base font-semibold leading-snug text-navy-800">
+                            {n.title}
+                          </h4>
+                        </div>
+                        <div className="mt-4 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                          {formatDate(n.publishedAt)}
+                          <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </div>
                       </div>
                     </GlassCard>
                   </Link>

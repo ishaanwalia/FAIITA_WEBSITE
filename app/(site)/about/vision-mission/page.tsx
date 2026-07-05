@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/common/SectionHeading";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { RealIndiaMap } from "@/components/about/RealIndiaMap";
+import { IndiaMap } from "@/components/about/IndiaMap";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -107,7 +107,7 @@ export default async function VisionMissionPage() {
               description="Explore where FAIITA's member associations operate today."
             />
             <div className="mt-10">
-              <RealIndiaMap states={mapPoints} />
+              <IndiaMap states={mapPoints} />
             </div>
           </div>
         </div>

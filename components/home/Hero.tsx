@@ -90,7 +90,7 @@ export function Hero() {
             custom={0.68}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
-            <MagneticButton asChild variant="accent" size="lg" clipped>
+            <MagneticButton asChild variant="accent" size="lg">
               <Link href="/about">
                 Explore FAIITA <ArrowRight className="h-4 w-4" />
               </Link>
