@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ComposableMap, Geographies, Geography } from "@vnedyalk0v/react19-simple-maps";
+import { ComposableMap, Geographies, Geography, createCoordinates } from "@vnedyalk0v/react19-simple-maps";
 import { ArrowRight, Building2, MapPin, Users, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { StateMapPoint } from "@/types";
@@ -79,7 +79,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
         >
           <ComposableMap
             projection="geoMercator"
-            projectionConfig={{ center: [83, 22.5], scale: 1000 }}
+            projectionConfig={{ center: createCoordinates(83, 22.5), scale: 1000 }}
             width={700}
             height={720}
             className="h-full w-full min-h-[360px] sm:min-h-[480px]"
