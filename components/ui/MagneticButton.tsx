@@ -13,9 +13,9 @@ export function MagneticButton({
   ...props
 }: ButtonProps & { strength?: number; clipped?: boolean }) {
   const ref = useRef<HTMLButtonElement>(null);
-  const quickX = useRef<ReturnType<typeof gsap.quickTo>>();
-  const quickY = useRef<ReturnType<typeof gsap.quickTo>>();
-  const quickScale = useRef<ReturnType<typeof gsap.quickTo>>();
+  const quickX = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
+  const quickY = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
+  const quickScale = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
 
   useEffect(() => {
     if (!ref.current) return;
