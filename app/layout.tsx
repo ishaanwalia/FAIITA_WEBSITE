@@ -1,0 +1,69 @@
+import type { Metadata, Viewport } from "next";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
+
+const display = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["500", "600", "700"],
+});
+
+const body = Inter({
+  subsets: ["latin"],
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400", "500", "600"],
+});
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faiita.co.in";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "FAIITA — Federation of All India Information Technology Associations",
+    template: "%s | FAIITA",
+  },
+  description:
+    "FAIITA is the apex body uniting state-level IT associations across India, representing 50,000+ IT channel partners across 29 states since 2014.",
+  keywords: [
+    "FAIITA",
+    "IT dealers India",
+    "IT associations",
+    "channel partners",
+    "IT federation",
+    "India IT trade",
+  ],
+  openGraph: {
+    title: "FAIITA — Federation of All India Information Technology Associations",
+    description: "Uniting 50,000+ IT entrepreneurs across 29 states under one national federation.",
+    url: siteUrl,
+    siteName: "FAIITA",
+    type: "website",
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FAIITA — Federation of All India Information Technology Associations",
+    description: "Uniting 50,000+ IT entrepreneurs across 29 states under one national federation.",
+  },
+  icons: { icon: "/favicon.ico" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0B2A4A",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+      <body>{children}</body>
+    </html>
+  );
+}
