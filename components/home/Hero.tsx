@@ -5,13 +5,12 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { ParticleBackground } from "@/components/home/ParticleBackground";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   show: (delay = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] as const } }),
 };
-
-const HEADLINE = "Federation of All India Information Technology Associations";
 
 export function Hero() {
   return (
@@ -22,62 +21,48 @@ export function Hero() {
           alt=""
           fill
           priority
-          className="object-cover opacity-30"
+          className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/80 via-navy-800/85 to-navy-800" />
-        <div className="absolute inset-0 bg-network-grid opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/90 via-navy-800/80 to-navy-800/95" />
       </div>
 
-      {/* decorative floating nodes echoing the federation-network motif */}
-      <div className="pointer-events-none absolute inset-0 hidden md:block" aria-hidden>
-        {[
-          { top: "18%", left: "12%", delay: "0s" },
-          { top: "30%", left: "82%", delay: "1.2s" },
-          { top: "68%", left: "8%", delay: "0.6s" },
-          { top: "74%", left: "88%", delay: "1.8s" },
-          { top: "12%", left: "60%", delay: "0.9s" },
-        ].map((p, i) => (
-          <span
-            key={i}
-            className="absolute h-2 w-2 animate-float-slow rounded-full bg-saffron-400/70"
-            style={{ top: p.top, left: p.left, animationDelay: p.delay }}
-          />
-        ))}
-      </div>
+      <ParticleBackground />
 
-      <div className="container-page relative z-10 py-32">
-        <div className="max-w-3xl">
-          <motion.span
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0}
-            className="inline-flex items-center gap-2 rounded-full border border-saffron-400/30 bg-saffron-500/10 px-4 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.18em] text-saffron-400"
-          >
-            Uniting India&apos;s IT Fraternity · Since 2014
-          </motion.span>
-
-          <h1 className="mt-6 flex flex-wrap text-balance font-display text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
-            {HEADLINE.split(" ").map((word, i) => (
-              <motion.span
-                key={i}
-                variants={fadeUp}
-                initial="hidden"
-                animate="show"
-                custom={0.12 + i * 0.035}
-                className="mr-[0.28em] inline-block"
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
+      <div className="container-page relative z-10 py-32 text-center">
+        <div className="mx-auto max-w-4xl">
+          <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0} className="mx-auto mb-8 flex justify-center">
+            <div className="relative h-20 w-64 sm:h-28 sm:w-80">
+              {/* Assumes /public/logo.png — rename this src if your file uses a different name/extension. */}
+              <Image src="/logo.png" alt="FAIITA Logo" fill priority className="object-contain" />
+            </div>
+          </motion.div>
 
           <motion.p
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            custom={0.55}
-            className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-white/70"
+            custom={0.15}
+            className="mb-4 font-mono text-sm font-medium uppercase tracking-[0.2em] text-saffron-400 sm:text-base"
+          >
+            Uniting India&apos;s IT Fraternity Since 1990
+          </motion.p>
+
+          <motion.h1
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={0.3}
+            className="mb-6 text-balance font-display text-4xl font-bold leading-[1.1] text-white sm:text-5xl lg:text-6xl"
+          >
+            Federation of All India <span className="gradient-text">Information Technology</span> Associations
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={0.45}
+            className="mx-auto mb-10 max-w-2xl text-balance text-lg leading-relaxed text-white/70"
           >
             Uniting 50,000+ IT entrepreneurs across 29 states — one federated
             voice driving growth in Retail, Distribution, Services & Solutions.
@@ -87,8 +72,8 @@ export function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            custom={0.68}
-            className="mt-10 flex flex-wrap items-center gap-4"
+            custom={0.6}
+            className="flex flex-wrap items-center justify-center gap-4"
           >
             <MagneticButton asChild variant="accent" size="lg">
               <Link href="/about">

@@ -50,12 +50,12 @@ export function Stats({ stats }: { stats: StatItem[] }) {
             const Icon = (Icons as unknown as Record<string, Icons.LucideIcon>)[stat.icon ?? "Sparkles"] ?? Icons.Sparkles;
             const numeric = parseInt(stat.value.replace(/[^0-9]/g, ""), 10) || 0;
             return (
-              <TiltCard key={stat.id} maxTilt={10}>
+              <TiltCard key={stat.id} maxTilt={10} className="h-full">
                 <GlassCard
                   variant="dark"
-                  className="text-center shadow-[0_8px_30px_rgba(0,0,0,0.35)] ring-1 ring-white/5"
+                  className="flex h-full flex-col items-center justify-center text-center shadow-[0_8px_30px_rgba(0,0,0,0.35)] ring-1 ring-white/5"
                 >
-                  <Icon className="mx-auto h-6 w-6 text-saffron-400" />
+                  <Icon className="h-6 w-6 text-saffron-400" />
                   <div className="stat-figure mt-4 text-3xl font-bold text-white sm:text-4xl">
                     <KineticCount value={numeric} />
                     {stat.suffix}

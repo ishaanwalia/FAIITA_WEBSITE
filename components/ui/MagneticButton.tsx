@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "@/components/ui/button";
@@ -13,6 +13,18 @@ export function MagneticButton({
   ...props
 }: ButtonProps & { strength?: number; clipped?: boolean }) {
   const ref = useRef<HTMLButtonElement>(null);
+  const quickX = useRef<ReturnType<typeof gsap.quickTo>>();
+  const quickY = useRef<ReturnType<typeof gsap.quickTo>>();
+  const quickScale = useRef<ReturnType<typeof gsap.quickTo>>();
+
+  useEffect(() => {
+    if (!ref.current) return;
+    // quickTo reuses a single tween setter instead of creating a new one on
+    // every mousemove — much cheaper for high-frequency updates.
+    quickX.current = gsap.quickTo(ref.current, "x", { duration: 0.4, ease: "power3.out" });
+    quickY.current = gsap.quickTo(ref.current, "y", { duration: 0.4, ease: "power3.out" });
+    quickScale.current = gsap.quickTo(ref.current, "scale", { duration: 0.3, ease: "power3.out" });
+  }, []);
 
   const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const el = ref.current;
@@ -20,26 +32,19 @@ export function MagneticButton({
     const rect = el.getBoundingClientRect();
     const relX = e.clientX - (rect.left + rect.width / 2);
     const relY = e.clientY - (rect.top + rect.height / 2);
-    gsap.to(el, {
-      x: relX * strength,
-      y: relY * strength,
-      scale: 1.05,
-      duration: 0.4,
-      ease: "power3.out",
-    });
+    quickX.current?.(relX * strength);
+    quickY.current?.(relY * strength);
+    quickScale.current?.(1.05);
   };
 
   const handleLeave = () => {
-    gsap.to(ref.current, { x: 0, y: 0, scale: 1, duration: 0.5, ease: "elastic.out(1,0.4)" });
+    quickX.current?.(0);
+    quickY.current?.(0);
+    quickScale.current?.(1);
   };
 
-  const handleDown = () => {
-    gsap.to(ref.current, { scale: 0.95, duration: 0.15 });
-  };
-
-  const handleUp = () => {
-    gsap.to(ref.current, { scale: 1.05, duration: 0.2 });
-  };
+  const handleDown = () => quickScale.current?.(0.95);
+  const handleUp = () => quickScale.current?.(1.05);
 
   return (
     <Button

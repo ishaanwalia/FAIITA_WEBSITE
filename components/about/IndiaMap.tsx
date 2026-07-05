@@ -3,26 +3,31 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+import { ComposableMap, Geographies, Geography } from "@vnedyalk0v/react19-simple-maps";
 import { ArrowRight, Building2, MapPin, Users, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { StateMapPoint } from "@/types";
 
-// Low-poly silhouette of India — a deliberate faceted / crystalline style
-// rather than a literal traced coastline, so it reads as "illustrated" and
-// pairs with the network-node motif used across the site (loader, hero).
-const OUTLINE = [
-  [34, 3], [44, 6], [58, 10], [66, 14], [72, 12], [82, 17], [80, 24],
-  [83, 30], [78, 35], [70, 33], [65, 30], [68, 38], [60, 45], [52, 55],
-  [50, 65], [46, 75], [42, 88], [30, 80], [24, 65], [20, 55], [16, 45],
-  [10, 38], [16, 30], [22, 22], [28, 14],
-];
-const CENTER: [number, number] = [45, 45];
+// Real India state-boundary topojson (pinned commit — stable, won't change unexpectedly).
+const GEO_URL = "https://cdn.jsdelivr.net/gh/udit-001/india-maps-data@ef25ebc/topojson/india.json";
 
-const COVERED_COLOR = "#F2921D"; // saffron — every FAIITA-covered state
-const GRID_COLOR = "#0B2A4A"; // navy grid lines, per theme
+const COVERED_FILL = "#F2921D"; // saffron — every FAIITA-covered state
+const UNCOVERED_FILL = "#F1F5F9"; // near-white for anything not in our dataset (e.g. small UTs)
+const BORDER_COLOR = "#0B2A4A"; // navy grid/border lines, per theme
 
-function outlinePath() {
-  return `M ${OUTLINE.map(([x, y]) => `${x},${y}`).join(" L ")} Z`;
+// Different India geojson sources use different property keys for the state name —
+// check the common ones so this keeps working regardless of which the CDN file uses.
+function getGeoStateName(properties: Record<string, unknown>): string {
+  const candidates = ["st_nm", "ST_NM", "NAME_1", "st_name", "State", "name"];
+  for (const key of candidates) {
+    const val = properties[key];
+    if (typeof val === "string" && val.length > 0) return val;
+  }
+  return "";
+}
+
+function normalize(name: string) {
+  return name.toLowerCase().replace(/[^a-z]/g, "");
 }
 
 export function IndiaMap({ states }: { states: StateMapPoint[] }) {
@@ -33,14 +38,10 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
 
   const regions = useMemo(() => ["All", ...Array.from(new Set(states.map((s) => s.region)))], [states]);
   const filtered = region === "All" ? states : states.filter((s) => s.region === region);
+  const activeStateNames = useMemo(() => new Set(filtered.map((s) => normalize(s.stateName))), [filtered]);
 
-  const maxMembers = Math.max(...states.map((s) => s.memberCount), 1);
-  const radiusFor = (count: number) => 1.1 + (count / maxMembers) * 2;
-
-  const facets = OUTLINE.map((point, i) => {
-    const next = OUTLINE[(i + 1) % OUTLINE.length];
-    return { a: point, b: next, id: i };
-  });
+  const findState = (geoName: string) =>
+    states.find((s) => normalize(s.stateName) === normalize(geoName));
 
   return (
     <div className="relative">
@@ -72,75 +73,65 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
       <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
         <div
           className={cn(
-            "relative overflow-hidden rounded-3xl border border-border bg-white p-4",
+            "relative overflow-hidden rounded-3xl border border-border bg-white p-2 sm:p-4",
             view === "list" && "hidden lg:block"
           )}
         >
-          <svg viewBox="-5 -5 110 110" className="h-full w-full min-h-[480px]" aria-hidden={false} role="img" aria-label="Interactive map of India showing FAIITA state associations">
-            {/* faceted low-poly grid — white fill, navy grid lines */}
-            {facets.map((f) => (
-              <polygon
-                key={f.id}
-                points={`${CENTER[0]},${CENTER[1]} ${f.a[0]},${f.a[1]} ${f.b[0]},${f.b[1]}`}
-                fill={f.id % 2 === 0 ? "#FFFFFF" : "#F7F9FC"}
-                stroke={GRID_COLOR}
-                strokeOpacity="0.25"
-                strokeWidth="0.15"
-              />
-            ))}
-            <path d={outlinePath()} fill="none" stroke={GRID_COLOR} strokeOpacity="0.55" strokeWidth="0.35" />
+          <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{ center: [83, 22.5], scale: 1000 }}
+            width={700}
+            height={720}
+            className="h-full w-full min-h-[360px] sm:min-h-[480px]"
+          >
+            <Geographies geography={GEO_URL}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const geoName = getGeoStateName(geo.properties as Record<string, unknown>);
+                  const match = findState(geoName);
+                  const isCovered = activeStateNames.has(normalize(geoName));
+                  const isHovered = hovered === geoName;
 
-            {/* connective lines between nearby state nodes, echoing the federation-network signature */}
-            {filtered.map((s, i) =>
-              filtered.slice(i + 1, i + 3).map((t) => (
-                <line
-                  key={`${s.id}-${t.id}`}
-                  x1={s.mapX}
-                  y1={s.mapY}
-                  x2={t.mapX}
-                  y2={t.mapY}
-                  stroke={COVERED_COLOR}
-                  strokeWidth="0.1"
-                  opacity="0.2"
-                />
-              ))
-            )}
-
-            {filtered.map((s) => {
-              const r = radiusFor(s.memberCount);
-              const isActive = active?.id === s.id;
-              const isHovered = hovered === s.id;
-              return (
-                <g
-                  key={s.id}
-                  className="cursor-pointer"
-                  onMouseEnter={() => setHovered(s.id)}
-                  onMouseLeave={() => setHovered((h) => (h === s.id ? null : h))}
-                  onClick={() => setActive(s)}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`${s.stateName} — ${s.associationName}`}
-                  onKeyDown={(e) => e.key === "Enter" && setActive(s)}
-                >
-                  {(isHovered || isActive) && (
-                    <circle cx={s.mapX} cy={s.mapY} r={r + 2} fill={COVERED_COLOR} opacity="0.25" className="animate-pulse-ring origin-center" />
-                  )}
-                  <circle
-                    cx={s.mapX}
-                    cy={s.mapY}
-                    r={r}
-                    fill={COVERED_COLOR}
-                    stroke="#ffffff"
-                    strokeWidth={isActive ? 0.5 : 0.25}
-                    opacity={isHovered || isActive ? 1 : 0.85}
-                  />
-                </g>
-              );
-            })}
-          </svg>
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      onMouseEnter={() => setHovered(geoName)}
+                      onMouseLeave={() => setHovered((h) => (h === geoName ? null : h))}
+                      onClick={() => match && setActive(match)}
+                      style={{
+                        default: {
+                          fill: isCovered ? COVERED_FILL : UNCOVERED_FILL,
+                          stroke: BORDER_COLOR,
+                          strokeWidth: 0.75,
+                          outline: "none",
+                          opacity: isCovered ? 0.85 : 1,
+                          transition: "fill 0.15s ease, opacity 0.15s ease",
+                        },
+                        hover: {
+                          fill: isCovered ? COVERED_FILL : "#E2E8F0",
+                          stroke: BORDER_COLOR,
+                          strokeWidth: 1,
+                          outline: "none",
+                          opacity: 1,
+                          cursor: match ? "pointer" : "default",
+                        },
+                        pressed: {
+                          fill: COVERED_FILL,
+                          stroke: BORDER_COLOR,
+                          strokeWidth: 1,
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  );
+                })
+              }
+            </Geographies>
+          </ComposableMap>
 
           <AnimatePresence>
-            {hovered && !active && (
+            {hovered && !active && findState(hovered) && (
               <motion.div
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -148,8 +139,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
                 className="pointer-events-none absolute bottom-5 left-5 rounded-xl border border-navy-700/10 bg-navy-800 px-4 py-2.5 text-white shadow-xl"
               >
                 {(() => {
-                  const s = filtered.find((x) => x.id === hovered);
-                  if (!s) return null;
+                  const s = findState(hovered)!;
                   return (
                     <>
                       <p className="text-sm font-semibold">{s.stateName}</p>
@@ -162,7 +152,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
           </AnimatePresence>
 
           <div className="absolute right-5 top-5 flex items-center gap-2 rounded-xl border border-border bg-white/90 px-3 py-2 shadow-sm">
-            <span className="h-2 w-2 rounded-full" style={{ background: COVERED_COLOR }} />
+            <span className="h-2 w-2 rounded-full" style={{ background: COVERED_FILL }} />
             <span className="text-[10px] font-medium uppercase tracking-wide text-navy-700/70">FAIITA Covered State</span>
           </div>
         </div>
@@ -181,8 +171,8 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
               <button
                 key={s.id}
                 onClick={() => setActive(s)}
-                onMouseEnter={() => setHovered(s.id)}
-                onMouseLeave={() => setHovered((h) => (h === s.id ? null : h))}
+                onMouseEnter={() => setHovered(s.stateName)}
+                onMouseLeave={() => setHovered((h) => (h === s.stateName ? null : h))}
                 className={cn(
                   "flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors",
                   active?.id === s.id ? "bg-navy-700 text-white" : "hover:bg-secondary"

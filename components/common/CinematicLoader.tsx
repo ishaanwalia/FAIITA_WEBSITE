@@ -5,36 +5,33 @@ import gsap from "gsap";
 
 const SESSION_KEY = "faiita-intro-played";
 
-// A jagged EKG/pulse-style zigzag spanning the viewBox width.
-const ZIGZAG_PATH = "M 2,50 L 16,50 L 22,20 L 30,80 L 38,35 L 46,65 L 54,50 L 68,50 L 74,15 L 82,85 L 90,50 L 98,50";
-
 export function CinematicLoader() {
   const [mounted, setMounted] = useState(false);
   const [reduced, setReduced] = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const wordmarkRef = useRef<HTMLDivElement>(null);
-  const taglineRef = useRef<HTMLParagraphElement>(null);
-  const flashRef = useRef<HTMLDivElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
-  const pulseRef = useRef<SVGCircleElement>(null);
-  const trailRef = useRef<SVGPathElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (sessionStorage.getItem(SESSION_KEY)) return;
+    if (sessionStorage.getItem(SESSION_KEY)) return; // never replay after first load this session
 
     setMounted(true);
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
   useEffect(() => {
-    if (!mounted || !rootRef.current) return;
+    if (!mounted) return;
+
+    const container = containerRef.current;
+    const canvas = canvasRef.current;
+    const logo = logoRef.current;
+    if (!container || !canvas || !logo) return;
 
     const finish = () => {
       sessionStorage.setItem(SESSION_KEY, "1");
-      gsap.to(rootRef.current, {
+      gsap.to(container, {
         opacity: 0,
-        scale: 1,
         duration: 0.6,
         ease: "power2.inOut",
         onComplete: () => setMounted(false),
@@ -42,60 +39,109 @@ export function CinematicLoader() {
     };
 
     if (reduced) {
-      gsap.set(rootRef.current, { scale: 1.1 });
-      gsap.to([wordmarkRef.current, taglineRef.current], { opacity: 1, duration: 0.4 });
+      gsap.to(logo, { opacity: 1, scale: 1, duration: 0.4 });
       const t = setTimeout(finish, 700);
       return () => clearTimeout(t);
     }
 
-    gsap.set(rootRef.current, { scale: 1.1 });
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    const path = pathRef.current;
-    const trail = trailRef.current;
-    const pulse = pulseRef.current;
-    if (!path || !trail || !pulse) return;
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
 
-    const length = path.getTotalLength();
-    gsap.set([path, trail], { strokeDasharray: length, strokeDashoffset: length });
+    // ─── Network Nodes (Particles) ──────────────────
+    const nodes: { x: number; y: number; vx: number; vy: number }[] = [];
+    const nodeCount = window.innerWidth < 640 ? 40 : 80; // fewer particles on small screens
 
-    const proxy = { p: 0 };
+    for (let i = 0; i < nodeCount; i++) {
+      nodes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+      });
+    }
+
+    // ─── Connections (computed once — cheap to redraw every frame) ──
+    const connections: number[][] = [];
+    for (let i = 0; i < nodeCount; i++) {
+      for (let j = i + 1; j < nodeCount; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200) connections.push([i, j]);
+      }
+    }
+
+    let animationId: number;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = "rgba(255, 153, 51, 0.15)";
+      ctx.lineWidth = 1;
+      connections.forEach(([i, j]) => {
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.stroke();
+      });
+
+      nodes.forEach((node) => {
+        node.x += node.vx;
+        node.y += node.vy;
+        if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+        if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 153, 51, 0.6)";
+        ctx.fill();
+      });
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    // ─── GSAP Timeline ─────────────────────────────
     const tl = gsap.timeline({
-      onComplete: () => {
-        const elapsed = tl.totalDuration() * 1000;
-        setTimeout(finish, Math.max(0, 2500 - elapsed));
+      defaults: { ease: "power3.inOut" },
+      onComplete: finish,
+    });
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+
+    tl.to(nodes, {
+      duration: 1.2,
+      onUpdate: () => {
+        const progress = tl.progress();
+        nodes.forEach((node) => {
+          node.x += (centerX + (Math.random() - 0.5) * 100 - node.x) * 0.02 * progress;
+          node.y += (centerY + (Math.random() - 0.5) * 100 - node.y) * 0.02 * progress;
+        });
       },
     });
 
-    tl.to(rootRef.current, { scale: 1, duration: 0.01 })
-      .to(proxy, {
-        p: 1,
-        duration: 1.5,
-        ease: "power1.inOut",
-        onUpdate: () => {
-          const dashOffset = length * (1 - proxy.p);
-          path.style.strokeDashoffset = String(dashOffset);
-          trail.style.strokeDashoffset = String(Math.max(0, dashOffset - length * 0.08));
-          const pt = path.getPointAtLength(proxy.p * length);
-          pulse.setAttribute("cx", String(pt.x));
-          pulse.setAttribute("cy", String(pt.y));
-        },
-      })
-      .to(pulse, { scale: 0, opacity: 0, duration: 0.15, transformOrigin: "center" }, ">-0.05")
-      .fromTo(
-        flashRef.current,
-        { opacity: 0.9 },
-        { opacity: 0, duration: 0.5, ease: "power2.out" },
-        "<"
-      )
-      .fromTo(
-        wordmarkRef.current,
-        { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" },
-        "<0.05"
-      )
-      .fromTo(taglineRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5 }, "-=0.2");
+    tl.to(logo, { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" }, "-=0.4");
+
+    const tagline = logo.querySelector(".loader-tagline") as HTMLElement | null;
+    if (tagline) {
+      tl.to(tagline, { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
+    }
+
+    tl.to({}, { duration: 0.8 });
+    tl.to(logo, { scale: 0.8, opacity: 0, duration: 0.6, ease: "power2.in" });
 
     return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", resize);
       tl.kill();
     };
   }, [mounted, reduced]);
@@ -104,47 +150,26 @@ export function CinematicLoader() {
 
   return (
     <div
-      ref={rootRef}
+      ref={containerRef}
       role="status"
       aria-label="Loading FAIITA"
-      className="fixed inset-0 z-[999] flex items-center justify-center overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #0A0A0F 0%, #1A1A2E 100%)" }}
+      className="fixed inset-0 z-[999] flex items-center justify-center overflow-hidden bg-[#0A2540]"
     >
-      <div className="absolute inset-0 bg-network-grid opacity-20" />
-
-      <svg viewBox="0 0 100 100" className="absolute inset-x-0 top-1/2 h-40 w-full -translate-y-1/2" preserveAspectRatio="none" aria-hidden>
-        <path
-          ref={trailRef}
-          d={ZIGZAG_PATH}
-          fill="none"
-          stroke="#F2921D"
-          strokeOpacity="0.25"
-          strokeWidth="2.5"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-        />
-        <path
-          ref={pathRef}
-          d={ZIGZAG_PATH}
-          fill="none"
-          stroke="#F2921D"
-          strokeWidth="0.8"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-        />
-        <circle ref={pulseRef} r="1.6" fill="#ffffff" />
-      </svg>
-
-      <div ref={flashRef} className="pointer-events-none absolute inset-0 bg-white opacity-0" aria-hidden />
-
-      <div className="relative flex flex-col items-center gap-3">
-        <div ref={wordmarkRef} className="font-display text-4xl font-bold tracking-tight text-white opacity-0 sm:text-6xl">
-          FAIITA
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <div ref={logoRef} className="relative flex flex-col items-center opacity-0 scale-90">
+        <div className="text-center">
+          <div className="text-5xl font-bold tracking-tight text-white md:text-7xl">
+            <span className="text-saffron-500">FAIITA</span>
+          </div>
+          <div className="mt-3 text-xs uppercase tracking-[0.2em] text-white/40 md:text-sm">
+            Federation of All India
+          </div>
+          <div className="text-xs uppercase tracking-[0.2em] text-white/40 md:text-sm">
+            Information Technology Associations
+          </div>
         </div>
-        <p ref={taglineRef} className="font-mono text-xs uppercase tracking-[0.3em] text-saffron-400 opacity-0">
-          29 States · One Federation
+        <p className="loader-tagline mt-6 translate-y-4 text-sm tracking-wider text-white/30 opacity-0">
+          Uniting India&apos;s IT Fraternity Since 1990
         </p>
       </div>
     </div>

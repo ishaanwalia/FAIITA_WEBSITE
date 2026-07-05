@@ -101,6 +101,10 @@
   .mix-blend-diff {
     mix-blend-mode: difference;
   }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-saffron-300 via-saffron-400 to-saffron-500 bg-clip-text text-transparent;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
