@@ -1,15 +1,17 @@
 // FAIITA — Prisma Schema
-// Local dev uses SQLite (file-based, zero setup).
-// For production on Vercel, switch provider to "postgresql" and point
-// DATABASE_URL at a free Postgres instance (Supabase / Neon) — see README.md.
+// Production datasource: Neon Postgres.
+// url = pooled connection (has "-pooler" in the hostname) — used at runtime.
+// directUrl = direct, non-pooled connection — used for migrations only.
+// Both come from environment variables — see .env / Vercel env vars.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite" // change to "postgresql" for production — see README
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 /// One row per Indian state/UT covered by FAIITA — powers the interactive map,
