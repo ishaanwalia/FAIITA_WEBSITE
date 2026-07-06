@@ -58,8 +58,6 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
     return data;
   }, [filtered]);
 
-  const findState = (name?: string) => (name ? states.find((s) => s.stateName === name) : undefined);
-
   return (
     <div className="relative">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
@@ -98,10 +96,6 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
             <DatamapsIndia
               regionData={regionData}
               hoverComponent={HoverCard}
-              onClick={(name: string) => {
-                const match = findState(name);
-                if (match) setActive(match);
-              }}
               mapLayout={{
                 startColor: COVERED_FILL,
                 endColor: COVERED_FILL,

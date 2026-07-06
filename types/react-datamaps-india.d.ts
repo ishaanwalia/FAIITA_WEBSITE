@@ -19,8 +19,6 @@ declare module "react-datamaps-india" {
     regionData?: Record<string, RegionDataValue>;
     hoverComponent?: ComponentType<{ value: RegionDataValue & { name?: string } }>;
     mapLayout?: MapLayout;
-    onClick?: (stateName: string) => void;
-    ref?: unknown;
   }
 
   const DatamapsIndia: ComponentType<DatamapsIndiaProps>;
