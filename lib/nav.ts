@@ -21,7 +21,7 @@ export const navItems: NavItem[] = [
       { label: "Blogs", href: "/resources/blogs", description: "Perspectives from the IT trade ecosystem" },
       { label: "Gallery", href: "/resources/gallery", description: "Moments from across the federation" },
       { label: "Newsletter", href: "/resources/newsletter", description: "Our quarterly publication" },
-      { label: "Policy", href: "/resources/policy", description: "Advocacy positions and guidance documents" },
+      { label: "Reports", href: "/resources/policy", description: "Industry research, policy papers, and annual reports" },
     ],
   },
   { label: "Contact", href: "/contact" },

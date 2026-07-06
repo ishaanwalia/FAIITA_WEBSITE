@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { Building2, MapPin, Search, Users } from "lucide-react";
+import { TiltCard } from "@/components/common/TiltCard";
+import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -64,17 +66,19 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
       {filtered.length > 0 ? (
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((m) => (
-            <div key={m.id} className="flex flex-col rounded-2xl border border-border bg-card p-6">
-              <Badge variant="outline" className="w-fit">{m.type}</Badge>
-              <h3 className="mt-4 font-display text-base font-bold text-navy-800">{m.name}</h3>
-              <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                <MapPin className="h-3.5 w-3.5" /> {m.city}, {m.state.stateName}
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{m.description}</p>
-              <p className="mt-4 flex items-center gap-1.5 border-t border-border pt-4 text-xs font-semibold text-saffron-600">
-                <Users className="h-3.5 w-3.5" /> {m.memberCount.toLocaleString("en-IN")} members
-              </p>
-            </div>
+            <TiltCard key={m.id} maxTilt={6} className="h-full">
+              <GlassCard variant="light" className="flex h-full flex-col">
+                <Badge variant="outline" className="w-fit">{m.type}</Badge>
+                <h3 className="mt-4 font-display text-base font-bold text-navy-800">{m.name}</h3>
+                <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <MapPin className="h-3.5 w-3.5" /> {m.city}, {m.state.stateName}
+                </p>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{m.description}</p>
+                <p className="mt-4 flex items-center gap-1.5 border-t border-navy-700/10 pt-4 text-xs font-semibold text-saffron-600">
+                  <Users className="h-3.5 w-3.5" /> {m.memberCount.toLocaleString("en-IN")} members
+                </p>
+              </GlassCard>
+            </TiltCard>
           ))}
         </div>
       ) : (

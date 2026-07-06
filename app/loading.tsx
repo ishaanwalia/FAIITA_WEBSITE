@@ -1,12 +1,8 @@
+// Intentionally renders nothing. This file is Next.js's Suspense fallback
+// shown while a page's async data is loading — but it renders *before* the
+// (site) layout (and its CinematicLoader) ever mounts, so having a visible
+// spinner here created a second, competing "loading screen" ahead of the
+// real one. Returning null lets the cinematic loader be the only one seen.
 export default function Loading() {
-  return (
-    <div className="flex min-h-[60vh] w-full items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative h-12 w-12">
-          <div className="absolute inset-0 animate-spin rounded-full border-2 border-navy-700/15 border-t-saffron-500" />
-        </div>
-        <p className="font-mono text-xs uppercase tracking-[0.25em] text-navy-400">Loading</p>
-      </div>
-    </div>
-  );
+  return null;
 }

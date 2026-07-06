@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, MapPin } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { TiltCard } from "@/components/common/TiltCard";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { EventCalendar } from "@/components/common/EventCalendar";
-import { formatDate, formatDateShort } from "@/lib/utils";
+import { EventsSpotlight } from "@/components/resources/EventsSpotlight";
+import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -48,37 +46,12 @@ export default async function EventsPage() {
       <section className="bg-background pb-20 pt-8">
         <div className="container-page">
           <h2 className="font-display text-xl font-bold text-navy-800">Upcoming</h2>
-          <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {upcoming.map((e, i) => {
-              const d = formatDateShort(e.startDate);
-              return (
-                <ScrollReveal key={e.id} direction="up" delay={(i % 3) * 0.08}>
-                  <TiltCard maxTilt={6} className="h-full">
-                    <Link href={`/resources/events/${e.slug}`} className="group block h-full">
-                      <GlassCard variant="light" className="flex h-full flex-col">
-                        <div className="flex items-start justify-between">
-                          <div className="flex h-14 w-14 flex-col items-center justify-center rounded-xl bg-navy-700 text-white">
-                            <span className="font-mono text-lg font-bold leading-none">{d.day}</span>
-                            <span className="text-[10px] font-medium uppercase tracking-wide">{d.month}</span>
-                          </div>
-                          <span className="rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-600">
-                            {e.category}
-                          </span>
-                        </div>
-                        <h3 className="mt-5 font-display text-lg font-semibold leading-snug text-navy-800">{e.title}</h3>
-                        <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <MapPin className="h-3.5 w-3.5" /> {e.city}, {e.state}
-                        </p>
-                        <span className="mt-4 flex items-center gap-1 text-xs font-semibold text-navy-700">
-                          Details <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-                        </span>
-                      </GlassCard>
-                    </Link>
-                  </TiltCard>
-                </ScrollReveal>
-              );
-            })}
-            {upcoming.length === 0 && <p className="text-sm text-muted-foreground">No upcoming events scheduled right now — check back soon.</p>}
+          <div className="mt-6">
+            {upcoming.length > 0 ? (
+              <EventsSpotlight events={upcoming} />
+            ) : (
+              <p className="text-sm text-muted-foreground">No upcoming events scheduled right now — check back soon.</p>
+            )}
           </div>
 
           {past.length > 0 && (

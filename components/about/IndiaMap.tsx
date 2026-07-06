@@ -1,62 +1,124 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import dynamic from "next/dynamic";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Building2, Users } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, Building2, MapPin, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { RegionDataValue } from "react-datamaps-india";
 import type { StateMapPoint } from "@/types";
-
-// This library touches `window` at module scope, so it must never be part of
-// the server bundle — load it purely on the client.
-const DatamapsIndia = dynamic(() => import("react-datamaps-india"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex min-h-[420px] items-center justify-center text-sm text-muted-foreground">
-      Loading map…
-    </div>
-  ),
-});
 
 const COVERED_FILL = "#F2921D";
 const COVERED_HOVER = "#D97A0E";
 const UNCOVERED_FILL = "#F1F5F9";
 const BORDER_COLOR = "#0B2A4A";
 
-function HoverCard({ value }: { value: RegionDataValue & { name?: string } }) {
-  if (!value?.memberCount) {
-    return <span className="text-xs text-white/60">{value?.name}</span>;
-  }
-  return (
-    <div className="text-left">
-      <p className="text-sm font-semibold text-white">{value.name}</p>
-      <p className="text-xs text-white/60">
-        {Number(value.memberCount).toLocaleString("en-IN")} members · Click below for details
-      </p>
-    </div>
-  );
+function normalize(name: string) {
+  return name.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+// Real-world SVG maps identify each state through different attributes
+// depending on the source — check the common ones so this keeps working
+// regardless of which free SVG map you drop in.
+function getShapeStateName(el: Element): string {
+  const attr =
+    el.getAttribute("name") ||
+    el.getAttribute("data-name") ||
+    el.getAttribute("aria-label") ||
+    el.querySelector("title")?.textContent ||
+    el.getAttribute("id") ||
+    "";
+  return attr.replace(/^IN[-_]?/i, "").replace(/[-_]/g, " ").trim();
 }
 
 export function IndiaMap({ states }: { states: StateMapPoint[] }) {
   const [active, setActive] = useState<StateMapPoint | null>(null);
+  const [hovered, setHovered] = useState<{ name: string; x: number; y: number } | null>(null);
   const [region, setRegion] = useState<string>("All");
   const [view, setView] = useState<"map" | "list">("map");
+  const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "missing">("loading");
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const regions = useMemo(() => ["All", ...Array.from(new Set(states.map((s) => s.region)))], [states]);
   const filtered = region === "All" ? states : states.filter((s) => s.region === region);
+  const findState = (name: string) => states.find((s) => normalize(s.stateName) === normalize(name));
 
-  const regionData = useMemo(() => {
-    const data: Record<string, RegionDataValue> = {};
-    for (const s of filtered) {
-      data[s.stateName] = {
-        value: s.memberCount,
-        memberCount: s.memberCount,
-        name: s.stateName,
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/india-map.svg")
+      .then((res) => {
+        if (!res.ok) throw new Error("not found");
+        return res.text();
+      })
+      .then((svgText) => {
+        if (cancelled || !containerRef.current) return;
+        containerRef.current.innerHTML = svgText;
+        const svg = containerRef.current.querySelector("svg");
+        if (svg) {
+          svg.setAttribute("width", "100%");
+          svg.setAttribute("height", "100%");
+          svg.removeAttribute("style");
+        }
+        setMapStatus("ready");
+      })
+      .catch(() => {
+        if (!cancelled) setMapStatus("missing");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (mapStatus !== "ready" || !containerRef.current) return;
+    const shapes = containerRef.current.querySelectorAll<SVGElement>("path, polygon");
+    const cleanups: (() => void)[] = [];
+
+    shapes.forEach((shape) => {
+      const rawName = getShapeStateName(shape);
+      const match = findState(rawName);
+      const isCovered = match && filtered.includes(match);
+
+      shape.style.fill = isCovered ? COVERED_FILL : UNCOVERED_FILL;
+      shape.style.stroke = BORDER_COLOR;
+      shape.style.strokeWidth = "0.75";
+      shape.style.transition = "fill 0.15s ease";
+      shape.style.cursor = match ? "pointer" : "default";
+
+      const onEnter = (e: Event) => {
+        if (!match) return;
+        shape.style.fill = COVERED_HOVER;
+        const me = e as MouseEvent;
+        setHovered({ name: match.stateName, x: me.clientX, y: me.clientY });
       };
-    }
-    return data;
-  }, [filtered]);
+      const onMove = (e: Event) => {
+        if (!match) return;
+        const me = e as MouseEvent;
+        setHovered({ name: match.stateName, x: me.clientX, y: me.clientY });
+      };
+      const onLeave = () => {
+        shape.style.fill = isCovered ? COVERED_FILL : UNCOVERED_FILL;
+        setHovered(null);
+      };
+      const onClick = () => {
+        if (match) setActive(match);
+      };
+
+      shape.addEventListener("mouseenter", onEnter);
+      shape.addEventListener("mousemove", onMove);
+      shape.addEventListener("mouseleave", onLeave);
+      shape.addEventListener("click", onClick);
+
+      cleanups.push(() => {
+        shape.removeEventListener("mouseenter", onEnter);
+        shape.removeEventListener("mousemove", onMove);
+        shape.removeEventListener("mouseleave", onLeave);
+        shape.removeEventListener("click", onClick);
+      });
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapStatus, filtered]);
 
   return (
     <div className="relative">
@@ -92,21 +154,33 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
             view === "list" && "hidden lg:block"
           )}
         >
-          <div className="min-h-[360px] sm:min-h-[480px] [&_svg]:h-auto [&_svg]:w-full">
-            <DatamapsIndia
-              regionData={regionData}
-              hoverComponent={HoverCard}
-              mapLayout={{
-                startColor: COVERED_FILL,
-                endColor: COVERED_FILL,
-                hoverColor: COVERED_HOVER,
-                noDataColor: UNCOVERED_FILL,
-                borderColor: BORDER_COLOR,
-                hoverBorderColor: BORDER_COLOR,
-                hoverTitle: "Members",
-              }}
-            />
-          </div>
+          <div ref={containerRef} className="min-h-[360px] sm:min-h-[480px] [&_svg]:h-auto [&_svg]:w-full" />
+
+          {mapStatus === "missing" && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white p-8 text-center">
+              <MapPin className="h-6 w-6 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">Map graphic coming soon.</p>
+            </div>
+          )}
+          {mapStatus === "loading" && (
+            <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">
+              Loading map…
+            </div>
+          )}
+
+          <AnimatePresence>
+            {hovered && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                style={{ position: "fixed", left: hovered.x + 14, top: hovered.y + 14 }}
+                className="pointer-events-none z-50 rounded-lg bg-navy-800 px-3 py-1.5 text-xs font-semibold text-white shadow-xl"
+              >
+                {hovered.name}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="absolute right-5 top-5 flex items-center gap-2 rounded-xl border border-border bg-white/90 px-3 py-2 shadow-sm">
             <span className="h-2 w-2 rounded-full" style={{ background: COVERED_FILL }} />

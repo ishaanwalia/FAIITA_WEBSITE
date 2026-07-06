@@ -156,8 +156,9 @@ model Policy {
   id          String   @id @default(cuid())
   title       String
   description String
-  category    String // GST | Trade | Digital Policy | Compliance
+  category    String // Annual | Research | Policy | White Paper
   fileUrl     String?
+  fileSize    String? // e.g. "4.2 MB"
   publishedAt DateTime @default(now())
 
   @@index([category])

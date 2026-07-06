@@ -5,9 +5,8 @@ import { SectionHeading } from "@/components/common/SectionHeading";
 import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { NewsGrid } from "@/components/resources/NewsGrid";
 import { Badge } from "@/components/ui/badge";
-import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -60,25 +59,7 @@ export default async function NewsPage() {
             </ScrollReveal>
           )}
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {rest.map((n, i) => (
-              <ScrollReveal key={n.id} direction="up" delay={(i % 3) * 0.08}>
-                <TiltCard maxTilt={6} className="h-full">
-                  <Link href={`/resources/news/${n.slug}`} className="group block h-full">
-                    <GlassCard variant="light" className="flex h-full flex-col">
-                      <Badge variant="outline" className="w-fit">{n.category}</Badge>
-                      <h2 className="mt-4 font-display text-lg font-bold leading-snug text-navy-800">{n.title}</h2>
-                      <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{n.excerpt}</p>
-                      <div className="mt-5 flex items-center gap-2 border-t border-navy-700/10 pt-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        {formatDate(n.publishedAt)}
-                        <ArrowUpRight className="h-3.5 w-3.5 text-navy-700 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </div>
-                    </GlassCard>
-                  </Link>
-                </TiltCard>
-              </ScrollReveal>
-            ))}
-          </div>
+          <NewsGrid news={rest} />
         </div>
       </section>
     </>

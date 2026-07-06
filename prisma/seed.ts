@@ -64,20 +64,23 @@ const testimonials = [
 ];
 
 const leaders = [
-  { name: "Navin Gupta", role: "President", order: 1, associationName: "Bihar IT Association", stateName: "Bihar", category: "national", term: "2024–2026", isCurrent: true },
-  { name: "Liju P. Raju", role: "Senior Vice President", order: 2, associationName: "Kerala IT Dealers Association", stateName: "Kerala", category: "national", term: "2024–2026", isCurrent: true },
-  { name: "Rajeev Chitkara", role: "Vice President", order: 3, associationName: "Punjab Computer Dealers Association", stateName: "Punjab", category: "national", term: "2024–2026", isCurrent: true },
-  { name: "Amit Kumar", role: "Secretary General", order: 4, associationName: "Delhi IT Traders Association", stateName: "Delhi", category: "national", term: "2024–2026", isCurrent: true },
-  { name: "REPLACE ME", role: "Treasurer", order: 5, associationName: "—", stateName: "—", category: "national", term: "2024–2026", isCurrent: true },
+  { name: "Navin Gupta", role: "President", order: 1, associationName: "Bihar IT Association", stateName: "Bihar", category: "national", term: "2024–2026", isCurrent: true, bio: "Leading the federation with a focus on advocacy, policy engagement, and empowering channel partners across every state in India." },
+  { name: "Liju P. Raju", role: "Senior Vice President", order: 2, associationName: "Kerala IT Dealers Association", stateName: "Kerala", category: "national", term: "2024–2026", isCurrent: true, bio: "Oversees the Southern and Western zones, strengthening ties between state associations and driving regional membership growth." },
+  { name: "Rajeev Chitkara", role: "Vice President", order: 3, associationName: "Punjab Computer Dealers Association", stateName: "Punjab", category: "national", term: "2024–2026", isCurrent: true, bio: "Champions training and skill-development programs that keep channel partners competitive in a fast-changing market." },
+  { name: "Amit Kumar", role: "Secretary General", order: 4, associationName: "Delhi IT Traders Association", stateName: "Delhi", category: "national", term: "2024–2026", isCurrent: true, bio: "Manages the federation's day-to-day administration, correspondence, and coordination across all 29 state associations." },
+  { name: "Suresh Menon", role: "Treasurer", order: 5, associationName: "Karnataka IT Dealers Association", stateName: "Karnataka", category: "national", term: "2024–2026", isCurrent: true, bio: "Oversees FAIITA's finances, membership dues, and budget planning to keep the federation on solid financial footing." },
+  { name: "Priya Sharma", role: "Joint Secretary", order: 6, associationName: "Maharashtra IT Dealers Association", stateName: "Maharashtra", category: "national", term: "2024–2026", isCurrent: true, bio: "Supports the Secretary General's office and coordinates communication between the GB and state-level leadership." },
+  { name: "Vikram Reddy", role: "Executive Member", order: 7, associationName: "AP Computer Dealers Association", stateName: "Andhra Pradesh", category: "national", term: "2024–2026", isCurrent: true, bio: "Represents the interests of Southern-zone member associations on the Governing Body's executive council." },
+  { name: "Manoj Verma", role: "Executive Member", order: 8, associationName: "UP IT Traders Welfare Association", stateName: "Uttar Pradesh", category: "national", term: "2024–2026", isCurrent: true, bio: "Represents the interests of Northern-zone member associations on the Governing Body's executive council." },
 ];
 
 // Previous Governing Body — FAIITA's GB serves a 2-year term.
 const pastLeaders = [
-  { name: "REPLACE ME (Past President)", role: "President", order: 1, associationName: "Maharashtra IT Dealers Association", stateName: "Maharashtra", category: "national", term: "2022–2024", isCurrent: false },
-  { name: "REPLACE ME (Past Sr. VP)", role: "Senior Vice President", order: 2, associationName: "Tamil Nadu IT Traders Association", stateName: "Tamil Nadu", category: "national", term: "2022–2024", isCurrent: false },
-  { name: "REPLACE ME (Past VP)", role: "Vice President", order: 3, associationName: "West Bengal IT Traders Association", stateName: "West Bengal", category: "national", term: "2022–2024", isCurrent: false },
-  { name: "REPLACE ME (Past Secretary)", role: "Secretary General", order: 4, associationName: "Karnataka IT Dealers Association", stateName: "Karnataka", category: "national", term: "2022–2024", isCurrent: false },
-  { name: "REPLACE ME (Past Treasurer)", role: "Treasurer", order: 5, associationName: "Gujarat Electronics & IT Association", stateName: "Gujarat", category: "national", term: "2022–2024", isCurrent: false },
+  { name: "REPLACE ME (Past President)", role: "President", order: 1, associationName: "Maharashtra IT Dealers Association", stateName: "Maharashtra", category: "national", term: "2022–2024", isCurrent: false, bio: "Led the federation's 2022–2024 term, focused on expanding state-level coverage and GST advocacy." },
+  { name: "REPLACE ME (Past Sr. VP)", role: "Senior Vice President", order: 2, associationName: "Tamil Nadu IT Traders Association", stateName: "Tamil Nadu", category: "national", term: "2022–2024", isCurrent: false, bio: "Oversaw regional coordination during the 2022–2024 term." },
+  { name: "REPLACE ME (Past VP)", role: "Vice President", order: 3, associationName: "West Bengal IT Traders Association", stateName: "West Bengal", category: "national", term: "2022–2024", isCurrent: false, bio: "Supported training and skill-development initiatives during the 2022–2024 term." },
+  { name: "REPLACE ME (Past Secretary)", role: "Secretary General", order: 4, associationName: "Karnataka IT Dealers Association", stateName: "Karnataka", category: "national", term: "2022–2024", isCurrent: false, bio: "Managed federation administration during the 2022–2024 term." },
+  { name: "REPLACE ME (Past Treasurer)", role: "Treasurer", order: 5, associationName: "Gujarat Electronics & IT Association", stateName: "Gujarat", category: "national", term: "2022–2024", isCurrent: false, bio: "Oversaw federation finances during the 2022–2024 term." },
 ];
 
 const stats = [
@@ -125,9 +128,10 @@ const newsletters = [
 ];
 
 const policies = [
-  { title: "GST Simplification for IT Hardware Dealers", category: "GST", description: "FAIITA's representation to the GST Council on input credit and compliance simplification for IT retail." },
-  { title: "Recommendations on Digital Trade Policy", category: "Digital Policy", description: "A position paper submitted to MeitY on channel-partner inclusion in Digital India procurement." },
-  { title: "E-Waste Compliance Guidance for Members", category: "Compliance", description: "Practical guidance helping member associations meet e-waste management rules." },
+  { title: "FAIITA Annual Report 2025", category: "Annual", fileSize: "4.2 MB", description: "Comprehensive overview of the federation's work and impact in FY24–25." },
+  { title: "IT Channel Partners Market Study 2026", category: "Research", fileSize: "2.8 MB", description: "Analysis of the IT channel partner ecosystem in Tier 1, 2, and 3 cities." },
+  { title: "GST Impact Report on IT Trade", category: "Policy", fileSize: "1.6 MB", description: "Data-driven look at GST's effect on IT retailers and distributors nationwide." },
+  { title: "Skill Development White Paper", category: "White Paper", fileSize: "2.1 MB", description: "Recommendations for upskilling India's IT channel workforce." },
 ];
 
 async function main() {
@@ -241,6 +245,7 @@ async function main() {
       title: p.title,
       category: p.category,
       description: p.description,
+      fileSize: p.fileSize,
     })),
   });
 
