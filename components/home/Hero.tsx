@@ -54,7 +54,7 @@ export function Hero() {
             custom={0.15}
             className="mb-4 font-mono text-sm font-medium uppercase tracking-[0.2em] text-saffron-400 sm:text-base"
           >
-            Uniting India&apos;s IT Fraternity Since 1990
+            Uniting India&apos;s IT Fraternity Since 2014
           </motion.p>
 
           <motion.h1
