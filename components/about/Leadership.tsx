@@ -105,27 +105,52 @@ export function Leadership({
         )}
       </AnimatePresence>
 
-      {/* Grid — click any card to feature it above */}
-      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {activeList.map((l, i) => (
-          <ScrollReveal key={l.id} direction="up" delay={i * 0.05}>
-            <TiltCard maxTilt={6}>
-              <button onClick={() => setFeaturedId(l.id)} className="block w-full text-left">
-                <GlassCard
-                  variant="dark"
-                  className={cn("text-center transition-all", featured?.id === l.id && "ring-2 ring-saffron-400")}
-                >
-                  <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-saffron-400 to-saffron-600 font-display text-lg font-bold text-navy-900">
-                    {initials(l.name)}
-                  </span>
-                  <h4 className="mt-3 font-display text-base font-bold text-white">{l.name}</h4>
-                  <p className="text-xs font-semibold text-saffron-400">{l.role}</p>
-                  {l.associationName && <p className="mt-1 text-[11px] text-white/50">{l.associationName}</p>}
-                </GlassCard>
-              </button>
-            </TiltCard>
-          </ScrollReveal>
-        ))}
+      {/* Bento grid — click any tile to feature it above; size reflects seniority */}
+      <div className="mt-8 grid auto-rows-[150px] grid-cols-2 gap-4 sm:grid-cols-4">
+        {activeList.map((l, i) => {
+          // First tile (President/lead) gets a large 2x2 bento cell, second
+          // gets a wide 2x1, the rest are standard single cells.
+          const spanClass =
+            i === 0
+              ? "col-span-2 row-span-2"
+              : i === 1
+                ? "col-span-2 row-span-1"
+                : "col-span-1 row-span-1";
+          const isFeatured = featured?.id === l.id;
+
+          return (
+            <ScrollReveal key={l.id} direction="up" delay={i * 0.05} className={spanClass}>
+              <TiltCard maxTilt={6} className="h-full">
+                <button onClick={() => setFeaturedId(l.id)} className="block h-full w-full text-left">
+                  <GlassCard
+                    variant="dark"
+                    className={cn(
+                      "flex h-full flex-col justify-center text-center transition-all",
+                      isFeatured && "ring-2 ring-saffron-400",
+                      i === 0 && "items-center justify-end pb-8"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "mx-auto flex items-center justify-center rounded-2xl bg-gradient-to-br from-saffron-400 to-saffron-600 font-display font-bold text-navy-900",
+                        i === 0 ? "h-20 w-20 text-2xl" : "h-14 w-14 text-base"
+                      )}
+                    >
+                      {initials(l.name)}
+                    </span>
+                    <h4 className={cn("mt-3 font-display font-bold text-white", i === 0 ? "text-xl" : "text-sm")}>
+                      {l.name}
+                    </h4>
+                    <p className={cn("font-semibold text-saffron-400", i === 0 ? "text-sm" : "text-xs")}>{l.role}</p>
+                    {l.associationName && i < 2 && (
+                      <p className="mt-1 text-xs text-white/50">{l.associationName}</p>
+                    )}
+                  </GlassCard>
+                </button>
+              </TiltCard>
+            </ScrollReveal>
+          );
+        })}
       </div>
     </div>
   );

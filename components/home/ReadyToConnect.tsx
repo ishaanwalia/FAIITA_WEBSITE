@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SpotlightSection } from "@/components/common/SpotlightSection";
 
 export function ReadyToConnect() {
   return (
-    <section className="relative overflow-hidden bg-navy-800 py-24">
+    <SpotlightSection className="overflow-hidden bg-navy-800 py-24">
       <div className="absolute inset-0 bg-network-grid opacity-20" aria-hidden />
       <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-saffron-500/10 blur-3xl" aria-hidden />
       <div className="container-page relative flex flex-col items-center gap-6 text-center">
@@ -27,6 +28,6 @@ export function ReadyToConnect() {
           </Button>
         </div>
       </div>
-    </section>
+    </SpotlightSection>
   );
 }

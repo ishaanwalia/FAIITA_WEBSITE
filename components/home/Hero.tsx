@@ -1,8 +1,9 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { ParticleBackground } from "@/components/home/ParticleBackground";
@@ -13,9 +14,18 @@ const fadeUp = {
 };
 
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+
+  // Background drifts slower than the foreground content as you scroll —
+  // a classic depth-of-field parallax cue, done with GPU-only transforms.
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "60%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
-    <section className="relative flex min-h-[92vh] items-center overflow-hidden bg-navy-800">
-      <div className="absolute inset-0">
+    <section ref={sectionRef} className="relative flex min-h-[92vh] items-center overflow-hidden bg-navy-800">
+      <motion.div style={{ y: bgY }} className="absolute inset-0 scale-110">
         <Image
           src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80"
           alt=""
@@ -24,11 +34,11 @@ export function Hero() {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-900/90 via-navy-800/80 to-navy-800/95" />
-      </div>
+      </motion.div>
 
       <ParticleBackground />
 
-      <div className="container-page relative z-10 py-32 text-center">
+      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="container-page relative z-10 py-32 text-center">
         <div className="mx-auto max-w-4xl">
           <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0} className="mx-auto mb-8 flex justify-center">
             <div className="relative h-20 w-64 sm:h-28 sm:w-80">
@@ -85,7 +95,7 @@ export function Hero() {
             </MagneticButton>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}
