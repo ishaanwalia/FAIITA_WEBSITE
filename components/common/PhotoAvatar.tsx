@@ -21,7 +21,7 @@ export function PhotoAvatar({
   initials: string;
   imageUrl?: string | null;
   size?: keyof typeof SIZES;
-  /** Scales the avatar 2x on hover of the nearest `group` ancestor (e.g. a card). */
+  /** Gently zooms the avatar on hover of the nearest `group` ancestor (e.g. a card). */
   hoverZoom?: boolean;
   className?: string;
 }) {
@@ -33,7 +33,7 @@ export function PhotoAvatar({
       className={cn(
         "relative z-10 shrink-0 overflow-hidden rounded-2xl shadow-md transition-transform duration-300 ease-out",
         SIZES[size],
-        hoverZoom && "group-hover:z-20 group-hover:scale-[2]",
+        hoverZoom && "group-hover:z-20 group-hover:scale-125",
         className
       )}
     >

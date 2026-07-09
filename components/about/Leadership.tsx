@@ -130,7 +130,7 @@ export function Leadership({
 
       {/* Bento grid — click a tile to feature it above; hover a tile to see
           its photo zoom in, click the info icon to flip for contact details. */}
-      <div className="mt-8 grid auto-rows-[150px] grid-cols-2 gap-4 sm:grid-cols-4" style={{ perspective: 1400 }}>
+      <div className="mt-8 grid auto-rows-[172px] grid-cols-2 gap-4 sm:grid-cols-4" style={{ perspective: 1400 }}>
         {activeList.map((l, i) => {
           const spanClass =
             i === 0 ? "col-span-2 row-span-2" : i === 1 ? "col-span-2 row-span-1" : "col-span-1 row-span-1";
@@ -142,19 +142,18 @@ export function Leadership({
               variant="dark"
               clip
               className={cn(
-                "flex h-full flex-col justify-center text-center transition-all",
-                isFeatured && "ring-2 ring-saffron-400",
-                i === 0 && "items-center justify-end pb-8"
+                "flex h-full flex-col items-center justify-center text-center transition-all",
+                isFeatured && "ring-2 ring-saffron-400"
               )}
             >
               <PhotoAvatar
                 initials={initials(l.name)}
                 imageUrl={l.imageUrl}
-                size={i === 0 ? "lg" : "md"}
+                size={i === 0 ? "xl" : "md"}
                 hoverZoom
                 className="mx-auto"
               />
-              <h4 className={cn("mt-3 font-display font-bold text-white", i === 0 ? "text-xl" : "text-sm")}>
+              <h4 className={cn("font-display font-bold text-white", i === 0 ? "mt-6 text-xl" : "mt-4 text-sm")}>
                 {l.name}
               </h4>
               <p className={cn("font-semibold text-saffron-400", i === 0 ? "text-sm" : "text-xs")}>{l.role}</p>

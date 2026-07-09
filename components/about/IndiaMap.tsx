@@ -12,8 +12,17 @@ const COVERED_HOVER = "#D97A0E";
 const UNCOVERED_FILL = "#F1F5F9";
 const BORDER_COLOR = "#0B2A4A";
 
+// Public-domain SVG maps often carry dated or variant state names — fold
+// them into the names used in the database before comparing.
+const NAME_ALIASES: Record<string, string> = {
+  orissa: "odisha",
+  uttaranchal: "uttarakhand",
+  pondicherry: "puducherry",
+};
+
 function normalize(name: string) {
-  return name.toLowerCase().replace(/[^a-z]/g, "");
+  const n = name.toLowerCase().replace(/&/g, "and").replace(/[^a-z]/g, "");
+  return NAME_ALIASES[n] ?? n;
 }
 
 // Real-world SVG maps identify each state through different attributes
@@ -30,6 +39,13 @@ function getShapeStateName(el: Element): string {
   return attr.replace(/^IN[-_]?/i, "").replace(/[-_]/g, " ").trim();
 }
 
+// ISO 3166-2 shape ids like "INJK" carry the same two-letter code stored as
+// stateCode in the database — the most reliable way to link shape and data.
+function getShapeStateCode(el: Element): string | null {
+  const m = /^IN[-_]?([A-Z]{2})$/i.exec(el.getAttribute("id") || "");
+  return m ? m[1].toUpperCase() : null;
+}
+
 export function IndiaMap({ states }: { states: StateMapPoint[] }) {
   const [active, setActive] = useState<StateMapPoint | null>(null);
   const [hovered, setHovered] = useState<{ name: string; x: number; y: number } | null>(null);
@@ -40,7 +56,11 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
 
   const regions = useMemo(() => ["All", ...Array.from(new Set(states.map((s) => s.region)))], [states]);
   const filtered = region === "All" ? states : states.filter((s) => s.region === region);
-  const findState = (name: string) => states.find((s) => normalize(s.stateName) === normalize(name));
+  const findState = (shape: Element) => {
+    const code = getShapeStateCode(shape);
+    const byCode = code ? states.find((s) => s.stateCode.toUpperCase() === code) : undefined;
+    return byCode ?? states.find((s) => normalize(s.stateName) === normalize(getShapeStateName(shape)));
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -74,8 +94,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
     const cleanups: (() => void)[] = [];
 
     shapes.forEach((shape) => {
-      const rawName = getShapeStateName(shape);
-      const match = findState(rawName);
+      const match = findState(shape);
       const isCovered = match && filtered.includes(match);
 
       shape.style.fill = isCovered ? COVERED_FILL : UNCOVERED_FILL;
