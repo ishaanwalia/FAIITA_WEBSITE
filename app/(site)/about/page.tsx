@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Compass, Layers, ShieldCheck, Users2 } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { TextReveal } from "@/components/common/TextReveal";
+import { GradientMesh } from "@/components/common/GradientMesh";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
@@ -42,8 +43,10 @@ export default async function AboutPage() {
 
   return (
     <>
-      <section className="bg-navy-800 py-24">
-        <div className="container-page">
+      <section className="relative overflow-hidden bg-navy-800 py-24">
+        <GradientMesh />
+        <div className="absolute inset-0 bg-network-grid opacity-10" />
+        <div className="container-page relative">
           <span className="section-eyebrow">About Us</span>
           <TextReveal
             text="One Federation, Twenty-Nine States"

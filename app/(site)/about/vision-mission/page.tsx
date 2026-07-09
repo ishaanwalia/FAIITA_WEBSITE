@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Compass, Target, Sparkles } from "lucide-react";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -57,16 +57,11 @@ export default async function VisionMissionPage() {
 
   return (
     <>
-      <section className="bg-navy-800 py-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="About / Vision & Mission"
-            title="Vision & Mission"
-            description="The principles that guide FAIITA's work uniting India's IT trade fraternity."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="About / Vision & Mission"
+        title="Vision & Mission"
+        description="The principles that guide FAIITA's work uniting India's IT trade fraternity."
+      />
 
       <section className="bg-background py-24">
         <div className="container-page">

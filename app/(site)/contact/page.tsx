@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Mail, MapPin, Phone, Clock } from "lucide-react";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { ContactForm } from "@/components/common/ContactForm";
 
 export const metadata: Metadata = {
@@ -11,16 +11,11 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <section className="bg-navy-800 py-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="Get in Touch"
-            title="Contact FAIITA"
-            description="Whether you're a state association looking to affiliate, a channel partner with a query, or a member of the press — we'd love to hear from you."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Get in Touch"
+        title="Contact FAIITA"
+        description="Whether you're a state association looking to affiliate, a channel partner with a query, or a member of the press — we'd love to hear from you."
+      />
 
       <section className="bg-background py-20">
         <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.3fr]">

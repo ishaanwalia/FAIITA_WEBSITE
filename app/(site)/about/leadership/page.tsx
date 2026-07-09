@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { Leadership } from "@/components/about/Leadership";
 import { prisma } from "@/lib/prisma";
 
@@ -21,16 +21,11 @@ export default async function LeadershipPage() {
 
   return (
     <>
-      <section className="bg-navy-800 py-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="About / Leadership"
-            title="National Leadership"
-            description="FAIITA's Governing Body (GB) serves a two-year term. Browse the current GB, or look back at the previous term below."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="About / Leadership"
+        title="National Leadership"
+        description="FAIITA's Governing Body (GB) serves a two-year term. Browse the current GB, or look back at the previous term below."
+      />
 
       <section className="bg-background py-24">
         <div className="container-page">

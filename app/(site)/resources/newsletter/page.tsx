@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Download, Mail } from "lucide-react";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { NewsletterForm } from "@/components/common/NewsletterForm";
@@ -19,16 +19,12 @@ export default async function NewsletterPage() {
 
   return (
     <>
-      <section className="bg-navy-800 pb-8 pt-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="Resources / Newsletter"
-            title="FAIITA Quarterly"
-            description="Our regular publication covering policy updates, association spotlights, and federation news."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Resources / Newsletter"
+        title="FAIITA Quarterly"
+        description="Our regular publication covering policy updates, association spotlights, and federation news."
+        compact
+      />
       <SectionDivider type="diagonal" className="bg-navy-800" />
 
       <section className="bg-background pb-20 pt-4">

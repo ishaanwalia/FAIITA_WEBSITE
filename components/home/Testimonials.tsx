@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
-import { MaskedAvatar } from "@/components/common/MaskedAvatar";
+import { PhotoAvatar } from "@/components/common/PhotoAvatar";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { cn } from "@/lib/utils";
 import type { TestimonialItem } from "@/types";
@@ -77,7 +77,7 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialItem[]
                     &ldquo;{t.quote}&rdquo;
                   </blockquote>
                   <figcaption className="flex items-center gap-3 border-t border-navy-700/10 pt-4">
-                    <MaskedAvatar initials={initials(t.name)} size="sm" />
+                    <PhotoAvatar initials={initials(t.name)} size="sm" />
                     <div>
                       <p className="text-sm font-semibold text-navy-800">{t.name}</p>
                       <p className="text-xs text-muted-foreground">{t.role}</p>

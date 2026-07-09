@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
@@ -18,16 +18,12 @@ export default async function GalleryPage() {
 
   return (
     <>
-      <section className="bg-navy-800 pb-8 pt-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="Resources / Gallery"
-            title="Moments From Across the Federation"
-            description="A look back at summits, regional meets, and leadership gatherings."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Resources / Gallery"
+        title="Moments From Across the Federation"
+        description="A look back at summits, regional meets, and leadership gatherings."
+        compact
+      />
       <SectionDivider type="wave" className="bg-navy-800" />
 
       <section className="bg-background pb-20 pt-4">

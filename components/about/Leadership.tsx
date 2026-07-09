@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Award, Mail, MapPin, Phone } from "lucide-react";
+import { Award, Briefcase, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { MaskedAvatar } from "@/components/common/MaskedAvatar";
+import { PhotoAvatar } from "@/components/common/PhotoAvatar";
 import { FlipCard } from "@/components/common/FlipCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { cn } from "@/lib/utils";
@@ -20,6 +20,9 @@ export type LeaderData = {
   phone: string | null;
   bio: string | null;
   term: string;
+  imageUrl?: string | null;
+  linkedIn?: string | null;
+  focusAreas?: string | null;
 };
 
 function initials(name: string) {
@@ -60,7 +63,7 @@ export function Leadership({
         ))}
       </div>
 
-      {/* Spotlight — the selected leader, shown prominently */}
+      {/* Spotlight — longer card, with extra info not shown on the grid tiles */}
       <AnimatePresence mode="wait">
         {featured && (
           <motion.div
@@ -69,11 +72,12 @@ export function Leadership({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative mt-10 overflow-hidden rounded-3xl bg-navy-800 p-8 sm:p-10"
+            className="relative mt-10 min-h-[320px] overflow-hidden rounded-3xl bg-navy-800 p-8 sm:p-12"
           >
             <div className="absolute inset-0 bg-network-grid opacity-10" />
-            <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
-              <MaskedAvatar initials={initials(featured.name)} size="xl" />
+            <div className="relative flex h-full flex-col gap-8 sm:flex-row">
+              <PhotoAvatar initials={initials(featured.name)} imageUrl={featured.imageUrl} size="xl" className="rounded-3xl" />
+
               <div className="flex-1">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
                   <Award className="h-3 w-3" /> {featured.role}
@@ -84,53 +88,72 @@ export function Leadership({
                     <MapPin className="h-3.5 w-3.5" /> {featured.associationName}
                   </p>
                 )}
-                {featured.bio && <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60">{featured.bio}</p>}
-                {tab === "current" && (featured.email || featured.phone) && (
-                  <div className="mt-4 flex gap-4">
-                    {featured.email && (
-                      <a href={`mailto:${featured.email}`} className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white">
-                        <Mail className="h-3.5 w-3.5" /> {featured.email}
-                      </a>
-                    )}
-                    {featured.phone && (
-                      <a href={`tel:${featured.phone}`} className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white">
-                        <Phone className="h-3.5 w-3.5" /> {featured.phone}
-                      </a>
-                    )}
+                {featured.bio && <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/60">{featured.bio}</p>}
+
+                {featured.focusAreas && (
+                  <div className="mt-5">
+                    <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white/40">
+                      <Briefcase className="h-3.5 w-3.5" /> Focus Areas
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {featured.focusAreas.split(",").map((tag) => (
+                        <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+                          {tag.trim()}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
+
+                <div className="mt-6 flex flex-wrap gap-4 border-t border-white/10 pt-5">
+                  {tab === "current" && featured.email && (
+                    <a href={`mailto:${featured.email}`} className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white">
+                      <Mail className="h-3.5 w-3.5" /> {featured.email}
+                    </a>
+                  )}
+                  {tab === "current" && featured.phone && (
+                    <a href={`tel:${featured.phone}`} className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white">
+                      <Phone className="h-3.5 w-3.5" /> {featured.phone}
+                    </a>
+                  )}
+                  {featured.linkedIn && (
+                    <a href={featured.linkedIn} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white">
+                      <Linkedin className="h-3.5 w-3.5" /> LinkedIn
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Bento grid, rendered with real CSS 3D perspective — click a tile to
-          feature it above; hover + the info icon flips it to show contact info. */}
-      <div
-        className="mt-8 grid auto-rows-[150px] grid-cols-2 gap-4 sm:grid-cols-4"
-        style={{ perspective: 1400 }}
-      >
+      {/* Bento grid — click a tile to feature it above; hover a tile to see
+          its photo zoom in, click the info icon to flip for contact details. */}
+      <div className="mt-8 grid auto-rows-[150px] grid-cols-2 gap-4 sm:grid-cols-4" style={{ perspective: 1400 }}>
         {activeList.map((l, i) => {
           const spanClass =
-            i === 0
-              ? "col-span-2 row-span-2"
-              : i === 1
-                ? "col-span-2 row-span-1"
-                : "col-span-1 row-span-1";
+            i === 0 ? "col-span-2 row-span-2" : i === 1 ? "col-span-2 row-span-1" : "col-span-1 row-span-1";
           const isFeatured = featured?.id === l.id;
           const hasContact = tab === "current" && (l.email || l.phone);
 
           const frontFace = (
             <GlassCard
               variant="dark"
+              clip
               className={cn(
                 "flex h-full flex-col justify-center text-center transition-all",
                 isFeatured && "ring-2 ring-saffron-400",
                 i === 0 && "items-center justify-end pb-8"
               )}
             >
-              <MaskedAvatar initials={initials(l.name)} size={i === 0 ? "lg" : "md"} className="mx-auto" />
+              <PhotoAvatar
+                initials={initials(l.name)}
+                imageUrl={l.imageUrl}
+                size={i === 0 ? "lg" : "md"}
+                hoverZoom
+                className="mx-auto"
+              />
               <h4 className={cn("mt-3 font-display font-bold text-white", i === 0 ? "text-xl" : "text-sm")}>
                 {l.name}
               </h4>

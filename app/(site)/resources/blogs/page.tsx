@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
@@ -21,16 +21,12 @@ export default async function BlogsPage() {
 
   return (
     <>
-      <section className="bg-navy-800 pb-8 pt-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="Resources / Blogs"
-            title="Perspectives & Insights"
-            description="Ideas and analysis from FAIITA's editorial desk and policy cell."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Resources / Blogs"
+        title="Perspectives & Insights"
+        description="Ideas and analysis from FAIITA's editorial desk and policy cell."
+        compact
+      />
       <SectionDivider type="diagonal" className="bg-navy-800" />
 
       <section className="bg-background pb-20 pt-4">

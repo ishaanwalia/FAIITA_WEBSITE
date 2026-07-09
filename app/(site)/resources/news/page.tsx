@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
@@ -22,16 +22,12 @@ export default async function NewsPage() {
 
   return (
     <>
-      <section className="bg-navy-800 pb-8 pt-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="Resources / News"
-            title="News & Announcements"
-            description="Federation updates, policy wins, and press releases."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Resources / News"
+        title="News & Announcements"
+        description="Federation updates, policy wins, and press releases."
+        compact
+      />
       <SectionDivider type="wave" className="bg-navy-800" />
 
       <section className="bg-background pb-20 pt-4">

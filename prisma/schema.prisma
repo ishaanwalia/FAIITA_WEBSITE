@@ -76,6 +76,7 @@ model Leader {
   category        String   @default("national") // national | state
   term            String   @default("2024–2026") // e.g. "2024–2026", FAIITA GB terms run 2 years
   isCurrent       Boolean  @default(true)
+  focusAreas      String? // comma-separated tags, shown only on the spotlight/featured card
   createdAt       DateTime @default(now())
 
   @@index([category, order])

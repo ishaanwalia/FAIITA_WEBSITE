@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { StateAssociationsGrid } from "@/components/about/StateAssociationsGrid";
 import { prisma } from "@/lib/prisma";
 
@@ -15,16 +15,11 @@ export default async function StateAssociationsPage() {
 
   return (
     <>
-      <section className="bg-navy-800 py-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="About / State Associations"
-            title="29 State Associations, One Federation"
-            description="Every state association operates independently while sharing in FAIITA's national advocacy and resources."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="About / State Associations"
+        title="29 State Associations, One Federation"
+        description="Every state association operates independently while sharing in FAIITA's national advocacy and resources."
+      />
 
       <section className="bg-background py-20">
         <div className="container-page">

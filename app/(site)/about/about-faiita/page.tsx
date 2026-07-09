@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SectionHeading } from "@/components/common/SectionHeading";
+import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { Building2, Network, Users, Vote } from "lucide-react";
 
@@ -26,16 +27,11 @@ const gbComposition = [
 export default function AboutFaiitaPage() {
   return (
     <>
-      <section className="bg-navy-800 py-24">
-        <div className="container-page">
-          <SectionHeading
-            eyebrow="About / About FAIITA"
-            title="About FAIITA"
-            description="Formed to give India's IT trade ecosystem a single, powerful national voice."
-            light
-          />
-        </div>
-      </section>
+      <PageHero
+        eyebrow="About / About FAIITA"
+        title="About FAIITA"
+        description="Formed to give India's IT trade ecosystem a single, powerful national voice."
+      />
 
       <section className="bg-background py-24">
         <div className="container-page grid gap-16 lg:grid-cols-2">
