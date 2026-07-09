@@ -11,7 +11,7 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = {
   title: "About FAIITA",
   description:
-    "Learn about FAIITA's vision, structure, leadership, and the 31-state network of IT associations it federates.",
+    "Learn about FAIITA's vision, structure, leadership, and the nationwide network of IT associations it federates.",
 };
 
 export const revalidate = 3600;
@@ -37,6 +37,10 @@ export default async function AboutPage() {
     associationName: s.associationName,
     memberCount: s.memberCount,
     foundedYear: s.foundedYear,
+    presidentName: s.presidentName,
+    contactEmail: s.contactEmail,
+    contactPhone: s.contactPhone,
+    logoUrl: s.logoUrl,
     mapX: s.mapX,
     mapY: s.mapY,
   }));
@@ -49,7 +53,7 @@ export default async function AboutPage() {
         <div className="container-page relative">
           <span className="section-eyebrow">About Us</span>
           <TextReveal
-            text="One Federation, Twenty-Nine States"
+            text="One Federation, One National Voice"
             as="h1"
             className="mt-3 max-w-3xl text-balance font-display text-3xl font-bold tracking-tight text-white sm:text-4xl"
           />

@@ -52,6 +52,10 @@ export default async function VisionMissionPage() {
     associationName: s.associationName,
     memberCount: s.memberCount,
     foundedYear: s.foundedYear,
+    presidentName: s.presidentName,
+    contactEmail: s.contactEmail,
+    contactPhone: s.contactPhone,
+    logoUrl: s.logoUrl,
     mapX: s.mapX,
     mapY: s.mapY,
   }));

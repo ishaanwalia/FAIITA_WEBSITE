@@ -81,14 +81,19 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
                       <div className="flex items-start gap-3">
                         <LogoImage logoUrl={s.logoUrl} alt={s.associationName} size="sm" />
                         <div>
-                          <h3 className="font-display text-base font-bold text-navy-800">{s.stateName}</h3>
-                          <p className="mt-1 text-xs font-medium text-saffron-600">{s.associationName}</p>
+                          {/* Association leads the card — several states have more than one. */}
+                          <h3 className="font-display text-sm font-bold leading-snug text-navy-800">{s.associationName}</h3>
+                          <p className="mt-1 text-xs font-medium text-saffron-600">{s.stateName}</p>
                         </div>
                       </div>
                       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1.5">
-                          <Users className="h-3.5 w-3.5" /> {s.memberCount.toLocaleString("en-IN")} members
-                        </span>
+                        {s.memberCount > 0 ? (
+                          <span className="flex items-center gap-1.5">
+                            <Users className="h-3.5 w-3.5" /> {s.memberCount.toLocaleString("en-IN")} members
+                          </span>
+                        ) : (
+                          <span />
+                        )}
                         <ArrowRight className="h-3.5 w-3.5 text-navy-700 transition-transform group-hover:translate-x-0.5" />
                       </div>
                     </GlassCard>

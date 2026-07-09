@@ -21,8 +21,8 @@ export default async function MemberAssociationsPage() {
     <>
       <PageHero
         eyebrow="About / Member Associations"
-        title="100+ Member Associations"
-        description="City and regional associations that operate under each state chapter — the backbone of FAIITA's grassroots network."
+        title="Member Associations"
+        description="City and regional associations that operate under each state chapter — the backbone of FAIITA's grassroots network. Verified member listings are coming soon."
       />
 
       <section className="bg-background py-20">

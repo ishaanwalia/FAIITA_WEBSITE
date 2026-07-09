@@ -38,11 +38,13 @@ export function PhotoAvatar({
       )}
     >
       {showImage ? (
+        // object-contain (not cover) so portrait photos are zoomed out to fit —
+        // faces must never be cropped; the white backing fills the letterbox.
         <Image
           src={imageUrl as string}
           alt=""
           fill
-          className="object-cover"
+          className="bg-white object-contain"
           onError={() => setFailed(true)}
         />
       ) : (

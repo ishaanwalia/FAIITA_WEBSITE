@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Building2, MapPin, Users } from "lucide-react";
+import { ArrowRight, Building2, Mail, MapPin, Phone, User, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { StateMapPoint } from "@/types";
 
@@ -18,7 +18,13 @@ const NAME_ALIASES: Record<string, string> = {
   orissa: "odisha",
   uttaranchal: "uttarakhand",
   pondicherry: "puducherry",
+  // The SVG draws Ladakh as its own shape; FAIITA data treats the whole
+  // northern region as Jammu & Kashmir, so both shapes select together.
+  ladakh: "jammuandkashmir",
 };
+
+// Same idea for ISO shape codes (id="INLA" → belongs with "JK").
+const CODE_ALIASES: Record<string, string> = { LA: "JK" };
 
 function normalize(name: string) {
   const n = name.toLowerCase().replace(/&/g, "and").replace(/[^a-z]/g, "");
@@ -43,11 +49,21 @@ function getShapeStateName(el: Element): string {
 // stateCode in the database — the most reliable way to link shape and data.
 function getShapeStateCode(el: Element): string | null {
   const m = /^IN[-_]?([A-Z]{2})$/i.exec(el.getAttribute("id") || "");
-  return m ? m[1].toUpperCase() : null;
+  if (!m) return null;
+  const code = m[1].toUpperCase();
+  return CODE_ALIASES[code] ?? code;
 }
 
+/** All associations of one state — several states have more than one. */
+type StateGroup = {
+  stateName: string;
+  stateCode: string;
+  region: string;
+  associations: StateMapPoint[];
+};
+
 export function IndiaMap({ states }: { states: StateMapPoint[] }) {
-  const [active, setActive] = useState<StateMapPoint | null>(null);
+  const [active, setActive] = useState<StateGroup | null>(null);
   const [hovered, setHovered] = useState<{ name: string; x: number; y: number } | null>(null);
   const [region, setRegion] = useState<string>("All");
   const [view, setView] = useState<"map" | "list">("map");
@@ -56,10 +72,30 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
 
   const regions = useMemo(() => ["All", ...Array.from(new Set(states.map((s) => s.region)))], [states]);
   const filtered = region === "All" ? states : states.filter((s) => s.region === region);
-  const findState = (shape: Element) => {
+
+  const groups = useMemo(() => {
+    const map = new Map<string, StateGroup>();
+    for (const s of filtered) {
+      const g = map.get(s.stateCode) ?? {
+        stateName: s.stateName,
+        stateCode: s.stateCode,
+        region: s.region,
+        associations: [],
+      };
+      g.associations.push(s);
+      map.set(s.stateCode, g);
+    }
+    return map;
+  }, [filtered]);
+
+  const findGroup = (shape: Element): StateGroup | undefined => {
     const code = getShapeStateCode(shape);
-    const byCode = code ? states.find((s) => s.stateCode.toUpperCase() === code) : undefined;
-    return byCode ?? states.find((s) => normalize(s.stateName) === normalize(getShapeStateName(shape)));
+    if (code && groups.has(code)) return groups.get(code);
+    const name = normalize(getShapeStateName(shape));
+    for (const g of groups.values()) {
+      if (normalize(g.stateName) === name) return g;
+    }
+    return undefined;
   };
 
   useEffect(() => {
@@ -93,9 +129,20 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
     const shapes = containerRef.current.querySelectorAll<SVGElement>("path, polygon");
     const cleanups: (() => void)[] = [];
 
+    // Shapes that belong to the same state (e.g. the separately drawn J&K and
+    // Ladakh paths) must hover/highlight together as one region.
+    const shapesByCode = new Map<string, SVGElement[]>();
     shapes.forEach((shape) => {
-      const match = findState(shape);
-      const isCovered = match && filtered.includes(match);
+      const g = findGroup(shape);
+      if (!g) return;
+      shapesByCode.set(g.stateCode, [...(shapesByCode.get(g.stateCode) ?? []), shape]);
+    });
+    const setGroupFill = (code: string, fill: string) =>
+      shapesByCode.get(code)?.forEach((s) => (s.style.fill = fill));
+
+    shapes.forEach((shape) => {
+      const match = findGroup(shape);
+      const isCovered = Boolean(match);
 
       shape.style.fill = isCovered ? COVERED_FILL : UNCOVERED_FILL;
       shape.style.stroke = BORDER_COLOR;
@@ -105,7 +152,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
 
       const onEnter = (e: Event) => {
         if (!match) return;
-        shape.style.fill = COVERED_HOVER;
+        setGroupFill(match.stateCode, COVERED_HOVER);
         const me = e as MouseEvent;
         setHovered({ name: match.stateName, x: me.clientX, y: me.clientY });
       };
@@ -115,7 +162,8 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
         setHovered({ name: match.stateName, x: me.clientX, y: me.clientY });
       };
       const onLeave = () => {
-        shape.style.fill = isCovered ? COVERED_FILL : UNCOVERED_FILL;
+        if (match) setGroupFill(match.stateCode, COVERED_FILL);
+        else shape.style.fill = UNCOVERED_FILL;
         setHovered(null);
       };
       const onClick = () => {
@@ -137,7 +185,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
 
     return () => cleanups.forEach((fn) => fn());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapStatus, filtered]);
+  }, [mapStatus, groups]);
 
   return (
     <div className="relative">
@@ -209,7 +257,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
 
         <div className={cn("flex flex-col gap-4", view === "map" && "hidden lg:flex")}>
           {active ? (
-            <StateDetailCard state={active} onClose={() => setActive(null)} />
+            <StateDetailCard group={active} onClose={() => setActive(null)} />
           ) : (
             <div className="rounded-3xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
               Select a state on the map, or from the list below, to view its association details.
@@ -220,19 +268,21 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
             {filtered.map((s) => (
               <button
                 key={s.id}
-                onClick={() => setActive(s)}
+                onClick={() => setActive(groups.get(s.stateCode) ?? null)}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors",
-                  active?.id === s.id ? "bg-navy-700 text-white" : "hover:bg-secondary"
+                  "flex w-full items-center justify-between gap-3 rounded-xl px-4 py-3 text-left transition-colors",
+                  active?.stateCode === s.stateCode ? "bg-navy-700 text-white" : "hover:bg-secondary"
                 )}
               >
                 <span>
                   <span className="block text-sm font-semibold">{s.stateName}</span>
-                  <span className={cn("text-xs", active?.id === s.id ? "text-white/60" : "text-muted-foreground")}>
+                  <span className={cn("text-xs", active?.stateCode === s.stateCode ? "text-white/60" : "text-muted-foreground")}>
                     {s.associationName}
                   </span>
                 </span>
-                <span className="font-mono text-xs">{s.memberCount.toLocaleString("en-IN")}</span>
+                {s.memberCount > 0 && (
+                  <span className="shrink-0 font-mono text-xs">{s.memberCount.toLocaleString("en-IN")}</span>
+                )}
               </button>
             ))}
           </div>
@@ -242,9 +292,11 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
   );
 }
 
-function StateDetailCard({ state, onClose }: { state: StateMapPoint; onClose: () => void }) {
+function StateDetailCard({ group, onClose }: { group: StateGroup; onClose: () => void }) {
+  const totalMembers = group.associations.reduce((sum, a) => sum + a.memberCount, 0);
+
   return (
-    <div className="relative rounded-3xl border border-border bg-card p-7">
+    <div className="relative max-h-[480px] overflow-y-auto rounded-3xl border border-border bg-card p-7">
       <button
         onClick={onClose}
         className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary"
@@ -253,30 +305,53 @@ function StateDetailCard({ state, onClose }: { state: StateMapPoint; onClose: ()
         ×
       </button>
       <span className="inline-flex items-center gap-1.5 rounded-full bg-saffron-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-navy-900">
-        {state.region} Zone
+        {group.region} Zone
       </span>
-      <h3 className="mt-4 font-display text-2xl font-bold text-navy-800">{state.stateName}</h3>
-      <p className="text-sm font-medium text-saffron-600">{state.associationName}</p>
+      <h3 className="mt-4 font-display text-2xl font-bold text-navy-800">{group.stateName}</h3>
+      <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+        <Building2 className="h-3.5 w-3.5" />
+        {group.associations.length}{" "}
+        {group.associations.length === 1 ? "affiliated association" : "affiliated associations"}
+        {totalMembers > 0 && <> · {totalMembers.toLocaleString("en-IN")} members</>}
+      </p>
 
-      <div className="mt-5 grid grid-cols-2 gap-4">
-        <div className="rounded-xl bg-secondary p-4">
-          <Users className="h-4 w-4 text-navy-700" />
-          <p className="mt-2 font-mono text-lg font-bold text-navy-800">{state.memberCount.toLocaleString("en-IN")}</p>
-          <p className="text-xs text-muted-foreground">Members</p>
-        </div>
-        <div className="rounded-xl bg-secondary p-4">
-          <Building2 className="h-4 w-4 text-navy-700" />
-          <p className="mt-2 font-mono text-lg font-bold text-navy-800">{state.foundedYear ?? "—"}</p>
-          <p className="text-xs text-muted-foreground">Founded</p>
-        </div>
+      <div className="mt-5 space-y-3">
+        {group.associations.map((a) => (
+          <div key={a.id} className="rounded-2xl bg-secondary p-4">
+            <p className="text-sm font-semibold text-navy-800">{a.associationName}</p>
+            <div className="mt-2 space-y-1.5 text-xs text-muted-foreground">
+              {a.presidentName && (
+                <p className="flex items-center gap-1.5">
+                  <User className="h-3.5 w-3.5 shrink-0 text-navy-700" /> {a.presidentName}, President
+                </p>
+              )}
+              {a.memberCount > 0 && (
+                <p className="flex items-center gap-1.5">
+                  <Users className="h-3.5 w-3.5 shrink-0 text-navy-700" />
+                  {a.memberCount.toLocaleString("en-IN")} members
+                  {a.foundedYear && <> · since {a.foundedYear}</>}
+                </p>
+              )}
+              {a.contactPhone && (
+                <a href={`tel:${a.contactPhone}`} className="flex items-center gap-1.5 hover:text-navy-700">
+                  <Phone className="h-3.5 w-3.5 shrink-0 text-navy-700" /> {a.contactPhone}
+                </a>
+              )}
+              {a.contactEmail && (
+                <a href={`mailto:${a.contactEmail}`} className="flex items-center gap-1.5 hover:text-navy-700">
+                  <Mail className="h-3.5 w-3.5 shrink-0 text-navy-700" /> {a.contactEmail}
+                </a>
+              )}
+            </div>
+            <Link
+              href={`/about/state-associations/${a.slug}`}
+              className="link-underline mt-3 flex w-fit items-center gap-1.5 text-xs font-semibold text-navy-700"
+            >
+              <ArrowRight className="h-3 w-3" /> View full profile
+            </Link>
+          </div>
+        ))}
       </div>
-
-      <Link
-        href={`/about/state-associations/${state.slug}`}
-        className="link-underline mt-6 flex items-center gap-1.5 text-sm font-semibold text-navy-700"
-      >
-        <ArrowRight className="h-3.5 w-3.5" /> View full state profile
-      </Link>
     </div>
   );
 }

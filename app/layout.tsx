@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | FAIITA",
   },
   description:
-    "FAIITA is the apex body uniting state-level IT associations across India, representing 50,000+ IT channel partners across 31 states since 2014.",
+    "FAIITA is the apex body uniting state-level IT associations across India, representing 50,000+ IT channel partners across 22 states & UTs since 2014.",
   keywords: [
     "FAIITA",
     "IT dealers India",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "FAIITA — Federation of All India Information Technology Associations",
-    description: "Uniting 50,000+ IT entrepreneurs across 31 states under one national federation.",
+    description: "Uniting 50,000+ IT entrepreneurs across 22 states & UTs under one national federation.",
     url: siteUrl,
     siteName: "FAIITA",
     type: "website",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "FAIITA — Federation of All India Information Technology Associations",
-    description: "Uniting 50,000+ IT entrepreneurs across 31 states under one national federation.",
+    description: "Uniting 50,000+ IT entrepreneurs across 22 states & UTs under one national federation.",
   },
   icons: { icon: "/favicon.ico" },
 };

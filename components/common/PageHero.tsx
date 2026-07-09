@@ -28,6 +28,7 @@ export function PageHero({
       <motion.div style={{ y }} className="absolute inset-0">
         <GradientMesh />
         <div className="absolute inset-0 bg-network-grid opacity-10" />
+        <div aria-hidden className="aurora-orb right-[8%] top-[10%] h-64 w-64 bg-saffron-500/10" />
       </motion.div>
       <div className="container-page relative">
         <SectionHeading eyebrow={eyebrow} title={title} description={description} light />

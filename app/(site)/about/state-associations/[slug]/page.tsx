@@ -82,7 +82,9 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Users className="h-4 w-4 text-navy-700" />
-                  <p className="mt-2 font-mono text-lg font-bold text-navy-800">{state.memberCount.toLocaleString("en-IN")}</p>
+                  <p className="mt-2 font-mono text-lg font-bold text-navy-800">
+                    {state.memberCount > 0 ? state.memberCount.toLocaleString("en-IN") : "—"}
+                  </p>
                   <p className="text-xs text-muted-foreground">Members</p>
                 </div>
                 <div>

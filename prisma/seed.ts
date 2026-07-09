@@ -11,6 +11,8 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 type StateSeed = {
+  /** URL slug — defaults to slugified stateName; must be set explicitly for states with more than one association. */
+  slug?: string;
   stateName: string;
   stateCode: string;
   region: string;
@@ -20,80 +22,78 @@ type StateSeed = {
   city: string;
   mapX: number;
   mapY: number;
-  /** Real data supplied by FAIITA (Faiita_President_XL_2025 27.xlsx) — when present, overrides the placeholder president/contact info. */
   presidentName?: string;
   contactEmail?: string;
   contactPhone?: string;
   /** Filename (no extension) expected at /public/logos/state/<logoSlug>.png */
   logoSlug?: string;
+  description?: string;
 };
 
+// Authoritative list of FAIITA state associations — Faiita_President_XL_2025 27.xlsx
+// (34 associations; states like Maharashtra, Delhi, MP and Rajasthan have several).
+// Some states have no dedicated state association, so a member association is
+// recognised as the state association — hence multiple entries share a state.
 // x/y are relative (0-100) positions on the illustrated India map viewBox.
 const states: StateSeed[] = [
+  // — North —
   { stateName: "Jammu & Kashmir", stateCode: "JK", region: "North", associationName: "Jammu Computer Dealers Association (JCDA)", foundedYear: 2015, memberCount: 220, city: "Jammu", mapX: 36, mapY: 8, presidentName: "Sandeep Malhotra", contactPhone: "+91 94191 93784", contactEmail: "lstechnologiesjmu@gmail.com", logoSlug: "jammu-kashmir" },
   { stateName: "Himachal Pradesh", stateCode: "HP", region: "North", associationName: "Shimla I T Dealer Association (SITDA)", foundedYear: 2016, memberCount: 180, city: "Shimla", mapX: 39, mapY: 17, presidentName: "Rupin Rekhi", contactPhone: "+91 98160 77729", contactEmail: "info@sitda.in", logoSlug: "himachal-pradesh" },
   { stateName: "Punjab", stateCode: "PB", region: "North", associationName: "Punjab Association of Computer Traders (PACT)", foundedYear: 2014, memberCount: 1450, city: "Ludhiana", mapX: 32, mapY: 19, presidentName: "Vikas Narang", contactPhone: "+91 98141 03518", contactEmail: "president@pactpunjab.com", logoSlug: "punjab" },
-  { stateName: "Chandigarh", stateCode: "CH", region: "North", associationName: "TECSPA Chandigarh", foundedYear: undefined, memberCount: 0, city: "Chandigarh", mapX: 34, mapY: 21, presidentName: "Satpal Singh", contactPhone: "+91 94172 18200", contactEmail: "president@tecspa.in", logoSlug: "chandigarh" },
+  { stateName: "Chandigarh", stateCode: "CH", region: "North", associationName: "TECSPA Chandigarh", memberCount: 0, city: "Chandigarh", mapX: 34, mapY: 21, presidentName: "Satpal Singh", contactPhone: "+91 94172 18200", contactEmail: "president@tecspa.in", logoSlug: "chandigarh" },
   { stateName: "Uttarakhand", stateCode: "UT", region: "North", associationName: "Uttaranchal IT Traders Association (UITTA)", foundedYear: 2017, memberCount: 340, city: "Dehradun", mapX: 43, mapY: 20, presidentName: "Rajesh Tomar", contactPhone: "+91 94120 58404", contactEmail: "president@uitta.org", logoSlug: "uttarakhand" },
-  { stateName: "Haryana", stateCode: "HR", region: "North", associationName: "Haryana IT Dealers Federation", foundedYear: 2015, memberCount: 980, city: "Gurugram", mapX: 35, mapY: 23 },
   { stateName: "Delhi", stateCode: "DL", region: "North", associationName: "All Delhi Computers Traders Association (ADCTA)", foundedYear: 2014, memberCount: 5200, city: "New Delhi", mapX: 37, mapY: 25, presidentName: "Mahinder Agrawal", contactPhone: "+91 92121 27937", contactEmail: "adcta.nehruplace@gmail.com", logoSlug: "delhi" },
+  { slug: "delhi-cmda", stateName: "Delhi", stateCode: "DL", region: "North", associationName: "Computer Media Dealers Association, Delhi (CMDA)", memberCount: 0, city: "New Delhi", mapX: 37, mapY: 25, presidentName: "Puneet Singhal", contactPhone: "+91 98100 48176", contactEmail: "infocmda@gmail.com", logoSlug: "cmda-delhi" },
+  { slug: "delhi-pcait", stateName: "Delhi", stateCode: "DL", region: "North", associationName: "Progressive Channels Association Of Information Technology (PCAIT)", memberCount: 0, city: "New Delhi", mapX: 37, mapY: 25, presidentName: "Alok Gupta", contactPhone: "+91 98101 98881", contactEmail: "alokgupta@unistal.com", logoSlug: "pcait" },
+  { slug: "delhi-cimeit", stateName: "Delhi", stateCode: "DL", region: "North", associationName: "Confederation of Indian MSME in ESDM & IT (CIMEIT)", memberCount: 0, city: "New Delhi", mapX: 37, mapY: 25, presidentName: "Milan Agrawal", contactPhone: "+91 98102 39199", contactEmail: "dg@ciemei.in", logoSlug: "cimeit" },
   { stateName: "Rajasthan", stateCode: "RJ", region: "North", associationName: "Rajasthan Computer Traders Association (RCTA)", foundedYear: 2014, memberCount: 2100, city: "Jaipur", mapX: 26, mapY: 31, presidentName: "Sugriv Singh", contactPhone: "+91 94140 72413", contactEmail: "rajshreesystems.udaipur@gmail.com", logoSlug: "rajasthan" },
-  { stateName: "Uttar Pradesh", stateCode: "UP", region: "North", associationName: "Uttar Pradesh Computer Dealers Welfare Association (UPCDWA)", foundedYear: 2014, memberCount: 4300, city: "Lucknow", mapX: 46, mapY: 30, presidentName: "Pankaj Agrawal", contactPhone: "+91 95595 52220", contactEmail: "pankaj@docketcare.com", logoSlug: "uttar-pradesh" },
+  { slug: "rajasthan-ucta", stateName: "Rajasthan", stateCode: "RJ", region: "North", associationName: "Udaipur Computer Traders Association (UCTA)", memberCount: 0, city: "Udaipur", mapX: 26, mapY: 31, presidentName: "Ajay Srivastava", contactPhone: "+91 98290 42643", contactEmail: "info@ucta.org.in", logoSlug: "ucta" },
+  { stateName: "Uttar Pradesh", stateCode: "UP", region: "North", associationName: "Uttar Pradesh Computer Dealers Welfare Association (UPCDWA)", foundedYear: 2014, memberCount: 4300, city: "Lucknow", mapX: 46, mapY: 30, presidentName: "Pankaj Agrawal", contactPhone: "+91 95595 51110", contactEmail: "pankaj@docketcare.com", logoSlug: "uttar-pradesh" },
+
+  // — East —
   { stateName: "Bihar", stateCode: "BR", region: "East", associationName: "Bihar IT Association (BITA)", foundedYear: 2015, memberCount: 1600, city: "Patna", mapX: 55, mapY: 33, presidentName: "Rajiv Agrawal", contactPhone: "+91 94310 18295", contactEmail: "rajivagrawal1989@gmail.com", logoSlug: "bihar" },
-  { stateName: "Sikkim", stateCode: "SK", region: "North-East", associationName: "Sikkim IT Dealers Forum", foundedYear: 2018, memberCount: 60, city: "Gangtok", mapX: 61, mapY: 27 },
   { stateName: "West Bengal", stateCode: "WB", region: "East", associationName: "COMPASS Kolkata", foundedYear: 2014, memberCount: 3100, city: "Kolkata", mapX: 62, mapY: 38, presidentName: "Manish Lunia", contactPhone: "+91 98311 55806", contactEmail: "manish@shreesales.co.in", logoSlug: "west-bengal" },
-  { stateName: "Assam", stateCode: "AS", region: "North-East", associationName: "North East Computer Traders Association (NECTA)", foundedYear: 2016, memberCount: 410, city: "Guwahati", mapX: 70, mapY: 29, presidentName: "Ranjan Kumar Das", contactPhone: "+91 94351 18986", contactEmail: "president@necta.co.in", logoSlug: "assam" },
-  { stateName: "Arunachal Pradesh", stateCode: "AR", region: "North-East", associationName: "Arunachal IT Traders Forum", foundedYear: 2019, memberCount: 45, city: "Itanagar", mapX: 76, mapY: 20 },
-  { stateName: "Nagaland", stateCode: "NL", region: "North-East", associationName: "Nagaland IT Dealers Association", foundedYear: 2019, memberCount: 40, city: "Kohima", mapX: 79, mapY: 28 },
-  { stateName: "Manipur", stateCode: "MN", region: "North-East", associationName: "Manipur IT Traders Association", foundedYear: 2019, memberCount: 38, city: "Imphal", mapX: 77, mapY: 32 },
-  { stateName: "Mizoram", stateCode: "MZ", region: "North-East", associationName: "Mizoram IT Dealers Forum", foundedYear: 2020, memberCount: 30, city: "Aizawl", mapX: 74, mapY: 36 },
-  { stateName: "Tripura", stateCode: "TR", region: "North-East", associationName: "Tripura IT Traders Association", foundedYear: 2019, memberCount: 42, city: "Agartala", mapX: 68, mapY: 35 },
-  { stateName: "Meghalaya", stateCode: "ML", region: "North-East", associationName: "Meghalaya IT Dealers Forum", foundedYear: 2020, memberCount: 35, city: "Shillong", mapX: 71, mapY: 31 },
   { stateName: "Jharkhand", stateCode: "JH", region: "East", associationName: "Jharkhand Computer Traders Association (JCTA)", foundedYear: 2016, memberCount: 780, city: "Ranchi", mapX: 54, mapY: 38, presidentName: "Mukesh Jha", contactPhone: "+91 93343 90891", contactEmail: "jctajharkhand@yahoo.com", logoSlug: "jharkhand" },
-  { stateName: "Odisha", stateCode: "OR", region: "East", associationName: "Information Technology Association Of Orissa (ITAO)", foundedYear: 2016, memberCount: 890, city: "Bhubaneswar", mapX: 55, mapY: 47, presidentName: "AbhiNash Patnayak", contactPhone: "+91 98610 63215", contactEmail: "president@itaoodisha.org", logoSlug: "odisha" },
+  { stateName: "Odisha", stateCode: "OR", region: "East", associationName: "Information Technology Association Of Orissa (ITAO)", foundedYear: 2016, memberCount: 890, city: "Bhubaneswar", mapX: 55, mapY: 47, presidentName: "Abhinash Patnayak", contactPhone: "+91 98610 63215", contactEmail: "president@itaoodisha.org", logoSlug: "odisha" },
+
+  // — North-East —
+  { stateName: "Assam", stateCode: "AS", region: "North-East", associationName: "North East Computer Traders Association (NECTA)", foundedYear: 2016, memberCount: 410, city: "Guwahati", mapX: 70, mapY: 29, presidentName: "Ranjan Kumar Das", contactPhone: "+91 94351 18986", contactEmail: "president@necta.co.in", logoSlug: "assam" },
+
+  // — Central —
   { stateName: "Chhattisgarh", stateCode: "CT", region: "Central", associationName: "Chhattisgarh Computer & Media Dealer Association (CCMDA)", foundedYear: 2017, memberCount: 520, city: "Raipur", mapX: 46, mapY: 44, presidentName: "Avinash Makhija", contactPhone: "+91 98261 62122", contactEmail: "avinash.compu@gmail.com", logoSlug: "chhattisgarh" },
   { stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Bhoj Information Technology & Office Automation Dealers Association (BITOAA)", foundedYear: 2015, memberCount: 1980, city: "Bhopal", mapX: 38, mapY: 41, presidentName: "Manish Gupta", contactPhone: "+91 98260 99941", contactEmail: "president.bitoaa@gmail.com", logoSlug: "madhya-pradesh" },
+  { slug: "madhya-pradesh-mpctas", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "M.P. Computer Telecom Association Samiti (MPCTAS)", memberCount: 0, city: "Indore", mapX: 38, mapY: 41, presidentName: "Rakesh Daga", contactPhone: "+91 93032 88083", contactEmail: "indoredb@gmail.com", logoSlug: "mpctas" },
+  { slug: "madhya-pradesh-mcda", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Mahakaushal Computer Dealer's Association (MCDA)", memberCount: 0, city: "Jabalpur", mapX: 38, mapY: 41, presidentName: "B.L. Patel", contactPhone: "+91 93007 64155", contactEmail: "mcdajbp2003@gmail.com", logoSlug: "mcda-jabalpur" },
+
+  // — West —
   { stateName: "Gujarat", stateCode: "GJ", region: "West", associationName: "Federation Of Information Technology Association Gujarat (FITAG)", foundedYear: 2014, memberCount: 3400, city: "Ahmedabad", mapX: 20, mapY: 43, presidentName: "Alok Ghelani", contactPhone: "+91 98986 22606", contactEmail: "president@fitag.in", logoSlug: "gujarat" },
   { stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Computer Media Dealers Association, Mumbai (CMDA)", foundedYear: 2014, memberCount: 6100, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Mihir Shah", contactPhone: "+91 98200 67580", contactEmail: "mihir@datatradeindia.com", logoSlug: "maharashtra" },
-  { stateName: "Telangana", stateCode: "TG", region: "South", associationName: "Telangana IT Traders Association", foundedYear: 2015, memberCount: 1750, city: "Hyderabad", mapX: 43, mapY: 58 },
+  { slug: "maharashtra-asirt", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Association Of System Integrators & Retailers Technology (ASIRT)", memberCount: 0, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Bharat Chheda", contactPhone: "+91 98212 46565", contactEmail: "president@asirt.in", logoSlug: "asirt" },
+  { slug: "maharashtra-tait", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Trade Association Of Information Technology (TAIT)", memberCount: 0, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Rushabh Shah", contactPhone: "+91 93222 13274", contactEmail: "taitoffice@tait.in", logoSlug: "tait" },
+  { slug: "maharashtra-nmit", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Navi Mumbai IT Association (NMIT)", memberCount: 0, city: "Navi Mumbai", mapX: 30, mapY: 54, presidentName: "Hemant Gupta", contactPhone: "+91 98198 10100", contactEmail: "twinklesystems@gmail.com", logoSlug: "nmit" },
+  { slug: "maharashtra-cmda-pune", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "CMDA Pune", memberCount: 0, city: "Pune", mapX: 30, mapY: 54, presidentName: "Mahesh More", contactPhone: "+91 98220 44158", contactEmail: "president@cmdapune.org", logoSlug: "cmda-pune" },
+  { slug: "maharashtra-can", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Computer Association of Nasik (CAN)", memberCount: 0, city: "Nashik", mapX: 30, mapY: 54, presidentName: "Sharad Mishra", contactPhone: "+91 98230 55584", contactEmail: "info@canit.co.in", logoSlug: "can-nasik" },
+  { slug: "maharashtra-vcmdwa", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Vidarbha Computer & Media Dealer's Welfare Association (VCMDWA)", memberCount: 0, city: "Nagpur", mapX: 30, mapY: 54, presidentName: "Dinesh Naidu", contactPhone: "+91 98230 16763", contactEmail: "admin@vcmdwa.org", logoSlug: "vcmdwa" },
+  { stateName: "Goa", stateCode: "GA", region: "West", associationName: "Goa IT Business Association (GIBA)", foundedYear: 2018, memberCount: 110, city: "Panaji", mapX: 26, mapY: 62, presidentName: "Ishwar Naik", contactPhone: "+91 98230 38013", contactEmail: "ishwar@siliconcomp.com", logoSlug: "goa" },
+
+  // — South —
   { stateName: "Andhra Pradesh", stateCode: "AP", region: "South", associationName: "Computer Dealers Association Of Nellore Distt (CDAN)", foundedYear: 2015, memberCount: 1620, city: "Nellore", mapX: 46, mapY: 64, presidentName: "B.V. Deepak", contactPhone: "+91 98481 75765", contactEmail: "deepak@sv-technologies.net", logoSlug: "andhra-pradesh" },
   { stateName: "Karnataka", stateCode: "KA", region: "South", associationName: "Federation Of IT Dealer's Association Of Karnataka (FITDAK)", foundedYear: 2014, memberCount: 4200, city: "Bengaluru", mapX: 33, mapY: 68, presidentName: "G. N. Mahesha", contactPhone: "+91 99866 32220", contactEmail: "gnmahesh9@gmail.com", logoSlug: "karnataka" },
-  { stateName: "Goa", stateCode: "GA", region: "West", associationName: "Goa IT Business Association (GIBA)", foundedYear: 2018, memberCount: 110, city: "Panaji", mapX: 26, mapY: 62, presidentName: "Ishwar Naik", contactPhone: "+91 98230 38013", contactEmail: "ishwar@siliconcomp.com", logoSlug: "goa" },
   { stateName: "Kerala", stateCode: "KL", region: "South", associationName: "All Kerala IT Dealers Association (AKITDA)", foundedYear: 2014, memberCount: 2600, city: "Kochi", mapX: 31, mapY: 84, presidentName: "Hareesh Kollam", contactPhone: "+91 94470 75216", contactEmail: "statepresident@akitda.co.in", logoSlug: "kerala" },
-  { stateName: "Tamil Nadu", stateCode: "TN", region: "South", associationName: "Confederation Of IT Associations (CONFED ITA)", foundedYear: 2014, memberCount: 3800, city: "Chennai", mapX: 39, mapY: 84, presidentName: "Vasudevan", contactPhone: "+91 99444 40980", contactEmail: "president@confedita.com", logoSlug: "tamil-nadu" },
+  { stateName: "Tamil Nadu", stateCode: "TN", region: "South", associationName: "Confederation Of IT Associations (CONFED ITA)", foundedYear: 2014, memberCount: 3800, city: "Chennai", mapX: 39, mapY: 84, presidentName: "Vasudevan", contactPhone: "+91 99444 40980", contactEmail: "president@confedita.com", logoSlug: "tamil-nadu", description: "Confederation Of IT Associations (CONFED ITA) represents IT channel partners, retailers and distributors across Tamil Nadu and Puducherry, working under the FAIITA umbrella since 2014." },
 ];
 
-// Additional real member associations under states that have more than one
-// FAIITA-affiliated body (Faiita_President_XL_2025 27.xlsx). Attached to the
-// state via `stateSlug`, which must match the slug generated from `states` above.
-type MemberSeed = {
-  stateSlug: string;
-  name: string;
-  city: string;
-  presidentName: string;
-  contactPhone: string;
-  contactEmail: string;
-  logoSlug: string; // filename (no extension) expected at /public/logos/member/<logoSlug>.png
+// Member associations are intentionally reduced to a single demo/placeholder
+// card until FAIITA supplies the verified member-association list.
+const demoMemberAssociation = {
+  slug: "demo-member-association",
+  name: "Your Association Name (Demo)",
+  city: "Your City",
+  type: "Demo",
+  memberCount: 0,
+  description:
+    "This is a sample card. City and district associations affiliated to FAIITA will be listed here with their logo, leadership and contact details.",
 };
-
-const realMemberAssociations: MemberSeed[] = [
-  { stateSlug: "madhya-pradesh", name: "M.P. Computer Telecom Association Samiti (MPCTAS)", city: "Indore", presidentName: "Rakesh Daga", contactPhone: "+91 93032 88083", contactEmail: "indoredb@gmail.com", logoSlug: "mpctas" },
-  { stateSlug: "madhya-pradesh", name: "Mahakaushal Computer Dealer's Association (MCDA)", city: "Jabalpur", presidentName: "B.L. Patel", contactPhone: "+91 93007 64155", contactEmail: "mcdajbp2003@gmail.com", logoSlug: "mcda-jabalpur" },
-  { stateSlug: "maharashtra", name: "The Chandrapur District Computer Dealers Association (TCDCDA)", city: "Chandrapur", presidentName: "Pankaj Zode", contactPhone: "+91 95956 55505", contactEmail: "cdcda.cha@gmail.com", logoSlug: "tcdcda" },
-  { stateSlug: "maharashtra", name: "Association Of System Integrators & Retailers Technology (ASIRT)", city: "Mumbai", presidentName: "Bharat Chheda", contactPhone: "+91 98212 46565", contactEmail: "president@asirt.in", logoSlug: "asirt" },
-  { stateSlug: "maharashtra", name: "Trade Association Of Information Technology (TAIT)", city: "Mumbai", presidentName: "Rushabh Shah", contactPhone: "+91 93222 13274", contactEmail: "taitoffice@tait.in", logoSlug: "tait" },
-  { stateSlug: "maharashtra", name: "Vidarbha Computer & Media Dealer's Welfare Association (VCMDWA)", city: "Nagpur", presidentName: "Dinesh Naidu", contactPhone: "+91 98230 16763", contactEmail: "admin@vcmdwa.org", logoSlug: "vcmdwa" },
-  { stateSlug: "maharashtra", name: "CMDA Pune", city: "Pune", presidentName: "Mahesh More", contactPhone: "+91 98220 44158", contactEmail: "president@cmdapune.org", logoSlug: "cmda-pune" },
-  { stateSlug: "maharashtra", name: "Computer Association of Nasik (CAN)", city: "Nashik", presidentName: "Sharad Mishra", contactPhone: "+91 98230 55584", contactEmail: "info@canit.co.in", logoSlug: "can-nasik" },
-  { stateSlug: "maharashtra", name: "CMDA Sangli", city: "Sangli", presidentName: "Pravin Suresh Pachore", contactPhone: "+91 93721 46565", contactEmail: "president@cmdasangli.in", logoSlug: "cmda-sangli" },
-  { stateSlug: "maharashtra", name: "Computer Association of Ichalkaranji", city: "Ichalkaranji", presidentName: "Kiran Chougule", contactPhone: "+91 93700 12682", contactEmail: "sandeep542001@gmail.com", logoSlug: "ca-ichalkaranji" },
-  { stateSlug: "maharashtra", name: "Navi Mumbai IT Association (NMIT)", city: "Navi Mumbai", presidentName: "Hemant Gupta", contactPhone: "+91 98198 10100", contactEmail: "twinklesystems@gmail.com", logoSlug: "nmit" },
-  { stateSlug: "delhi", name: "Computer Media Dealers Association, Delhi [Regd] (CMDA)", city: "New Delhi", presidentName: "Puneet Singhal", contactPhone: "+91 98100 48176", contactEmail: "infocmda@gmail.com", logoSlug: "cmda-delhi" },
-  { stateSlug: "delhi", name: "Progressive Channels Association Of Information Technology (PCAIT)", city: "New Delhi", presidentName: "Alok Gupta", contactPhone: "+91 98101 98881", contactEmail: "alokgupta@unistal.com", logoSlug: "pcait" },
-  { stateSlug: "delhi", name: "Confederation of Indian MSME in ESDM & IT (CIMEIT)", city: "New Delhi", presidentName: "Milan Agrawal", contactPhone: "+91 98102 39199", contactEmail: "dg@ciemei.in", logoSlug: "cimeit" },
-  { stateSlug: "rajasthan", name: "Udaipur Computer Traders Association (UCTA)", city: "Udaipur", presidentName: "Ajay Srivastava", contactPhone: "+91 98290 42643", contactEmail: "info@ucta.org.in", logoSlug: "ucta" },
-  { stateSlug: "uttar-pradesh", name: "Society For Welfare Of IT Dealers U.P.", city: "Lucknow", presidentName: "Vipul Garg", contactPhone: "+91 98370 26945", contactEmail: "vipul@saviks.com", logoSlug: "swid-up" },
-];
 
 const testimonials = [
   { name: "Navin Gupta", role: "President, FAIITA", association: "Bihar IT Association", quote: "FAIITA has been instrumental in uniting IT dealers across India. Through sustained advocacy, our members have seen real policy change.", order: 1 },
@@ -156,8 +156,8 @@ const pastLeaders = [
 ];
 
 const stats = [
-  { label: "States Covered", value: "31", suffix: "", icon: "MapPinned", order: 1 },
-  { label: "Member Associations", value: "100", suffix: "+", icon: "Building2", order: 2 },
+  { label: "States & UTs Covered", value: "22", suffix: "", icon: "MapPinned", order: 1 },
+  { label: "Affiliated Associations", value: "34", suffix: "", icon: "Building2", order: 2 },
   { label: "Channel Partners", value: "50", suffix: "K+", icon: "Users", order: 3 },
   { label: "Employment Generated", value: "5", suffix: "L+", icon: "Briefcase", order: 4 },
   { label: "Years Since 2014", suffix: "+", value: "12", icon: "CalendarClock", order: 5 },
@@ -209,8 +209,8 @@ const policies = [
 async function main() {
   console.log("Seeding FAIITA database…");
 
-  await prisma.contactSubmission.deleteMany();
-  await prisma.newsletterSubscriber.deleteMany();
+  // Note: contactSubmission and newsletterSubscriber are NOT cleared —
+  // they hold real visitor data that must survive reseeding.
   await prisma.memberAssociation.deleteMany();
   await prisma.stateAssociation.deleteMany();
   await prisma.leader.deleteMany();
@@ -223,10 +223,10 @@ async function main() {
   await prisma.newsletter.deleteMany();
   await prisma.policy.deleteMany();
 
-  const stateBySlug = new Map<string, string>(); // slug -> id, for attaching realMemberAssociations below
+  let firstStateId: string | null = null;
 
   for (const s of states) {
-    const slug = s.stateName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const slug = s.slug ?? s.stateName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const state = await prisma.stateAssociation.create({
       data: {
         slug,
@@ -236,37 +236,24 @@ async function main() {
         associationName: s.associationName,
         foundedYear: s.foundedYear,
         memberCount: s.memberCount,
-        presidentName: s.presidentName ?? "REPLACE ME",
-        contactEmail: s.contactEmail ?? `${s.stateCode.toLowerCase()}@faiita.co.in`,
-        contactPhone: s.contactPhone ?? "+91 00000 00000",
+        presidentName: s.presidentName,
+        contactEmail: s.contactEmail,
+        contactPhone: s.contactPhone,
         address: `${s.city}, ${s.stateName}`,
-        description: `${s.associationName} represents IT channel partners, retailers and distributors across ${s.stateName}, working under the FAIITA umbrella${s.foundedYear ? ` since ${s.foundedYear}` : ""}.`,
+        description:
+          s.description ??
+          `${s.associationName} represents IT channel partners, retailers and distributors across ${s.stateName}, working under the FAIITA umbrella${s.foundedYear ? ` since ${s.foundedYear}` : ""}.`,
         logoUrl: s.logoSlug ? `/logos/state/${s.logoSlug}.png` : null,
         mapX: s.mapX,
         mapY: s.mapY,
       },
     });
-    stateBySlug.set(slug, state.id);
+    firstStateId ??= state.id;
   }
 
-  // Additional real member associations (states with more than one FAIITA-affiliated body).
-  for (const m of realMemberAssociations) {
-    const stateId = stateBySlug.get(m.stateSlug);
-    if (!stateId) continue;
+  if (firstStateId) {
     await prisma.memberAssociation.create({
-      data: {
-        slug: `${m.stateSlug}-${m.logoSlug}`,
-        name: m.name,
-        city: m.city,
-        type: "Retail",
-        memberCount: 0,
-        description: `${m.name} is a FAIITA-affiliated IT trade association based in ${m.city}.`,
-        presidentName: m.presidentName,
-        contactPhone: m.contactPhone,
-        contactEmail: m.contactEmail,
-        logoUrl: `/logos/member/${m.logoSlug}.png`,
-        stateId,
-      },
+      data: { ...demoMemberAssociation, stateId: firstStateId },
     });
   }
 

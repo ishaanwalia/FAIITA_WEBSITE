@@ -23,7 +23,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <StateMarquee states={states.map((s) => s.stateName)} />
+      <StateMarquee states={[...new Set(states.map((s) => s.stateName))]} />
       <Stats stats={stats} />
       <MembershipBenefits />
       <JoinCta />

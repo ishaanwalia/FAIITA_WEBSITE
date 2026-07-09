@@ -38,6 +38,12 @@ export function Hero() {
 
       <ParticleBackground />
 
+      {/* Slow-drifting glow blobs — subtle depth behind the content layer */}
+      <div aria-hidden className="absolute inset-0 z-[1] overflow-hidden">
+        <div className="aurora-orb left-[6%] top-[18%] h-72 w-72 bg-saffron-500/15" />
+        <div className="aurora-orb right-[4%] bottom-[12%] h-96 w-96 bg-sky-400/10 [animation-delay:-8s]" />
+      </div>
+
       <motion.div style={{ y: contentY, opacity: contentOpacity }} className="container-page relative z-10 py-32 text-center">
         <div className="mx-auto max-w-4xl">
           <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0} className="mx-auto mb-8 flex justify-center">
@@ -74,7 +80,7 @@ export function Hero() {
             custom={0.45}
             className="mx-auto mb-10 max-w-2xl text-balance text-lg leading-relaxed text-white/70"
           >
-            Uniting 50,000+ IT entrepreneurs across 31 states — one federated
+            Uniting 50,000+ IT entrepreneurs across 22 states & UTs — one federated
             voice driving growth in Retail, Distribution, Services & Solutions.
           </motion.p>
 

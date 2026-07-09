@@ -109,6 +109,60 @@
   .gradient-text-navy {
     @apply bg-gradient-to-r from-navy-900 via-navy-700 to-navy-500 bg-clip-text text-transparent;
   }
+
+  /* Light sheen that sweeps across primary CTAs on hover */
+  .btn-shine {
+    @apply relative overflow-hidden;
+  }
+  .btn-shine::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.45) 50%, transparent 60%);
+    transform: translateX(-130%);
+    transition: transform 0.65s ease;
+    pointer-events: none;
+  }
+  .btn-shine:hover::after {
+    transform: translateX(130%);
+  }
+
+  /* Slow-drifting glow blobs used behind hero content for depth */
+  .aurora-orb {
+    @apply pointer-events-none absolute rounded-full blur-3xl;
+    animation: aurora-drift 16s ease-in-out infinite;
+  }
+}
+
+@keyframes aurora-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(36px, -24px) scale(1.08); }
+  66% { transform: translate(-24px, 18px) scale(0.94); }
+}
+
+/* Thin, brand-tinted scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(211 45% 28% / 0.45);
+  border-radius: 8px;
+  border: 2px solid hsl(var(--secondary));
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(211 45% 28% / 0.75);
+}
+
+/* Keyboard-visible focus for links and interactive text, matching the brand */
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid hsl(var(--accent));
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 @media (hover: hover) and (pointer: fine) {
