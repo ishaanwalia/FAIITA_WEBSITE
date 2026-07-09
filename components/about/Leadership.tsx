@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Award, Briefcase, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
@@ -40,10 +40,20 @@ export function Leadership({
   const activeList = tab === "current" ? current : past;
   const [featuredId, setFeaturedId] = useState<string | undefined>(current[0]?.id);
   const featured = activeList.find((l) => l.id === featuredId) ?? activeList[0];
+  const spotlightRef = useRef<HTMLDivElement>(null);
 
   const selectTab = (t: "current" | "past") => {
     setTab(t);
     setFeaturedId((t === "current" ? current : past)[0]?.id);
+  };
+
+  // On small screens the spotlight card sits above the grid, so tapping a tile
+  // must scroll back up to it — otherwise the selection appears to do nothing.
+  const featureLeader = (id: string) => {
+    setFeaturedId(id);
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches) {
+      requestAnimationFrame(() => spotlightRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
   };
 
   return (
@@ -63,7 +73,9 @@ export function Leadership({
         ))}
       </div>
 
-      {/* Spotlight — longer card, with extra info not shown on the grid tiles */}
+      {/* Spotlight — longer card, with extra info not shown on the grid tiles.
+          scroll-mt clears the fixed navbar when the mobile auto-scroll lands here. */}
+      <div ref={spotlightRef} className="scroll-mt-24">
       <AnimatePresence mode="wait">
         {featured && (
           <motion.div
@@ -127,6 +139,7 @@ export function Leadership({
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
 
       {/* Bento grid — click a tile to feature it above; hover a tile to see
           its photo zoom in, click the info icon to flip for contact details. */}
@@ -184,14 +197,14 @@ export function Leadership({
                   <FlipCard
                     className="h-full"
                     front={
-                      <button onClick={() => setFeaturedId(l.id)} className="block h-full w-full text-left">
+                      <button onClick={() => featureLeader(l.id)} className="block h-full w-full text-left">
                         {frontFace}
                       </button>
                     }
                     back={backFace}
                   />
                 ) : (
-                  <button onClick={() => setFeaturedId(l.id)} className="block h-full w-full text-left">
+                  <button onClick={() => featureLeader(l.id)} className="block h-full w-full text-left">
                     {frontFace}
                   </button>
                 )}

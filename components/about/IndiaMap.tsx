@@ -66,9 +66,18 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
   const [active, setActive] = useState<StateGroup | null>(null);
   const [hovered, setHovered] = useState<{ name: string; x: number; y: number } | null>(null);
   const [region, setRegion] = useState<string>("All");
-  const [view, setView] = useState<"map" | "list">("map");
   const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "missing">("loading");
   const containerRef = useRef<HTMLDivElement>(null);
+  const detailRef = useRef<HTMLDivElement>(null);
+
+  // On small screens the detail card sits below the map, so a tap on the map
+  // must bring it into view — otherwise the selection appears to do nothing.
+  const selectGroup = (group: StateGroup | null) => {
+    setActive(group);
+    if (group && typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches) {
+      requestAnimationFrame(() => detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
+  };
 
   const regions = useMemo(() => ["All", ...Array.from(new Set(states.map((s) => s.region)))], [states]);
   const filtered = region === "All" ? states : states.filter((s) => s.region === region);
@@ -167,7 +176,7 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
         setHovered(null);
       };
       const onClick = () => {
-        if (match) setActive(match);
+        if (match) selectGroup(match);
       };
 
       shape.addEventListener("mouseenter", onEnter);
@@ -206,21 +215,12 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
             </button>
           ))}
         </div>
-        <button
-          onClick={() => setView(view === "map" ? "list" : "map")}
-          className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-navy-700 hover:bg-secondary lg:hidden"
-        >
-          {view === "map" ? "View as list" : "View map"}
-        </button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
-        <div
-          className={cn(
-            "relative overflow-hidden rounded-3xl border border-border bg-white p-2 sm:p-4",
-            view === "list" && "hidden lg:block"
-          )}
-        >
+      {/* Mobile stacks map → detail → list so a tap always has a visible result;
+          desktop keeps the two-column layout. */}
+      <div className="grid gap-6 lg:gap-8 lg:grid-cols-[1.3fr_1fr]">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-white p-2 sm:p-4">
           <div ref={containerRef} className="min-h-[360px] sm:min-h-[480px] [&_svg]:h-auto [&_svg]:w-full" />
 
           {mapStatus === "missing" && (
@@ -255,20 +255,23 @@ export function IndiaMap({ states }: { states: StateMapPoint[] }) {
           </div>
         </div>
 
-        <div className={cn("flex flex-col gap-4", view === "map" && "hidden lg:flex")}>
-          {active ? (
-            <StateDetailCard group={active} onClose={() => setActive(null)} />
-          ) : (
-            <div className="rounded-3xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-              Select a state on the map, or from the list below, to view its association details.
-            </div>
-          )}
+        <div className="flex flex-col gap-4">
+          {/* scroll-mt clears the fixed navbar when the mobile auto-scroll lands here */}
+          <div ref={detailRef} className="scroll-mt-24">
+            {active ? (
+              <StateDetailCard group={active} onClose={() => setActive(null)} />
+            ) : (
+              <div className="rounded-3xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+                Select a state on the map, or from the list below, to view its association details.
+              </div>
+            )}
+          </div>
 
           <div className="max-h-[360px] space-y-2 overflow-y-auto rounded-3xl border border-border p-3">
             {filtered.map((s) => (
               <button
                 key={s.id}
-                onClick={() => setActive(groups.get(s.stateCode) ?? null)}
+                onClick={() => selectGroup(groups.get(s.stateCode) ?? null)}
                 className={cn(
                   "flex w-full items-center justify-between gap-3 rounded-xl px-4 py-3 text-left transition-colors",
                   active?.stateCode === s.stateCode ? "bg-navy-700 text-white" : "hover:bg-secondary"
