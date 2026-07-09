@@ -28,6 +28,8 @@ type StateSeed = {
   /** Filename (no extension) expected at /public/logos/state/<logoSlug>.png */
   logoSlug?: string;
   description?: string;
+  /** Defaults to "<city>, <stateName>" — override when stateName isn't a literal state. */
+  address?: string;
 };
 
 // Authoritative list of FAIITA state associations — Faiita_President_XL_2025 27.xlsx
@@ -57,7 +59,9 @@ const states: StateSeed[] = [
   { stateName: "Odisha", stateCode: "OR", region: "East", associationName: "Information Technology Association Of Orissa (ITAO)", foundedYear: 2016, memberCount: 890, city: "Bhubaneswar", mapX: 55, mapY: 47, presidentName: "Abhinash Patnayak", contactPhone: "+91 98610 63215", contactEmail: "president@itaoodisha.org", logoSlug: "odisha" },
 
   // — North-East —
-  { stateName: "Assam", stateCode: "AS", region: "North-East", associationName: "North East Computer Traders Association (NECTA)", foundedYear: 2016, memberCount: 410, city: "Guwahati", mapX: 70, mapY: 29, presidentName: "Ranjan Kumar Das", contactPhone: "+91 94351 18986", contactEmail: "president@necta.co.in", logoSlug: "assam" },
+  // NECTA covers the whole North-East (Sikkim + the seven sister states) as
+  // one unit, headquartered in Guwahati, Assam.
+  { stateName: "North East", stateCode: "AS", region: "North-East", associationName: "North East Computer Traders Association (NECTA)", foundedYear: 2016, memberCount: 410, city: "Guwahati", mapX: 70, mapY: 29, presidentName: "Ranjan Kumar Das", contactPhone: "+91 94351 18986", contactEmail: "president@necta.co.in", logoSlug: "assam", address: "Guwahati, Assam", description: "North East Computer Traders Association (NECTA) represents IT channel partners, retailers and distributors across the entire North-East — Sikkim, Assam, Arunachal Pradesh, Nagaland, Manipur, Mizoram, Tripura and Meghalaya — headquartered in Guwahati and working under the FAIITA umbrella since 2016." },
 
   // — Central —
   { stateName: "Chhattisgarh", stateCode: "CT", region: "Central", associationName: "Chhattisgarh Computer & Media Dealer Association (CCMDA)", foundedYear: 2017, memberCount: 520, city: "Raipur", mapX: 46, mapY: 44, presidentName: "Avinash Makhija", contactPhone: "+91 98261 62122", contactEmail: "avinash.compu@gmail.com", logoSlug: "chhattisgarh" },
@@ -156,8 +160,8 @@ const pastLeaders = [
 ];
 
 const stats = [
-  { label: "States & UTs Covered", value: "22", suffix: "", icon: "MapPinned", order: 1 },
-  { label: "Affiliated Associations", value: "34", suffix: "", icon: "Building2", order: 2 },
+  { label: "State Associations", value: "34", suffix: "", icon: "MapPinned", order: 1 },
+  { label: "Member Associations", value: "120", suffix: "+", icon: "Building2", order: 2 },
   { label: "Channel Partners", value: "50", suffix: "K+", icon: "Users", order: 3 },
   { label: "Employment Generated", value: "5", suffix: "L+", icon: "Briefcase", order: 4 },
   { label: "Years Since 2014", suffix: "+", value: "12", icon: "CalendarClock", order: 5 },
@@ -239,7 +243,7 @@ async function main() {
         presidentName: s.presidentName,
         contactEmail: s.contactEmail,
         contactPhone: s.contactPhone,
-        address: `${s.city}, ${s.stateName}`,
+        address: s.address ?? `${s.city}, ${s.stateName}`,
         description:
           s.description ??
           `${s.associationName} represents IT channel partners, retailers and distributors across ${s.stateName}, working under the FAIITA umbrella${s.foundedYear ? ` since ${s.foundedYear}` : ""}.`,

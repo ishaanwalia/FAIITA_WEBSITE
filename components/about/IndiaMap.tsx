@@ -21,10 +21,30 @@ const NAME_ALIASES: Record<string, string> = {
   // The SVG draws Ladakh as its own shape; FAIITA data treats the whole
   // northern region as Jammu & Kashmir, so both shapes select together.
   ladakh: "jammuandkashmir",
+  // NECTA (HQ Guwahati) covers the entire North-East — Sikkim and the seven
+  // sister states select together as one unit on the map.
+  assam: "northeast",
+  sikkim: "northeast",
+  arunachalpradesh: "northeast",
+  nagaland: "northeast",
+  manipur: "northeast",
+  mizoram: "northeast",
+  tripura: "northeast",
+  meghalaya: "northeast",
 };
 
 // Same idea for ISO shape codes (id="INLA" → belongs with "JK").
-const CODE_ALIASES: Record<string, string> = { LA: "JK" };
+const CODE_ALIASES: Record<string, string> = {
+  LA: "JK",
+  // North-East shapes all belong to NECTA, stored under Assam's "AS" code.
+  SK: "AS",
+  AR: "AS",
+  NL: "AS",
+  MN: "AS",
+  MZ: "AS",
+  TR: "AS",
+  ML: "AS",
+};
 
 function normalize(name: string) {
   const n = name.toLowerCase().replace(/&/g, "and").replace(/[^a-z]/g, "");
