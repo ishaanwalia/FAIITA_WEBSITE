@@ -30,6 +30,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [spotlit, setSpotlit] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
 
@@ -65,17 +66,26 @@ export function Navbar() {
       <div className="container-page flex h-20 items-center justify-between">
         <Logo variant="light" />
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary" onMouseLeave={() => setSpotlit(null)}>
           {navItems.map((item) => {
             const active = isActive(item.href) || (item.children?.some((c) => pathname.startsWith(c.href)) ?? false);
             return (
               <div
                 key={item.label}
                 className="group relative"
-                onMouseEnter={() => item.children && openMenu(item.label)}
+                onMouseEnter={() => {
+                  setSpotlit(item.label);
+                  if (item.children) openMenu(item.label);
+                }}
                 onMouseLeave={() => item.children && scheduleClose()}
               >
-                {item.children ? (
+                {spotlit === item.label && (
+                  <motion.div
+                    layoutId="nav-spotlight"
+                    className="absolute inset-0 rounded-full bg-white/10"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}                {item.children ? (
                   <button
                     className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium text-white/90 transition-colors hover:text-white"
                     aria-expanded={openDropdown === item.label}

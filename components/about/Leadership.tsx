@@ -5,6 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Award, Mail, MapPin, Phone } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
+import { MaskedAvatar } from "@/components/common/MaskedAvatar";
+import { FlipCard } from "@/components/common/FlipCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { cn } from "@/lib/utils";
 
@@ -71,9 +73,7 @@ export function Leadership({
           >
             <div className="absolute inset-0 bg-network-grid opacity-10" />
             <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
-              <span className="flex h-28 w-28 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-saffron-400 to-saffron-600 font-display text-4xl font-bold text-navy-900">
-                {initials(featured.name)}
-              </span>
+              <MaskedAvatar initials={initials(featured.name)} size="xl" />
               <div className="flex-1">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
                   <Award className="h-3 w-3" /> {featured.role}
@@ -105,11 +105,13 @@ export function Leadership({
         )}
       </AnimatePresence>
 
-      {/* Bento grid — click any tile to feature it above; size reflects seniority */}
-      <div className="mt-8 grid auto-rows-[150px] grid-cols-2 gap-4 sm:grid-cols-4">
+      {/* Bento grid, rendered with real CSS 3D perspective — click a tile to
+          feature it above; hover + the info icon flips it to show contact info. */}
+      <div
+        className="mt-8 grid auto-rows-[150px] grid-cols-2 gap-4 sm:grid-cols-4"
+        style={{ perspective: 1400 }}
+      >
         {activeList.map((l, i) => {
-          // First tile (President/lead) gets a large 2x2 bento cell, second
-          // gets a wide 2x1, the rest are standard single cells.
           const spanClass =
             i === 0
               ? "col-span-2 row-span-2"
@@ -117,36 +119,60 @@ export function Leadership({
                 ? "col-span-2 row-span-1"
                 : "col-span-1 row-span-1";
           const isFeatured = featured?.id === l.id;
+          const hasContact = tab === "current" && (l.email || l.phone);
+
+          const frontFace = (
+            <GlassCard
+              variant="dark"
+              className={cn(
+                "flex h-full flex-col justify-center text-center transition-all",
+                isFeatured && "ring-2 ring-saffron-400",
+                i === 0 && "items-center justify-end pb-8"
+              )}
+            >
+              <MaskedAvatar initials={initials(l.name)} size={i === 0 ? "lg" : "md"} className="mx-auto" />
+              <h4 className={cn("mt-3 font-display font-bold text-white", i === 0 ? "text-xl" : "text-sm")}>
+                {l.name}
+              </h4>
+              <p className={cn("font-semibold text-saffron-400", i === 0 ? "text-sm" : "text-xs")}>{l.role}</p>
+              {l.associationName && i < 2 && <p className="mt-1 text-xs text-white/50">{l.associationName}</p>}
+            </GlassCard>
+          );
+
+          const backFace = (
+            <GlassCard variant="dark" className="flex h-full flex-col items-center justify-center gap-2 text-center">
+              <p className="text-xs font-semibold uppercase tracking-wide text-saffron-400">Contact</p>
+              {l.email && (
+                <a href={`mailto:${l.email}`} className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white">
+                  <Mail className="h-3.5 w-3.5" /> {l.email}
+                </a>
+              )}
+              {l.phone && (
+                <a href={`tel:${l.phone}`} className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white">
+                  <Phone className="h-3.5 w-3.5" /> {l.phone}
+                </a>
+              )}
+            </GlassCard>
+          );
 
           return (
             <ScrollReveal key={l.id} direction="up" delay={i * 0.05} className={spanClass}>
-              <TiltCard maxTilt={6} className="h-full">
-                <button onClick={() => setFeaturedId(l.id)} className="block h-full w-full text-left">
-                  <GlassCard
-                    variant="dark"
-                    className={cn(
-                      "flex h-full flex-col justify-center text-center transition-all",
-                      isFeatured && "ring-2 ring-saffron-400",
-                      i === 0 && "items-center justify-end pb-8"
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "mx-auto flex items-center justify-center rounded-2xl bg-gradient-to-br from-saffron-400 to-saffron-600 font-display font-bold text-navy-900",
-                        i === 0 ? "h-20 w-20 text-2xl" : "h-14 w-14 text-base"
-                      )}
-                    >
-                      {initials(l.name)}
-                    </span>
-                    <h4 className={cn("mt-3 font-display font-bold text-white", i === 0 ? "text-xl" : "text-sm")}>
-                      {l.name}
-                    </h4>
-                    <p className={cn("font-semibold text-saffron-400", i === 0 ? "text-sm" : "text-xs")}>{l.role}</p>
-                    {l.associationName && i < 2 && (
-                      <p className="mt-1 text-xs text-white/50">{l.associationName}</p>
-                    )}
-                  </GlassCard>
-                </button>
+              <TiltCard maxTilt={8} className="h-full">
+                {hasContact ? (
+                  <FlipCard
+                    className="h-full"
+                    front={
+                      <button onClick={() => setFeaturedId(l.id)} className="block h-full w-full text-left">
+                        {frontFace}
+                      </button>
+                    }
+                    back={backFace}
+                  />
+                ) : (
+                  <button onClick={() => setFeaturedId(l.id)} className="block h-full w-full text-left">
+                    {frontFace}
+                  </button>
+                )}
               </TiltCard>
             </ScrollReveal>
           );
