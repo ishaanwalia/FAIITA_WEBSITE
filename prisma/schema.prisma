@@ -53,6 +53,9 @@ model MemberAssociation {
   description String?
   logoUrl     String?
   website     String?
+  presidentName String?
+  contactEmail  String?
+  contactPhone  String?
   stateId     String
   state       StateAssociation @relation(fields: [stateId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())

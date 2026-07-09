@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const structure = [
   { icon: Building2, title: "National Governing Body", subtitle: "FAIITA Executive Committee", detail: "President, Vice Presidents, Secretary General & Treasurer set national policy and represent the federation to government bodies." },
-  { icon: Network, title: "State Associations", subtitle: "29 States Covered", detail: "Each state operates its own registered IT association, electing its own leadership and running local programs." },
+  { icon: Network, title: "State Associations", subtitle: "31 States Covered", detail: "Each state operates its own registered IT association, electing its own leadership and running local programs." },
   { icon: Building2, title: "Member Associations", subtitle: "100+ Associations", detail: "City and regional associations affiliate with their state body, focused on Retail, Distribution, Services & Solutions." },
   { icon: Users, title: "Channel Partners", subtitle: "50,000+ Individuals & Businesses", detail: "The IT retailers, resellers, system integrators, and service providers who form the federation's grassroots base." },
 ];
@@ -53,7 +53,7 @@ export default function AboutFaiitaPage() {
                 coordinated national impact.
               </p>
               <p>
-                Today, FAIITA represents 29 state associations, 100+ member
+                Today, FAIITA represents 31 state associations, 100+ member
                 associations, and over 50,000 channel partners spanning
                 retail, distribution, services, and solutions businesses
                 across India.

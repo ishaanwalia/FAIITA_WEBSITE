@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Building2, MapPin, Search, Users } from "lucide-react";
+import { Building2, MapPin, Search, User, Users } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
+import { LogoImage } from "@/components/common/LogoImage";
 import { cn } from "@/lib/utils";
 
 type MemberRow = {
@@ -14,6 +15,8 @@ type MemberRow = {
   type: string;
   memberCount: number;
   description: string | null;
+  presidentName?: string | null;
+  logoUrl?: string | null;
   state: { stateName: string };
 };
 
@@ -68,13 +71,21 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
           {filtered.map((m) => (
             <TiltCard key={m.id} maxTilt={6} className="h-full">
               <GlassCard variant="light" className="flex h-full flex-col">
-                <Badge variant="outline" className="w-fit">{m.type}</Badge>
+                <div className="flex items-start justify-between gap-3">
+                  <Badge variant="outline" className="w-fit">{m.type}</Badge>
+                  <LogoImage logoUrl={m.logoUrl} alt={m.name} size="sm" />
+                </div>
                 <h3 className="mt-4 font-display text-base font-bold text-navy-800">{m.name}</h3>
                 <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
                   <MapPin className="h-3.5 w-3.5" /> {m.city}, {m.state.stateName}
                 </p>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{m.description}</p>
-                <p className="mt-4 flex items-center gap-1.5 border-t border-navy-700/10 pt-4 text-xs font-semibold text-saffron-600">
+                {m.presidentName && (
+                  <p className="mt-3 flex items-center gap-1.5 text-xs text-navy-700/70">
+                    <User className="h-3.5 w-3.5" /> {m.presidentName}, President
+                  </p>
+                )}
+                <p className="mt-2 flex items-center gap-1.5 border-t border-navy-700/10 pt-4 text-xs font-semibold text-saffron-600">
                   <Users className="h-3.5 w-3.5" /> {m.memberCount.toLocaleString("en-IN")} members
                 </p>
               </GlassCard>

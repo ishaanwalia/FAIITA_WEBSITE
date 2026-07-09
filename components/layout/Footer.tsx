@@ -35,7 +35,7 @@ export function Footer() {
           <Logo variant="light" />
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/50">
             The apex body uniting state-level IT associations across India —
-            representing 50,000+ channel partners across 29 states, formally
+            representing 50,000+ channel partners across 31 states, formally
             federated since 2014.
           </p>
           <div className="mt-6">

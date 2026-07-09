@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Building2, Calendar, Mail, MapPin, Phone, Users } from "lucide-react";
+import { ArrowLeft, Building2, Calendar, Mail, MapPin, Phone, User, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { LogoImage } from "@/components/common/LogoImage";
 
 export const revalidate = 3600;
 
@@ -40,8 +41,13 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
           <span className="mt-6 inline-block rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
             {state.region} Zone
           </span>
-          <h1 className="mt-4 font-display text-3xl font-bold text-white sm:text-4xl">{state.stateName}</h1>
-          <p className="mt-2 text-lg text-white/60">{state.associationName}</p>
+          <div className="mt-4 flex items-center gap-4">
+            <LogoImage logoUrl={state.logoUrl} alt={state.associationName} size="lg" className="border-white/10 bg-white" />
+            <div>
+              <h1 className="font-display text-3xl font-bold text-white sm:text-4xl">{state.stateName}</h1>
+              <p className="mt-2 text-lg text-white/60">{state.associationName}</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -56,10 +62,14 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
                 <h2 className="font-display text-xl font-bold text-navy-800">Member Chapters</h2>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   {state.memberAssociations.map((m) => (
-                    <div key={m.id} className="rounded-2xl border border-border bg-card p-5">
-                      <h3 className="font-display text-sm font-bold text-navy-800">{m.name}</h3>
-                      <p className="mt-1 text-xs text-muted-foreground">{m.city} · {m.type}</p>
-                      <p className="mt-2 text-xs text-saffron-600">{m.memberCount.toLocaleString("en-IN")} members</p>
+                    <div key={m.id} className="flex gap-3 rounded-2xl border border-border bg-card p-5">
+                      <LogoImage logoUrl={m.logoUrl} alt={m.name} size="sm" />
+                      <div>
+                        <h3 className="font-display text-sm font-bold text-navy-800">{m.name}</h3>
+                        <p className="mt-1 text-xs text-muted-foreground">{m.city} · {m.type}</p>
+                        {m.presidentName && <p className="mt-1 text-xs text-navy-700/70">{m.presidentName}, President</p>}
+                        <p className="mt-2 text-xs text-saffron-600">{m.memberCount.toLocaleString("en-IN")} members</p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -82,6 +92,11 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
                 </div>
               </div>
               <div className="mt-5 space-y-3 border-t border-border pt-5 text-sm">
+                {state.presidentName && state.presidentName !== "REPLACE ME" && (
+                  <p className="flex items-center gap-2 text-muted-foreground">
+                    <User className="h-4 w-4 shrink-0 text-navy-700" /> {state.presidentName}, President
+                  </p>
+                )}
                 {state.address && (
                   <p className="flex items-start gap-2 text-muted-foreground">
                     <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-navy-700" /> {state.address}

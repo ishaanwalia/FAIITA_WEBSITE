@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Search, Users } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { LogoImage } from "@/components/common/LogoImage";
 import { cn } from "@/lib/utils";
 
 type StateRow = {
@@ -14,6 +15,7 @@ type StateRow = {
   associationName: string;
   region: string;
   memberCount: number;
+  logoUrl?: string | null;
 };
 
 export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
@@ -76,8 +78,13 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
                 <TiltCard key={s.id} maxTilt={6} className="h-full">
                   <Link href={`/about/state-associations/${s.slug}`} className="group block h-full">
                     <GlassCard variant="light" className="flex h-full flex-col">
-                      <h3 className="font-display text-base font-bold text-navy-800">{s.stateName}</h3>
-                      <p className="mt-1 text-xs font-medium text-saffron-600">{s.associationName}</p>
+                      <div className="flex items-start gap-3">
+                        <LogoImage logoUrl={s.logoUrl} alt={s.associationName} size="sm" />
+                        <div>
+                          <h3 className="font-display text-base font-bold text-navy-800">{s.stateName}</h3>
+                          <p className="mt-1 text-xs font-medium text-saffron-600">{s.associationName}</p>
+                        </div>
+                      </div>
                       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
                         <span className="flex items-center gap-1.5">
                           <Users className="h-3.5 w-3.5" /> {s.memberCount.toLocaleString("en-IN")} members

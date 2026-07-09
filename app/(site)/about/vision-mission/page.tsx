@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Compass, Target, Sparkles } from "lucide-react";
 import { PageHero } from "@/components/common/PageHero";
+import { SectionHeading } from "@/components/common/SectionHeading";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -98,7 +99,7 @@ export default async function VisionMissionPage() {
           <div className="mt-16">
             <SectionHeading
               eyebrow="Our Reach"
-              title="A Vision Realized Across 29 States"
+              title="A Vision Realized Across 31 States"
               description="Explore where FAIITA's member associations operate today."
             />
             <div className="mt-10">

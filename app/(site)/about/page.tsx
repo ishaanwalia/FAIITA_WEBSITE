@@ -11,7 +11,7 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = {
   title: "About FAIITA",
   description:
-    "Learn about FAIITA's vision, structure, leadership, and the 29-state network of IT associations it federates.",
+    "Learn about FAIITA's vision, structure, leadership, and the 31-state network of IT associations it federates.",
 };
 
 export const revalidate = 3600;

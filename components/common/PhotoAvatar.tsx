@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +25,9 @@ export function PhotoAvatar({
   hoverZoom?: boolean;
   className?: string;
 }) {
+  const [failed, setFailed] = useState(false);
+  const showImage = Boolean(imageUrl) && !failed;
+
   return (
     <div
       className={cn(
@@ -31,8 +37,14 @@ export function PhotoAvatar({
         className
       )}
     >
-      {imageUrl ? (
-        <Image src={imageUrl} alt="" fill className="object-cover" />
+      {showImage ? (
+        <Image
+          src={imageUrl as string}
+          alt=""
+          fill
+          className="object-cover"
+          onError={() => setFailed(true)}
+        />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-saffron-400 to-saffron-600">
           <span className="font-display font-bold text-navy-900">{initials}</span>

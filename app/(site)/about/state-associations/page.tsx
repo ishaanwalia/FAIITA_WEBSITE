@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "State Associations",
-  description: "Browse FAIITA's 29 state-level IT associations across India.",
+  description: "Browse FAIITA's 31 state-level IT associations across India.",
 };
 
 export const revalidate = 3600;
@@ -17,7 +17,7 @@ export default async function StateAssociationsPage() {
     <>
       <PageHero
         eyebrow="About / State Associations"
-        title="29 State Associations, One Federation"
+        title="31 State Associations, One Federation"
         description="Every state association operates independently while sharing in FAIITA's national advocacy and resources."
       />
 
