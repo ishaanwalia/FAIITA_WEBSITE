@@ -160,8 +160,8 @@ const pastLeaders = [
 ];
 
 const stats = [
-  { label: "State Associations", value: "34", suffix: "", icon: "MapPinned", order: 1 },
-  { label: "Member Associations", value: "120", suffix: "+", icon: "Building2", order: 2 },
+  { label: "Affiliated Associations", value: "34", suffix: "", icon: "MapPinned", order: 1 },
+  { label: "Member Associations", value: "100", suffix: "+", icon: "Building2", order: 2 },
   { label: "Channel Partners", value: "50", suffix: "K+", icon: "Users", order: 3 },
   { label: "Employment Generated", value: "5", suffix: "L+", icon: "Briefcase", order: 4 },
   { label: "Years Since 2014", suffix: "+", value: "12", icon: "CalendarClock", order: 5 },
