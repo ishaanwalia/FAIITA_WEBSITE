@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/common/PageHero";
 import { Leadership } from "@/components/about/Leadership";
+import { withLeaderProfile } from "@/lib/leader-profiles";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function LeadershipPage() {
-  const allLeaders = await prisma.leader.findMany({
-    where: { category: "national" },
-    orderBy: { order: "asc" },
-  });
+  const allLeaders = (
+    await prisma.leader.findMany({
+      where: { category: "national" },
+      orderBy: { order: "asc" },
+    })
+  ).map(withLeaderProfile);
 
   const current = allLeaders.filter((l) => l.isCurrent);
   const past = allLeaders.filter((l) => !l.isCurrent);

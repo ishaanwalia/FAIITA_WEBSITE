@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Award, Briefcase, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Award, Briefcase, Building2, Globe, History, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { PhotoAvatar } from "@/components/common/PhotoAvatar";
@@ -23,7 +23,17 @@ export type LeaderData = {
   imageUrl?: string | null;
   linkedIn?: string | null;
   focusAreas?: string | null;
+  /** Extended profile fields merged in from lib/leader-profiles.ts */
+  journey?: string[];
+  company?: string;
+  location?: string;
+  website?: string;
 };
+
+/** "https://www.anjalirajkot.com" → "anjalirajkot.com" for display */
+function prettyUrl(url: string) {
+  return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+}
 
 function initials(name: string) {
   return name.split(" ").map((n) => n[0]).slice(0, 2).join("");
@@ -100,7 +110,38 @@ export function Leadership({
                     <MapPin className="h-3.5 w-3.5" /> {featured.associationName}
                   </p>
                 )}
+                {featured.journey?.map((step) => (
+                  <p key={step} className="mt-2 flex items-start gap-1.5 text-sm text-white/55">
+                    <History className="mt-0.5 h-3.5 w-3.5 shrink-0 text-electric/70" /> {step}
+                  </p>
+                ))}
                 {featured.bio && <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/60">{featured.bio}</p>}
+
+                {/* Digital visiting card — the leader's business identity at a glance */}
+                {(featured.company || featured.location || featured.website) && (
+                  <div className="mt-5 inline-flex flex-wrap items-center gap-x-6 gap-y-2.5 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
+                    {featured.company && (
+                      <span className="flex items-center gap-2 text-sm font-medium text-white/80">
+                        <Building2 className="h-4 w-4 text-saffron-400" /> {featured.company}
+                      </span>
+                    )}
+                    {featured.location && (
+                      <span className="flex items-center gap-2 text-sm text-white/65">
+                        <MapPin className="h-4 w-4 text-saffron-400" /> {featured.location}
+                      </span>
+                    )}
+                    {featured.website && (
+                      <a
+                        href={featured.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-underline flex items-center gap-2 text-sm text-white/65 hover:text-white"
+                      >
+                        <Globe className="h-4 w-4 text-saffron-400" /> {prettyUrl(featured.website)}
+                      </a>
+                    )}
+                  </div>
+                )}
 
                 {featured.focusAreas && (
                   <div className="mt-5">
@@ -148,7 +189,7 @@ export function Leadership({
           const spanClass =
             i === 0 ? "col-span-2 row-span-2" : i === 1 ? "col-span-2 row-span-1" : "col-span-1 row-span-1";
           const isFeatured = featured?.id === l.id;
-          const hasContact = tab === "current" && (l.email || l.phone);
+          const hasContact = tab === "current" && (l.email || l.phone || l.website);
 
           const frontFace = (
             <GlassCard
@@ -185,6 +226,16 @@ export function Leadership({
               {l.phone && (
                 <a href={`tel:${l.phone}`} className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white">
                   <Phone className="h-3.5 w-3.5" /> {l.phone}
+                </a>
+              )}
+              {l.website && (
+                <a
+                  href={l.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white"
+                >
+                  <Globe className="h-3.5 w-3.5" /> {prettyUrl(l.website)}
                 </a>
               )}
             </GlassCard>

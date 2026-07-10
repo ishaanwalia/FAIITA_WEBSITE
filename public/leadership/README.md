@@ -26,7 +26,7 @@ naresh-batra.jpg
 puneet-singhaal.jpg
 deepak-vidhani.jpg
 b-l-navlakha.jpg
-praful-desai.jpg
+praful-desai.jpeg
 mahesha-g-n.jpg
 sulalith-gupta.jpg
 sudhir-goyal.jpg

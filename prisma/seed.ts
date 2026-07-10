@@ -111,7 +111,7 @@ const testimonials = [
 const leaders = [
   { name: "Navin Gupta", role: "President", order: 1, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/navin-gupta.jpg" },
   { name: "Liju P Raju", role: "Senior Vice President", order: 2, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/liju-p-raju.jpg" },
-  { name: "Praful Desai", role: "Vice President", order: 3, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/praful-desai.jpg" },
+  { name: "Praful Desai", role: "Vice President", order: 3, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/praful-desai.jpeg" },
   { name: "Sanjeev Walia", role: "General Secretary", order: 4, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sanjeev-walia.jpg" },
   { name: "Deepak Bommisetty", role: "Joint Secretary", order: 5, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/deepak-bommisetty.jpg" },
   { name: "Naveen Gupta", role: "Treasurer", order: 6, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/naveen-gupta.jpg" },
@@ -145,7 +145,7 @@ const pastLeaders = [
   { name: "Puneet Singhaal", role: "GB Member", order: 12, category: "national", term: "2022–2024", isCurrent: false, imageUrl: "/leadership/puneet-singhaal.jpg" },
   { name: "Deepak Vidhani", role: "GB Member", order: 13, category: "national", term: "2022–2024", isCurrent: false, imageUrl: "/leadership/deepak-vidhani.jpg" },
   { name: "B L Navlakha", role: "GB Member / Zonal Chairman (East)", order: 14, category: "national", term: "2022–2024", isCurrent: false, imageUrl: "/leadership/b-l-navlakha.jpg" },
-  { name: "Praful Desai", role: "GB Member / Zonal Chairman (West)", order: 15, category: "national", term: "2022–2024", isCurrent: false, imageUrl: "/leadership/praful-desai.jpg" },
+  { name: "Praful Desai", role: "GB Member / Zonal Chairman (West)", order: 15, category: "national", term: "2022–2024", isCurrent: false, imageUrl: "/leadership/praful-desai.jpeg" },
   { name: "Mahesha G N", role: "GB Member", order: 16, category: "national", term: "2022–2024", isCurrent: false, imageUrl: "/leadership/mahesha-g-n.jpg" },
   { name: "Sulalith Gupta", role: "GB Member / Zonal Chairman (North)", order: 17, category: "national", term: "2022–2024", isCurrent: false, imageUrl: "/leadership/sulalith-gupta.jpg" },
   { name: "Sudhir Goyal", role: "GB Member / Zonal Chairman (Central)", order: 18, category: "national", term: "2022–2024", isCurrent: false, imageUrl: "/leadership/sudhir-goyal.jpg" },
