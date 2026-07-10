@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Download, FileText } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
-import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -33,7 +32,7 @@ export default async function ReportsPage() {
 
   return (
     <>
-      <section className="bg-navy-800 pb-8 pt-24">
+      <section className="bg-navy-800 py-24">
         <div className="container-page">
           <SectionHeading
             eyebrow="Resources / Reports"
@@ -43,9 +42,8 @@ export default async function ReportsPage() {
           />
         </div>
       </section>
-      <SectionDivider type="curve" className="bg-navy-800" />
 
-      <section className="bg-background pb-20 pt-4">
+      <section className="bg-background py-20">
         <div className="container-page grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {reports.length === 0 ? (
             <p className="col-span-full py-12 text-center text-muted-foreground">

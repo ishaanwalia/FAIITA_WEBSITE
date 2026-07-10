@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/common/PageHero";
-import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { EventCalendar } from "@/components/common/EventCalendar";
 import { EventsSpotlight } from "@/components/resources/EventsSpotlight";
@@ -27,11 +26,9 @@ export default async function EventsPage() {
         eyebrow="Resources / Events"
         title="Events & Programs"
         description="Summits, AGMs, workshops, and regional meets across the federation."
-        compact
       />
-      <SectionDivider type="curve" className="bg-navy-800" />
 
-      <section className="bg-background pb-8 pt-4">
+      <section className="bg-background pb-8 pt-20">
         <div className="container-page">
           <ScrollReveal direction="scale">
             <EventCalendar events={events} />

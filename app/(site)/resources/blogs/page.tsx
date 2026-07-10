@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/common/PageHero";
-import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -25,11 +24,9 @@ export default async function BlogsPage() {
         eyebrow="Resources / Blogs"
         title="Perspectives & Insights"
         description="Ideas and analysis from FAIITA's editorial desk and policy cell."
-        compact
       />
-      <SectionDivider type="diagonal" className="bg-navy-800" />
 
-      <section className="bg-background pb-20 pt-4">
+      <section className="bg-background py-20">
         <div className="container-page grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {blogs.map((b, i) => (
             <ScrollReveal key={b.id} direction="up" delay={(i % 3) * 0.08}>

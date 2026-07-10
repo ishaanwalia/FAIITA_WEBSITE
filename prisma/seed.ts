@@ -169,7 +169,7 @@ const stats = [
 ];
 
 const newsItems = [
-  { slug: "faiita-hosts-national-it-summit-2025", title: "FAIITA Hosts National IT Summit 2025 in New Delhi", excerpt: "Leaders from all 29 state associations convened to chart the federation's advocacy roadmap for the year ahead.", category: "Events", featured: true, daysAgo: 20 },
+  { slug: "faiita-hosts-national-it-summit-2025", title: "FAIITA Hosts National IT Summit 2025 in New Delhi", excerpt: "Leaders from state associations across all 28 states convened to chart the federation's advocacy roadmap for the year ahead.", category: "Events", featured: true, daysAgo: 20 },
   { slug: "new-gst-guidelines-for-it-products", title: "New GST Guidelines for IT Products Announced", excerpt: "FAIITA's sustained advocacy leads to simplified GST compliance for IT dealers and distributors nationwide.", category: "Policy", featured: true, daysAgo: 35 },
   { slug: "digital-india-skill-development", title: "Digital India Initiative: FAIITA's Role in Skill Development", excerpt: "Partnership with government agencies to train 10,000+ IT professionals in emerging technologies.", category: "Initiative", featured: false, daysAgo: 48 },
   { slug: "faiita-emerging-tech-roundtable", title: "FAIITA Convenes Roundtable on Emerging Technology Retail", excerpt: "State association leaders discussed the shift toward AI-enabled devices and its impact on channel partners.", category: "Press Release", featured: false, daysAgo: 60 },

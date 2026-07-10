@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Download, Mail } from "lucide-react";
 import { PageHero } from "@/components/common/PageHero";
-import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { NewsletterForm } from "@/components/common/NewsletterForm";
 import { formatDate } from "@/lib/utils";
@@ -23,11 +22,9 @@ export default async function NewsletterPage() {
         eyebrow="Resources / Newsletter"
         title="FAIITA Quarterly"
         description="Our regular publication covering policy updates, association spotlights, and federation news."
-        compact
       />
-      <SectionDivider type="diagonal" className="bg-navy-800" />
 
-      <section className="bg-background pb-20 pt-4">
+      <section className="bg-background py-20">
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_320px]">
           <div className="space-y-4">
             {newsletters.map((n, i) => (

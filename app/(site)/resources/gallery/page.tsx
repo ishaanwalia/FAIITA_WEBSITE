@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { PageHero } from "@/components/common/PageHero";
-import { SectionDivider } from "@/components/common/SectionDivider";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { prisma } from "@/lib/prisma";
@@ -22,11 +21,9 @@ export default async function GalleryPage() {
         eyebrow="Resources / Gallery"
         title="Moments From Across the Federation"
         description="A look back at summits, regional meets, and leadership gatherings."
-        compact
       />
-      <SectionDivider type="wave" className="bg-navy-800" />
 
-      <section className="bg-background pb-20 pt-4">
+      <section className="bg-background py-20">
         <div className="container-page columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:mb-6">
           {items.map((item, i) => (
             <ScrollReveal key={item.id} direction="scale" delay={(i % 3) * 0.06} className="break-inside-avoid">
