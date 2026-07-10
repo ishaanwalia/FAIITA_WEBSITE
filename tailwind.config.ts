@@ -68,6 +68,7 @@ const config: Config = {
           green: "#0F8B5F",
           "green-dark": "#0B6A48",
         },
+        electric: "#00F5FF",
       },
       fontFamily: {
         display: ["var(--font-display)"],

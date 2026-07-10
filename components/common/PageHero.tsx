@@ -10,10 +10,10 @@ import { GradientMesh, MESH_VARIANTS, type MeshVariant } from "@/components/comm
 const ACCENT_ORB: Record<MeshVariant, string> = {
   aurora: "right-[8%] top-[10%] h-64 w-64 bg-saffron-500/10",
   dawn: "right-[30%] top-[15%] h-48 w-48 bg-saffron-400/10",
-  tide: "left-[12%] bottom-[10%] h-56 w-56 bg-federal-green/10",
-  ember: "left-[6%] bottom-[18%] h-52 w-52 bg-sky-400/10",
+  tide: "left-[12%] bottom-[10%] h-56 w-56 bg-electric/[0.07]",
+  ember: "left-[6%] bottom-[18%] h-52 w-52 bg-teal-400/10",
   meadow: "left-[35%] top-[12%] h-48 w-48 bg-saffron-400/10",
-  zenith: "right-[18%] top-[35%] h-56 w-56 bg-sky-400/10",
+  zenith: "right-[18%] top-[35%] h-56 w-56 bg-electric/[0.07]",
 };
 
 // Deterministic pick: the page title seeds which gradient spread it gets,
@@ -43,9 +43,11 @@ export function PageHero({
   return (
     <section ref={ref} className="relative overflow-hidden bg-navy-800 py-24">
       <motion.div style={{ y }} className="absolute inset-0">
+        <div aria-hidden className="animated-gradient absolute inset-0" />
         <GradientMesh variant={variant} />
         <div className="absolute inset-0 bg-network-grid opacity-10" />
         <div aria-hidden className={`aurora-orb ${ACCENT_ORB[variant]}`} />
+        <div aria-hidden className="grain absolute inset-0" />
       </motion.div>
       <div className="container-page relative">
         <SectionHeading eyebrow={eyebrow} title={title} description={description} light />

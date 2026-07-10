@@ -16,7 +16,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
       <div
         ref={ref}
         className={cn(
-          "group relative rounded-2xl p-6 transition-all duration-300",
+          "group holo-ring relative rounded-2xl p-6 transition-all duration-300",
           clip && "overflow-hidden",
           variant === "dark" ? "glass-dark text-white" : "glass-light text-navy-800",
           // Dimensional/soft-UI shadow: a tight contact shadow plus a larger

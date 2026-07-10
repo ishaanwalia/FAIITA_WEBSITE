@@ -41,7 +41,7 @@ export function CustomCursor() {
       />
       <div
         ref={ringRef}
-        className="pointer-events-none fixed left-0 top-0 z-[200] hidden h-8 w-8 rounded-full border border-saffron-400/60 transition-transform duration-150 ease-out md:block"
+        className="pointer-events-none fixed left-0 top-0 z-[200] hidden h-8 w-8 rounded-full border border-saffron-400/60 shadow-[0_0_14px_rgba(0,245,255,0.25)] transition-transform duration-150 ease-out md:block"
         aria-hidden
       />
     </>

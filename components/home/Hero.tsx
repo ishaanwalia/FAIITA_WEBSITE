@@ -34,6 +34,7 @@ export function Hero() {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-900/90 via-navy-800/80 to-navy-800/95" />
+        <div aria-hidden className="animated-gradient absolute inset-0" />
       </motion.div>
 
       <ParticleBackground />
@@ -41,8 +42,10 @@ export function Hero() {
       {/* Slow-drifting glow blobs — subtle depth behind the content layer */}
       <div aria-hidden className="absolute inset-0 z-[1] overflow-hidden">
         <div className="aurora-orb left-[6%] top-[18%] h-72 w-72 bg-saffron-500/15" />
-        <div className="aurora-orb right-[4%] bottom-[12%] h-96 w-96 bg-sky-400/10 [animation-delay:-8s]" />
+        <div className="aurora-orb right-[4%] bottom-[12%] h-96 w-96 bg-violet-500/10 [animation-delay:-8s]" />
+        <div className="aurora-orb left-[45%] bottom-[-6rem] h-80 w-80 bg-teal-400/10 [animation-delay:-4s]" />
       </div>
+      <div aria-hidden className="grain absolute inset-0 z-[1]" />
 
       <motion.div style={{ y: contentY, opacity: contentOpacity }} className="container-page relative z-10 py-32 text-center">
         <div className="mx-auto max-w-4xl">
@@ -70,7 +73,7 @@ export function Hero() {
             custom={0.3}
             className="mb-6 text-balance font-display text-4xl font-bold leading-[1.1] text-white sm:text-5xl lg:text-6xl"
           >
-            Federation of All India <span className="gradient-text">Information Technology</span> Associations
+            Federation of All India <span className="gradient-text-kinetic">Information Technology</span> Associations
           </motion.h1>
 
           <motion.p

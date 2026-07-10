@@ -34,8 +34,10 @@ function KineticCount({ value }: { value: number }) {
 
 export function Stats({ stats }: { stats: StatItem[] }) {
   return (
-    <section className="bg-navy-800 py-20">
-      <div className="container-page">
+    <section className="relative overflow-hidden bg-navy-800 py-20">
+      <div aria-hidden className="animated-gradient absolute inset-0" />
+      <div aria-hidden className="grain absolute inset-0" />
+      <div className="container-page relative">
         <SectionHeading
           eyebrow="Our Impact"
           title="FAIITA by the Numbers"

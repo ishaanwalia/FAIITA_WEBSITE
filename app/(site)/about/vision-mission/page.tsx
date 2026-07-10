@@ -200,6 +200,7 @@ export default async function VisionMissionPage() {
 
           <ScrollReveal direction="scale">
             <div className="relative mt-24 overflow-hidden rounded-3xl bg-navy-800 p-10 text-center sm:p-14">
+              <div aria-hidden className="animated-gradient absolute inset-0" />
               <div className="absolute inset-0 bg-network-grid opacity-10" />
               <div aria-hidden className="aurora-orb -left-10 top-0 h-56 w-56 bg-saffron-500/15" />
               <div aria-hidden className="aurora-orb -right-10 bottom-0 h-56 w-56 bg-federal-green/15 [animation-delay:-6s]" />
