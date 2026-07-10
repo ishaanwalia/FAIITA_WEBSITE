@@ -11,6 +11,11 @@ import { prisma } from "@/lib/prisma";
 
 export const revalidate = 3600; // ISR — refresh homepage content hourly
 
+// Display corrections for DB records the site owner updates separately.
+const associationFixes: Record<string, string> = {
+  "Kerala IT Dealers Association": "All Kerala IT Dealers Association (AKITDA)",
+};
+
 export default async function HomePage() {
   const [stats, testimonials, news, events, states] = await Promise.all([
     prisma.stat.findMany({ orderBy: { order: "asc" } }),
@@ -27,7 +32,12 @@ export default async function HomePage() {
       <Stats stats={stats} />
       <MembershipBenefits />
       <JoinCta />
-      <Testimonials testimonials={testimonials} />
+      <Testimonials
+        testimonials={testimonials.map((t) => ({
+          ...t,
+          association: associationFixes[t.association] ?? t.association,
+        }))}
+      />
       <NewsSection news={news} />
       <EventsSection events={events} />
       <ReadyToConnect />

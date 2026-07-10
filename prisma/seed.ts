@@ -101,7 +101,7 @@ const demoMemberAssociation = {
 
 const testimonials = [
   { name: "Navin Gupta", role: "President, FAIITA", association: "Bihar IT Association", quote: "FAIITA has been instrumental in uniting IT dealers across India. Through sustained advocacy, our members have seen real policy change.", order: 1 },
-  { name: "Liju P. Raju", role: "Sr. Vice President, FAIITA", association: "Kerala IT Dealers Association", quote: "Being part of FAIITA gives our state association a voice at the national level. The networking opportunities are invaluable.", order: 2 },
+  { name: "Liju P. Raju", role: "Sr. Vice President, FAIITA", association: "All Kerala IT Dealers Association (AKITDA)", quote: "Being part of FAIITA gives our state association a voice at the national level. The networking opportunities are invaluable.", order: 2 },
   { name: "Rajeev Chitkara", role: "Vice President, FAIITA", association: "Punjab Computer Dealers Association", quote: "FAIITA's training programs and industry insights help our members stay competitive in a fast-changing market.", order: 3 },
   { name: "Amit Kumar", role: "Secretary, FAIITA", association: "Delhi IT Traders Association", quote: "The federation's work on GST simplification and digital-transformation advocacy has directly benefited our 5,000+ members.", order: 4 },
 ];
