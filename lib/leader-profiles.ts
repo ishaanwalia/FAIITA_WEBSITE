@@ -8,9 +8,11 @@
  */
 
 export type LeaderExtras = {
-  /** Earlier or concurrent roles, e.g. "Past President — FITAG (…)" */
+  /** Earlier or concurrent roles in their state association, e.g. "Past President — FITAG (…)" */
   journey?: string[];
   company?: string;
+  /** Link opened when the company name is clicked, e.g. a Google Business profile */
+  companyUrl?: string;
   location?: string;
   website?: string;
 };
@@ -25,6 +27,7 @@ const profiles: Record<string, LeaderOverrides> = {
   "Praful Desai": {
     journey: ["Past President — FITAG (Federation of Information Technology Association of Gujarat)"],
     company: "Anjali Infocom India",
+    companyUrl: "https://share.google/uqBa72Tk08RIy7ouT",
     location: "Rajkot, Gujarat",
     website: "https://www.anjalirajkot.com",
     email: "info@anjalirajkot.com",
@@ -38,6 +41,6 @@ export function withLeaderProfile<
 >(leader: T): T & LeaderExtras {
   const p = profiles[leader.name];
   if (!p) return leader;
-  const { journey, company, location, website, ...overrides } = p;
-  return { ...leader, ...overrides, journey, company, location, website };
+  const { journey, company, companyUrl, location, website, ...overrides } = p;
+  return { ...leader, ...overrides, journey, company, companyUrl, location, website };
 }

@@ -26,6 +26,7 @@ export type LeaderData = {
   /** Extended profile fields merged in from lib/leader-profiles.ts */
   journey?: string[];
   company?: string;
+  companyUrl?: string;
   location?: string;
   website?: string;
 };
@@ -120,11 +121,21 @@ export function Leadership({
                 {/* Digital visiting card — the leader's business identity at a glance */}
                 {(featured.company || featured.location || featured.website) && (
                   <div className="mt-5 inline-flex flex-wrap items-center gap-x-6 gap-y-2.5 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
-                    {featured.company && (
-                      <span className="flex items-center gap-2 text-sm font-medium text-white/80">
-                        <Building2 className="h-4 w-4 text-saffron-400" /> {featured.company}
-                      </span>
-                    )}
+                    {featured.company &&
+                      (featured.companyUrl ? (
+                        <a
+                          href={featured.companyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="link-underline flex items-center gap-2 text-sm font-medium text-white/80 hover:text-white"
+                        >
+                          <Building2 className="h-4 w-4 text-saffron-400" /> {featured.company}
+                        </a>
+                      ) : (
+                        <span className="flex items-center gap-2 text-sm font-medium text-white/80">
+                          <Building2 className="h-4 w-4 text-saffron-400" /> {featured.company}
+                        </span>
+                      ))}
                     {featured.location && (
                       <span className="flex items-center gap-2 text-sm text-white/65">
                         <MapPin className="h-4 w-4 text-saffron-400" /> {featured.location}
