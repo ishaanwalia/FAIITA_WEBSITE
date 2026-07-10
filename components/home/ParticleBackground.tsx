@@ -28,6 +28,7 @@ export function ParticleBackground() {
 
     let animId: number;
     let nodes: Node[] = [];
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const setup = () => {
       canvas.width = canvas.offsetWidth;
@@ -85,7 +86,8 @@ export function ParticleBackground() {
         ctx.fill();
       });
 
-      animId = requestAnimationFrame(animate);
+      // Reduced motion: render the mesh once as a static backdrop, no loop
+      if (!reducedMotion) animId = requestAnimationFrame(animate);
     };
 
     animate();
