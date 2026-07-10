@@ -24,6 +24,24 @@ type LeaderOverrides = LeaderExtras & {
 };
 
 const profiles: Record<string, LeaderOverrides> = {
+  "Liju P Raju": {
+    journey: ["Past President — AKITDA (All Kerala IT Dealers Association)"],
+    company: "Zeta IT Innovation India Pvt Ltd",
+    location: "Thrissur, Kerala",
+    website: "https://www.zetaipl.com",
+    email: "zetaliju@yahoo.in",
+    phone: "+91 93874 25526",
+  },
+  "Sanjeev Walia": {
+    journey: ["Chairman — PACT (Punjab Association of Computer Traders)"],
+    company: "Jetage Computer Traders",
+    companyUrl: "https://share.google/iwE1vp7fnwd7y4iNC",
+    location: "Chandigarh, India",
+    website: "https://www.jetageindia.in",
+    email: "jetage17@gmail.com",
+    phone: "+91 98149 58290",
+    imageUrl: "/leadership/sanjeev-walia.jpeg",
+  },
   "Praful Desai": {
     journey: ["Past President — FITAG (Federation of Information Technology Association of Gujarat)"],
     company: "Anjali Infocom India",

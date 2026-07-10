@@ -20,7 +20,7 @@ koushik-pandya.jpg
 arun-dey.jpg
 deepak-bommisetty.jpg
 susheel-kumar.jpg
-sanjeev-walia.jpg
+sanjeev-walia.jpeg
 liju-p-raju.jpg
 naresh-batra.jpg
 puneet-singhaal.jpg
