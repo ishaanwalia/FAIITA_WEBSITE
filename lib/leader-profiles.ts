@@ -196,7 +196,7 @@ const profiles: Record<string, LeaderOverrides> = {
     email: "pkghy1962@gmail.com",
     phone: "+91 94350 47633",
   },
-  "Sulalith Gupta": {
+  "Sugreev Singh Ranawat": {
     journey: [
       { text: "Chairman — New Opportunities, FAIITA" },
       { text: "Immediate Past President — Rajasthan Computer Traders Association (RCTA)" },

@@ -26,11 +26,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : 0.7,
   }));
 
-  const [states, news, blogs, events] = await Promise.all([
+  const [states, news, blogs, events, newsletters] = await Promise.all([
     prisma.stateAssociation.findMany({ select: { slug: true } }),
     prisma.news.findMany({ select: { slug: true, publishedAt: true } }),
     prisma.blog.findMany({ select: { slug: true, publishedAt: true } }),
     prisma.event.findMany({ select: { slug: true, startDate: true } }),
+    prisma.newsletter.findMany({ select: { slug: true, issueDate: true } }),
   ]);
 
   return [
@@ -39,5 +40,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...news.map((n) => ({ url: `${siteUrl}/resources/news/${n.slug}`, lastModified: n.publishedAt, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...blogs.map((b) => ({ url: `${siteUrl}/resources/blogs/${b.slug}`, lastModified: b.publishedAt, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...events.map((e) => ({ url: `${siteUrl}/resources/events/${e.slug}`, lastModified: e.startDate, changeFrequency: "monthly" as const, priority: 0.5 })),
+    ...newsletters.map((n) => ({ url: `${siteUrl}/resources/newsletter/${n.slug}`, lastModified: n.issueDate, changeFrequency: "monthly" as const, priority: 0.5 })),
   ];
 }

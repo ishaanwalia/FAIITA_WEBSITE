@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Download, Mail } from "lucide-react";
+import Link from "next/link";
+import { BookOpen, Download, Mail } from "lucide-react";
 import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { NewsletterForm } from "@/components/common/NewsletterForm";
@@ -8,8 +9,8 @@ import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "Newsletter",
-  description: "FAIITA's quarterly newsletter archive.",
+  title: "FAIITA Patrika",
+  description: "FAIITA Patrika — the federation's e-bulletin archive, readable online.",
 };
 
 export const revalidate = 3600;
@@ -21,8 +22,8 @@ export default async function NewsletterPage() {
     <>
       <PageHero
         eyebrow="Resources / Newsletter"
-        title="FAIITA Quarterly"
-        description="Our regular publication covering policy updates, association spotlights, and federation news."
+        title="FAIITA Patrika"
+        description="The federation's e-bulletin — policy updates, association spotlights, and news from across India's IT trade. Read every issue right here."
       />
 
       <section className="bg-background py-20">
@@ -40,23 +41,23 @@ export default async function NewsletterPage() {
                     <p className="mt-1 text-sm text-muted-foreground">{n.description}</p>
                     <p className="mt-2 text-xs text-muted-foreground">{formatDate(n.issueDate)}</p>
                   </div>
-                  {n.fileUrl?.includes("heyzine.com") ? (
-                    <a
-                      href={n.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex shrink-0 items-center gap-2 rounded-full border border-navy-700/20 px-4 py-2 text-sm font-semibold text-navy-700 hover:bg-navy-700/5"
+                  <div className="flex shrink-0 flex-wrap items-center gap-3">
+                    <Link
+                      href={`/resources/newsletter/${n.slug}`}
+                      className="flex items-center gap-2 rounded-full bg-navy-700 px-5 py-2 text-sm font-semibold text-white hover:bg-navy-800"
                     >
-                      📖 View Flip-Book
-                    </a>
-                  ) : (
-                    <a
-                      href={n.fileUrl ?? "#"}
-                      className="flex shrink-0 items-center gap-2 rounded-full border border-navy-700/20 px-4 py-2 text-sm font-semibold text-navy-700 hover:bg-navy-700/5"
-                    >
-                      <Download className="h-4 w-4" /> Download PDF
-                    </a>
-                  )}
+                      <BookOpen className="h-4 w-4" /> Read Issue
+                    </Link>
+                    {n.fileUrl?.toLowerCase().endsWith(".pdf") && (
+                      <a
+                        href={n.fileUrl}
+                        download
+                        className="flex items-center gap-2 rounded-full border border-navy-700/20 px-4 py-2 text-sm font-semibold text-navy-700 hover:bg-navy-700/5"
+                      >
+                        <Download className="h-4 w-4" /> PDF
+                      </a>
+                    )}
+                  </div>
                 </div>
               </ScrollReveal>
             ))}

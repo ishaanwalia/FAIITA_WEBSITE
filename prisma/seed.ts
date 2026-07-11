@@ -232,10 +232,33 @@ const galleryItems = [
   { title: "Digital Transformation Workshop", category: "Events", order: 6, imageUrl: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&q=80" },
 ];
 
+// FAIITA Patrika — the federation's real e-bulletin. Vol 2 & 3 are hosted
+// Heyzine flip-books; Vol 1 is a PDF served from /public/newsletters.
 const newsletters = [
-  { title: "FAIITA Quarterly — Q1 2026", issueNumber: 21, monthsAgo: 1, description: "GST updates, state association spotlights, and the year's advocacy roadmap." },
-  { title: "FAIITA Quarterly — Q4 2025", issueNumber: 20, monthsAgo: 4, description: "AGM highlights, new member associations, and policy wins from 2025." },
-  { title: "FAIITA Quarterly — Q3 2025", issueNumber: 19, monthsAgo: 7, description: "Channel partner summit recap and skill-development programme results." },
+  {
+    slug: "faiita-patrika-vol-3-april-2026",
+    title: "FAIITA Patrika Vol 3",
+    description: "April 2026 edition — cyber-threat predictions for 2026, CMDA IT Expo, association meets across India, and FAIITA's call for a level playing field.",
+    issueNumber: 3,
+    issueDate: new Date("2026-04-01"),
+    fileUrl: "https://heyzine.com/flip-book/dbc48dc82a.html",
+  },
+  {
+    slug: "faiita-patrika-vol-2-october-2025",
+    title: "FAIITA Patrika Vol 2",
+    description: "October 2025 edition — Punjab AGM & IT Expo highlights, FAIITA AGM, and messages from the federation's leadership.",
+    issueNumber: 2,
+    issueDate: new Date("2025-10-01"),
+    fileUrl: "https://heyzine.com/flip-book/36696db51a.html",
+  },
+  {
+    slug: "faiita-patrika-vol-1-april-2025",
+    title: "FAIITA Patrika Vol 1",
+    description: "Inaugural April 2025 edition of FAIITA Patrika, the federation's e-bulletin for the IT channel community.",
+    issueNumber: 1,
+    issueDate: new Date("2025-04-01"),
+    fileUrl: "/newsletters/faiita-patrika-vol-1-april-2025.pdf",
+  },
 ];
 
 const policies = [
@@ -344,15 +367,7 @@ async function main() {
 
   await prisma.galleryItem.createMany({ data: galleryItems.map((g) => ({ ...g, isDemo: true })) });
 
-  await prisma.newsletter.createMany({
-    data: newsletters.map((n) => ({
-      title: n.title,
-      description: n.description,
-      issueNumber: n.issueNumber,
-      issueDate: new Date(now - n.monthsAgo * 30 * 86400000),
-      isDemo: true,
-    })),
-  });
+  await prisma.newsletter.createMany({ data: newsletters });
 
   await prisma.policy.createMany({
     data: policies.map((p) => ({

@@ -152,9 +152,10 @@ model GalleryItem {
 
 model Newsletter {
   id          String   @id @default(cuid())
+  slug        String   @unique
   title       String
   description String?
-  fileUrl     String?
+  fileUrl     String? // Heyzine flip-book URL or /newsletters/<file>.pdf under /public
   issueNumber Int
   issueDate   DateTime
   isDemo      Boolean  @default(false)
