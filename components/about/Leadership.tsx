@@ -25,8 +25,7 @@ export type LeaderData = {
   focusAreas?: string | null;
   /** Extended profile fields merged in from lib/leader-profiles.ts */
   journey?: { text: string; url?: string }[];
-  company?: string;
-  companyUrl?: string;
+  companies?: { name: string; url?: string }[];
   location?: string;
   website?: string;
 };
@@ -131,23 +130,25 @@ export function Leadership({
                 {featured.bio && <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/60">{featured.bio}</p>}
 
                 {/* Digital visiting card — the leader's business identity at a glance */}
-                {(featured.company || featured.location || featured.website) && (
+                {(featured.companies?.length || featured.location || featured.website) && (
                   <div className="mt-5 inline-flex flex-wrap items-center gap-x-6 gap-y-2.5 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
-                    {featured.company &&
-                      (featured.companyUrl ? (
+                    {featured.companies?.map((c) =>
+                      c.url ? (
                         <a
-                          href={featured.companyUrl}
+                          key={c.name}
+                          href={c.url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="link-underline flex items-center gap-2 text-sm font-medium text-white/80 hover:text-white"
                         >
-                          <Building2 className="h-4 w-4 text-saffron-400" /> {featured.company}
+                          <Building2 className="h-4 w-4 text-saffron-400" /> {c.name}
                         </a>
                       ) : (
-                        <span className="flex items-center gap-2 text-sm font-medium text-white/80">
-                          <Building2 className="h-4 w-4 text-saffron-400" /> {featured.company}
+                        <span key={c.name} className="flex items-center gap-2 text-sm font-medium text-white/80">
+                          <Building2 className="h-4 w-4 text-saffron-400" /> {c.name}
                         </span>
-                      ))}
+                      )
+                    )}
                     {featured.location && (
                       <span className="flex items-center gap-2 text-sm text-white/65">
                         <MapPin className="h-4 w-4 text-saffron-400" /> {featured.location}

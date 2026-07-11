@@ -19,7 +19,7 @@ naveen-gupta.jpg          (distinct person from "navin-gupta" — Treasurer)
 koushik-pandya.jpg
 arun-dey.jpg
 deepak-bommisetty.jpg
-susheel-kumar.jpg
+sushil-kumar.jpg
 sanjeev-walia.jpeg
 liju-p-raju.jpg
 naresh-batra.jpg
@@ -44,3 +44,7 @@ pawan-agarwal.jpg
 paresh-salgaonkar.jpg
 sugreev-singh-ranawat.jpg
 dharmesh-negandhi.jpg
+pratheesh-mathew.jpg
+shiv-shankar-singh.jpg
+rajesh-tomar.jpg
+mahinder-aggarwal.jpg
