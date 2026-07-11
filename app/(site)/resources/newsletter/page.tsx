@@ -40,12 +40,23 @@ export default async function NewsletterPage() {
                     <p className="mt-1 text-sm text-muted-foreground">{n.description}</p>
                     <p className="mt-2 text-xs text-muted-foreground">{formatDate(n.issueDate)}</p>
                   </div>
-                  <a
-                    href={n.fileUrl ?? "#"}
-                    className="flex shrink-0 items-center gap-2 rounded-full border border-navy-700/20 px-4 py-2 text-sm font-semibold text-navy-700 hover:bg-navy-700/5"
-                  >
-                    <Download className="h-4 w-4" /> Download PDF
-                  </a>
+                  {n.fileUrl?.includes("heyzine.com") ? (
+                    <a
+                      href={n.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex shrink-0 items-center gap-2 rounded-full border border-navy-700/20 px-4 py-2 text-sm font-semibold text-navy-700 hover:bg-navy-700/5"
+                    >
+                      📖 View Flip-Book
+                    </a>
+                  ) : (
+                    <a
+                      href={n.fileUrl ?? "#"}
+                      className="flex shrink-0 items-center gap-2 rounded-full border border-navy-700/20 px-4 py-2 text-sm font-semibold text-navy-700 hover:bg-navy-700/5"
+                    >
+                      <Download className="h-4 w-4" /> Download PDF
+                    </a>
+                  )}
                 </div>
               </ScrollReveal>
             ))}

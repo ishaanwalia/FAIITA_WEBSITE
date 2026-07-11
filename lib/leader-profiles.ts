@@ -189,6 +189,38 @@ const profiles: Record<string, LeaderOverrides> = {
     email: "multitechjbp@gmail.com",
     phone: "+91 94251 53283",
   },
+  "Pawan Agarwal": {
+    name: "Pawan Kr Agarwalla",
+    journey: [{ text: "Past President — North East Computer Association (NECTA)" }],
+    location: "Guwahati, Assam",
+    email: "pkghy1962@gmail.com",
+    phone: "+91 94350 47633",
+  },
+  "Sulalith Gupta": {
+    journey: [
+      { text: "Chairman — New Opportunities, FAIITA" },
+      { text: "Immediate Past President — Rajasthan Computer Traders Association (RCTA)" },
+    ],
+    companies: [
+      { name: "Super Sonic" },
+      { name: "Rajshree Systems" },
+    ],
+    location: "Jaipur, Rajasthan",
+    email: "rajshreesystems.udaipur@gmail.com",
+    phone: "+91 94140 72413",
+  },
+  "Kuldeep S Verma": {
+    name: "Kuldeep Singh",
+    journey: [{ text: "SITDA (Shimla IT Dealer Association), Himachal Pradesh" }],
+    companies: [
+      { name: "Global Netcom" },
+      { name: "Global E-Store" },
+    ],
+    location: "Shimla, Himachal Pradesh",
+    website: "https://www.globalestore.in",
+    email: "kuldeep@globalestore.in",
+    phone: "+91 94180 45351",
+  },
   // Past-GB (2022–24) records of members who also appear in the current term
   "Samir Parekh": samirParekhProfile,
   "Gurpreet Singh": gurpreetSinghProfile,
