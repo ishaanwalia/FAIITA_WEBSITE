@@ -6,6 +6,7 @@ import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { NewsGrid } from "@/components/resources/NewsGrid";
 import { Badge } from "@/components/ui/badge";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -36,7 +37,10 @@ export default async function NewsPage() {
                   <div className="relative overflow-hidden rounded-3xl bg-navy-800 p-10 sm:p-14">
                     <div className="absolute inset-0 bg-network-grid opacity-15" />
                     <div className="relative max-w-2xl">
-                      <Badge variant="accent">Featured · {featured.category}</Badge>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant="accent">Featured · {featured.category}</Badge>
+                        {featured.isDemo && <DemoBadge />}
+                      </div>
                       <h2 className="mt-5 text-balance font-display text-3xl font-bold text-white sm:text-4xl">
                         {featured.title}
                       </h2>

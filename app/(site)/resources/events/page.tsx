@@ -4,6 +4,7 @@ import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { EventCalendar } from "@/components/common/EventCalendar";
 import { EventsSpotlight } from "@/components/resources/EventsSpotlight";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
@@ -54,7 +55,10 @@ export default async function EventsPage() {
                 {past.map((e) => (
                   <Link key={e.id} href={`/resources/events/${e.slug}`} className="flex items-center justify-between p-5 hover:bg-secondary/60">
                     <div>
-                      <p className="font-medium text-navy-800">{e.title}</p>
+                      <p className="flex items-center gap-2 font-medium text-navy-800">
+                        {e.title}
+                        {e.isDemo && <DemoBadge />}
+                      </p>
                       <p className="text-xs text-muted-foreground">{e.city}, {e.state}</p>
                     </div>
                     <span className="text-xs text-muted-foreground">{formatDate(e.startDate)}</span>

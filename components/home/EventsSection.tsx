@@ -6,6 +6,7 @@ import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDateShort } from "@/lib/utils";
 import type { EventItem } from "@/types";
 
@@ -47,8 +48,11 @@ export function EventsSection({ events }: { events: EventItem[] }) {
                         <span className="font-mono text-base font-bold leading-none">{d.day}</span>
                         <span className="text-[9px] font-medium uppercase tracking-wide">{d.month}</span>
                       </div>
-                      <span className="absolute right-3 top-3 rounded-full bg-saffron-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-navy-900">
-                        {e.category}
+                      <span className="absolute right-3 top-3 flex items-center gap-1.5">
+                        {e.isDemo && <DemoBadge className="bg-navy-900/70 text-amber-300" />}
+                        <span className="rounded-full bg-saffron-500 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-navy-900">
+                          {e.category}
+                        </span>
                       </span>
                     </div>
                     <div className="flex flex-1 flex-col p-6">

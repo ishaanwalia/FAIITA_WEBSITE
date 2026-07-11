@@ -93,7 +93,9 @@ model News {
   content       String
   category      String // Events | Policy | Initiative | Press Release
   coverImage    String?
+  sourceUrl     String? // link to original coverage (press, magazine)
   featured      Boolean  @default(false)
+  isDemo        Boolean  @default(false) // placeholder content, remove when real content lands
   publishedAt   DateTime @default(now())
 
   @@index([publishedAt])
@@ -113,6 +115,7 @@ model Event {
   coverImage         String?
   registrationLink   String?
   isUpcoming         Boolean  @default(true)
+  isDemo             Boolean  @default(false)
   createdAt          DateTime @default(now())
 
   @@index([startDate])
@@ -128,6 +131,7 @@ model Blog {
   authorRole  String?
   coverImage  String?
   tags        String // comma separated
+  isDemo      Boolean  @default(false)
   publishedAt DateTime @default(now())
 
   @@index([publishedAt])
@@ -140,6 +144,7 @@ model GalleryItem {
   category  String // Events | Summits | Leadership | Regional Meets
   caption   String?
   order     Int      @default(0)
+  isDemo    Boolean  @default(false)
   createdAt DateTime @default(now())
 
   @@index([category])
@@ -152,6 +157,7 @@ model Newsletter {
   fileUrl     String?
   issueNumber Int
   issueDate   DateTime
+  isDemo      Boolean  @default(false)
 
   @@index([issueDate])
 }
@@ -163,6 +169,7 @@ model Policy {
   category    String // Annual | Research | Policy | White Paper
   fileUrl     String?
   fileSize    String? // e.g. "4.2 MB"
+  isDemo      Boolean  @default(false)
   publishedAt DateTime @default(now())
 
   @@index([category])

@@ -7,6 +7,7 @@ import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDate } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,7 @@ type NewsRow = {
   title: string;
   excerpt: string;
   category: string;
+  isDemo: boolean;
   publishedAt: Date;
 };
 
@@ -68,7 +70,10 @@ export function NewsGrid({ news }: { news: NewsRow[] }) {
               <TiltCard maxTilt={6} className="h-full">
                 <Link href={`/resources/news/${n.slug}`} className="group block h-full">
                   <GlassCard variant="light" className="flex h-full flex-col">
-                    <Badge variant="outline" className="w-fit">{n.category}</Badge>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant="outline" className="w-fit">{n.category}</Badge>
+                      {n.isDemo && <DemoBadge />}
+                    </div>
                     <h2 className="mt-4 font-display text-lg font-bold leading-snug text-navy-800">{n.title}</h2>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{n.excerpt}</p>
                     <div className="mt-5 flex items-center gap-2 border-t border-navy-700/10 pt-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -37,7 +38,10 @@ export default async function GalleryPage() {
                     className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-900/90 to-transparent p-4">
-                    <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-400">{item.category}</span>
+                    <span className="flex items-center gap-2">
+                      <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-400">{item.category}</span>
+                      {item.isDemo && <DemoBadge className="border-amber-400/60 text-amber-300" />}
+                    </span>
                     <p className="text-sm font-medium text-white">{item.title}</p>
                   </figcaption>
                 </figure>

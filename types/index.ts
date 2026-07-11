@@ -34,6 +34,7 @@ export type NewsItem = {
   excerpt: string;
   category: string;
   coverImage: string | null;
+  isDemo: boolean;
   publishedAt: Date;
 };
 
@@ -47,6 +48,7 @@ export type EventItem = {
   state: string;
   startDate: Date;
   coverImage: string | null;
+  isDemo: boolean;
 };
 
 export type StateMapPoint = {

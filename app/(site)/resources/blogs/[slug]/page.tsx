@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
@@ -29,7 +30,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         <Link href="/resources/blogs" className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">
           <ArrowLeft className="h-3.5 w-3.5" /> All blogs
         </Link>
-        <h1 className="mt-6 text-balance font-display text-3xl font-bold text-navy-800 sm:text-4xl">{item.title}</h1>
+        {item.isDemo && <DemoBadge className="mt-6" />}
+        <h1 className="mt-4 text-balance font-display text-3xl font-bold text-navy-800 sm:text-4xl">{item.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{item.author} · {formatDate(item.publishedAt)}</p>
         <div className="mt-8 space-y-4 text-base leading-relaxed text-navy-800/80">
           <p>{item.content}</p>

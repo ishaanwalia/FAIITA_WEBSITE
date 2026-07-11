@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDate, formatDateShort } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +18,7 @@ type EventRow = {
   category: string;
   city: string;
   state: string;
+  isDemo: boolean;
   startDate: Date;
 };
 
@@ -44,8 +46,11 @@ export function EventsSpotlight({ events }: { events: EventRow[] }) {
               <span className="text-[10px] font-semibold uppercase tracking-wide">{formatDateShort(featured.startDate).month}</span>
             </div>
             <div className="flex-1">
-              <span className="inline-flex rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
-                {featured.category}
+              <span className="inline-flex items-center gap-2">
+                <span className="inline-flex rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
+                  {featured.category}
+                </span>
+                {featured.isDemo && <DemoBadge className="border-amber-400/60 text-amber-400" />}
               </span>
               <h3 className="mt-3 font-display text-2xl font-bold text-white sm:text-3xl">{featured.title}</h3>
               <p className="mt-1 flex items-center gap-1.5 text-sm text-white/50">
@@ -79,8 +84,11 @@ export function EventsSpotlight({ events }: { events: EventRow[] }) {
                       <span className="font-mono text-sm font-bold leading-none">{d.day}</span>
                       <span className="text-[9px] font-medium uppercase tracking-wide">{d.month}</span>
                     </div>
-                    <span className="rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-600">
-                      {e.category}
+                    <span className="flex items-center gap-1.5">
+                      <span className="rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-600">
+                        {e.category}
+                      </span>
+                      {e.isDemo && <DemoBadge />}
                     </span>
                   </div>
                   <h4 className="mt-4 font-display text-base font-semibold leading-snug text-navy-800">{e.title}</h4>

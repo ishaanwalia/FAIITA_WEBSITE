@@ -5,6 +5,7 @@ import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -15,20 +16,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function ReportsPage() {
-  // Safe query - only selects existing columns
-  const reports = await prisma.policy.findMany({
-    orderBy: { publishedAt: "desc" },
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      category: true,
-      fileUrl: true,
-      // fileSize is commented out because it doesn't exist in DB yet
-      // fileSize: true,
-      publishedAt: true,
-    },
-  });
+  const reports = await prisma.policy.findMany({ orderBy: { publishedAt: "desc" } });
 
   return (
     <>
@@ -60,9 +48,10 @@ export default async function ReportsPage() {
 
                     <div className="mt-4 flex items-center gap-2">
                       <Badge variant="accent">{r.category}</Badge>
-                      {/* <span className="text-xs text-muted-foreground">
+                      {r.isDemo && <DemoBadge />}
+                      <span className="text-xs text-muted-foreground">
                         PDF{r.fileSize ? ` · ${r.fileSize}` : ""}
-                      </span> */}
+                      </span>
                     </div>
 
                     <h3 className="mt-3 font-display text-lg font-bold text-navy-800">

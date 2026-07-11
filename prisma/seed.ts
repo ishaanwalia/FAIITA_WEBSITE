@@ -6,9 +6,17 @@
  * FAIITA's verified data before going live — search "REPLACE ME"
  * style values (president names, phone numbers) before launch.
  */
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
+/** Returns the public path if the file exists under /public, else null — lets
+ *  cover images go live simply by dropping the file in and reseeding. */
+function publicImage(path: string): string | null {
+  return existsSync(join(__dirname, "..", "public", path)) ? `/${path.replace(/\\/g, "/")}` : null;
+}
 
 type StateSeed = {
   /** URL slug — defaults to slugified stateName; must be set explicitly for states with more than one association. */
@@ -168,11 +176,38 @@ const stats = [
   { label: "Policy Advocacy Wins", value: "300", suffix: "+", icon: "ShieldCheck", order: 6 },
 ];
 
+// Real news posts. publishedAt is fixed (not relative) so reseeding never
+// reorders them. coverImage goes live automatically once the file exists
+// under /public — see publicImage().
+const realNews = [
+  {
+    slug: "faiita-upcdwa-strategic-brand-discussions-lucknow-june-2026",
+    title: "FAIITA & UPCDWA Hold Strategic Brand Discussions in Lucknow; Seek Stronger Support for Offline IT Channel Ecosystem",
+    excerpt:
+      "FAIITA, in association with UPCDWA, held two days of strategic discussions with HP, Lenovo, Dell, Acer and ASUS at Lucknow on 8–9 June 2026, seeking stronger brand support for the offline IT hardware channel.",
+    category: "Press Release",
+    featured: true,
+    publishedAt: new Date("2026-06-18T09:00:00+05:30"),
+    coverImage: publicImage("images/news/faiita-upcdwa-lucknow-june-2026.jpg"),
+    sourceUrl: "https://www.dqchannels.com/news/faiita-and-upcdwa-strategic-brand-discussions-in-lucknow-targets-key-challenges-12051477",
+    content: [
+      "The Federation of All India Information Technology Associations (FAIITA), in association with the Uttar Pradesh Computer Dealers Welfare Association (UPCDWA), successfully conducted a series of strategic discussions with leading IT brands — HP, Lenovo, Dell, Acer and ASUS — on 08–09 June 2026 at The Regnant, Nirala Nagar, Lucknow.",
+      "The discussions were attended by FAIITA leadership comprising Mr. Devesh Rastogi (Chairman, FAIITA), Mr. Navin Gupta (President, FAIITA) and Mr. Deepak Bommisetty (Chairman, FAIITA Brand Coordination Committee), along with the UPCDWA leadership team and senior representatives from the participating brands.",
+      "The primary objective of the meetings was to address the severe challenges currently impacting the offline IT hardware channel ecosystem — price disparity, declining profitability, inventory pressures, market instability, working-capital concerns and the growing impact of aggressive online pricing practices. FAIITA and UPCDWA highlighted that the offline channel continues to face unprecedented pressure from MOP violations, online price disruptions, uneven market practices, inventory risks and shrinking dealer margins, and emphasised that a healthy, profitable offline ecosystem remains critical for long-term customer support, brand visibility, service delivery and sustainable market growth.",
+      "The participating brands acknowledged several of these concerns and offered key assurances covering price parity, dealer-protection mechanisms, inventory support, EMI and affordability programs, channel profitability initiatives, activation support, exclusive channel SKUs, service integration and the evaluation of O2O/OMO business models.",
+      "Following the discussions, detailed Minutes of Meeting were formally shared with all participating brands, and FAIITA and UPCDWA requested official point-wise responses on the discussed assurances and action points by 25 June 2026.",
+      "FAIITA leaders expressed optimism that the industry is entering a critical phase in which stronger collaboration between brands and channel partners can create a more balanced and sustainable business environment. As the industry moves into FY 2026–27, FAIITA remains hopeful that this year will mark a significant turnaround for the channel community — one of the most successful and profitable years in the history of the Indian IT channel industry.",
+    ].join("\n\n"),
+  },
+];
+
+// Placeholder items kept only so the section doesn't look empty — all flagged
+// isDemo and dated well before any real post. Delete as real news lands.
 const newsItems = [
-  { slug: "faiita-hosts-national-it-summit-2025", title: "FAIITA Hosts National IT Summit 2025 in New Delhi", excerpt: "Leaders from state associations across all 28 states convened to chart the federation's advocacy roadmap for the year ahead.", category: "Events", featured: true, daysAgo: 20 },
-  { slug: "new-gst-guidelines-for-it-products", title: "New GST Guidelines for IT Products Announced", excerpt: "FAIITA's sustained advocacy leads to simplified GST compliance for IT dealers and distributors nationwide.", category: "Policy", featured: true, daysAgo: 35 },
-  { slug: "digital-india-skill-development", title: "Digital India Initiative: FAIITA's Role in Skill Development", excerpt: "Partnership with government agencies to train 10,000+ IT professionals in emerging technologies.", category: "Initiative", featured: false, daysAgo: 48 },
-  { slug: "faiita-emerging-tech-roundtable", title: "FAIITA Convenes Roundtable on Emerging Technology Retail", excerpt: "State association leaders discussed the shift toward AI-enabled devices and its impact on channel partners.", category: "Press Release", featured: false, daysAgo: 60 },
+  { slug: "faiita-hosts-national-it-summit-2025", title: "FAIITA Hosts National IT Summit 2025 in New Delhi", excerpt: "Leaders from state associations across all 28 states convened to chart the federation's advocacy roadmap for the year ahead.", category: "Events", featured: false, daysAgo: 160 },
+  { slug: "new-gst-guidelines-for-it-products", title: "New GST Guidelines for IT Products Announced", excerpt: "FAIITA's sustained advocacy leads to simplified GST compliance for IT dealers and distributors nationwide.", category: "Policy", featured: false, daysAgo: 175 },
+  { slug: "digital-india-skill-development", title: "Digital India Initiative: FAIITA's Role in Skill Development", excerpt: "Partnership with government agencies to train 10,000+ IT professionals in emerging technologies.", category: "Initiative", featured: false, daysAgo: 190 },
+  { slug: "faiita-emerging-tech-roundtable", title: "FAIITA Convenes Roundtable on Emerging Technology Retail", excerpt: "State association leaders discussed the shift toward AI-enabled devices and its impact on channel partners.", category: "Press Release", featured: false, daysAgo: 205 },
 ];
 
 const events = [
@@ -266,6 +301,7 @@ async function main() {
   await prisma.stat.createMany({ data: stats });
 
   const now = Date.now();
+  await prisma.news.createMany({ data: realNews });
   await prisma.news.createMany({
     data: newsItems.map((n) => ({
       slug: n.slug,
@@ -274,6 +310,7 @@ async function main() {
       content: n.excerpt,
       category: n.category,
       featured: n.featured,
+      isDemo: true,
       publishedAt: new Date(now - n.daysAgo * 86400000),
     })),
   });
@@ -288,6 +325,7 @@ async function main() {
       state: e.state,
       startDate: new Date(now + e.daysFromNow * 86400000),
       isUpcoming: true,
+      isDemo: true,
     })),
   });
 
@@ -300,10 +338,11 @@ async function main() {
       author: b.author,
       authorRole: "FAIITA",
       tags: b.tags,
+      isDemo: true,
     })),
   });
 
-  await prisma.galleryItem.createMany({ data: galleryItems });
+  await prisma.galleryItem.createMany({ data: galleryItems.map((g) => ({ ...g, isDemo: true })) });
 
   await prisma.newsletter.createMany({
     data: newsletters.map((n) => ({
@@ -311,6 +350,7 @@ async function main() {
       description: n.description,
       issueNumber: n.issueNumber,
       issueDate: new Date(now - n.monthsAgo * 30 * 86400000),
+      isDemo: true,
     })),
   });
 
@@ -320,6 +360,7 @@ async function main() {
       category: p.category,
       description: p.description,
       fileSize: p.fileSize,
+      isDemo: true,
     })),
   });
 

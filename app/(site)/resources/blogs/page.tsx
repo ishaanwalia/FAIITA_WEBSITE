@@ -5,6 +5,7 @@ import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
@@ -39,6 +40,7 @@ export default async function BlogsPage() {
                           {t.trim()}
                         </span>
                       ))}
+                      {b.isDemo && <DemoBadge />}
                     </div>
                     <h2 className="mt-4 font-display text-lg font-bold leading-snug text-navy-800">{b.title}</h2>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{b.excerpt}</p>

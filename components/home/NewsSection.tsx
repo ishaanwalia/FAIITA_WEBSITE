@@ -6,6 +6,7 @@ import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDate } from "@/lib/utils";
 import type { NewsItem } from "@/types";
 
@@ -48,7 +49,10 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/50 to-navy-900/20" />
                 <div className="relative">
-                  <Badge variant="accent">{lead.category}</Badge>
+                  <span className="flex items-center gap-2">
+                    <Badge variant="accent">{lead.category}</Badge>
+                    {lead.isDemo && <DemoBadge className="border-amber-400/60 text-amber-300" />}
+                  </span>
                   <h3 className="mt-4 max-w-lg text-balance font-display text-2xl font-bold text-white sm:text-3xl">
                     {lead.title}
                   </h3>
@@ -78,7 +82,10 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                       </div>
                       <div className="flex flex-1 flex-col justify-between p-5">
                         <div>
-                          <Badge variant="outline">{n.category}</Badge>
+                          <span className="flex items-center gap-2">
+                            <Badge variant="outline">{n.category}</Badge>
+                            {n.isDemo && <DemoBadge />}
+                          </span>
                           <h4 className="mt-3 font-display text-base font-semibold leading-snug text-navy-800">
                             {n.title}
                           </h4>
