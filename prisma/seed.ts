@@ -32,7 +32,9 @@ type StateSeed = {
   mapY: number;
   presidentName?: string;
   contactEmail?: string;
+  secretaryEmail?: string;
   contactPhone?: string;
+  websiteUrl?: string;
   /** Filename (no extension) expected at /public/logos/state/<logoSlug>.png */
   logoSlug?: string;
   description?: string;
@@ -78,7 +80,20 @@ const states: StateSeed[] = [
   { slug: "madhya-pradesh-mcda", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Mahakaushal Computer Dealer's Association (MCDA)", memberCount: 0, city: "Jabalpur", mapX: 38, mapY: 41, presidentName: "B.L. Patel", contactPhone: "+91 93007 64155", contactEmail: "mcdajbp2003@gmail.com", logoSlug: "mcda-jabalpur" },
 
   // — West —
-  { stateName: "Gujarat", stateCode: "GJ", region: "West", associationName: "Federation Of Information Technology Association Gujarat (FITAG)", foundedYear: 2014, memberCount: 3400, city: "Ahmedabad", mapX: 20, mapY: 43, presidentName: "Alok Ghelani", contactPhone: "+91 98986 22606", contactEmail: "president@fitag.in", logoSlug: "gujarat" },
+  {
+    stateName: "Gujarat", stateCode: "GJ", region: "West",
+    associationName: "Federation Of Information Technology Association Gujarat (FITAG)",
+    foundedYear: 2008, memberCount: 10000, city: "Ahmedabad", mapX: 20, mapY: 43,
+    presidentName: "Alok Ghelani", contactPhone: "+91 98986 22606",
+    contactEmail: "president@fitag.in", secretaryEmail: "secretary@fitag.in",
+    websiteUrl: "https://www.fitag.in", logoSlug: "gujarat",
+    description: [
+      "FITAG has been an old idea, which has now flourished through the interest and initiative of many leaders of the IT fraternity in Gujarat. In fact, there is no such umbrella body at the regional level anywhere across India. Cities across Gujarat, as well as India, have their own associations and most of their problems are common — FITAG is the first body of its kind in India to address those common issues.",
+      "Founded in 2008, FITAG today unites 44 IT associations under a single umbrella, representing 10,000+ IT partners across Gujarat.",
+      "FITAG's objectives, in a nutshell, rest on a five-point agenda — Flourish, Knowledge, Networking, Strength and Protection — the foundation on which FITAG is laid:",
+      "• Flourish — to flourish and co-exist by being united and supportive of each other.\n• Knowledge — to share the knowledge available by all means.\n• Networking — to increase awareness through extensive networking with each other.\n• Strength — to stay united and utilise the collective strength.\n• Protection — to protect the common interest.",
+    ].join("\n\n"),
+  },
   { stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Computer Media Dealers Association, Mumbai (CMDA)", foundedYear: 2014, memberCount: 6100, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Mihir Shah", contactPhone: "+91 98200 67580", contactEmail: "mihir@datatradeindia.com", logoSlug: "maharashtra" },
   { slug: "maharashtra-asirt", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Association Of System Integrators & Retailers Technology (ASIRT)", memberCount: 0, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Bharat Chheda", contactPhone: "+91 98212 46565", contactEmail: "president@asirt.in", logoSlug: "asirt" },
   { slug: "maharashtra-tait", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Trade Association Of Information Technology (TAIT)", memberCount: 0, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Rushabh Shah", contactPhone: "+91 93222 13274", contactEmail: "taitoffice@tait.in", logoSlug: "tait" },
@@ -301,7 +316,9 @@ async function main() {
         memberCount: s.memberCount,
         presidentName: s.presidentName,
         contactEmail: s.contactEmail,
+        secretaryEmail: s.secretaryEmail,
         contactPhone: s.contactPhone,
+        websiteUrl: s.websiteUrl,
         address: s.address ?? `${s.city}, ${s.stateName}`,
         description:
           s.description ??

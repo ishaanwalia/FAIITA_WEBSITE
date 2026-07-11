@@ -28,7 +28,9 @@ model StateAssociation {
   presidentName    String?
   secretaryName    String?
   contactEmail     String?
+  secretaryEmail   String?
   contactPhone     String?
+  websiteUrl       String?
   address          String?
   description      String?
   logoUrl          String?

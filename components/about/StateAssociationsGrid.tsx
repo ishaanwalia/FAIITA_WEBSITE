@@ -18,26 +18,29 @@ type StateRow = {
   logoUrl?: string | null;
 };
 
+const ZONE_ORDER = ["North", "East", "North-East", "Central", "West", "South"];
+
 export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
   const [region, setRegion] = useState("All");
   const [query, setQuery] = useState("");
 
-  const regions = useMemo(() => ["All", ...Array.from(new Set(states.map((s) => s.region)))], [states]);
+  const regions = useMemo(
+    () => ["All", ...ZONE_ORDER.filter((z) => states.some((s) => s.region === z))],
+    [states]
+  );
 
-  const filtered = states.filter((s) => {
-    const matchesRegion = region === "All" || s.region === region;
-    const matchesQuery =
-      query.trim() === "" ||
-      s.stateName.toLowerCase().includes(query.toLowerCase()) ||
-      s.associationName.toLowerCase().includes(query.toLowerCase());
-    return matchesRegion && matchesQuery;
-  });
-
-  const grouped = useMemo(() => {
-    const map = new Map<string, StateRow[]>();
-    for (const s of filtered) map.set(s.region, [...(map.get(s.region) ?? []), s]);
-    return map;
-  }, [filtered]);
+  // A-Z by association name; "All" shows one flat list, a zone tab shows only
+  // that zone under a single heading.
+  const filtered = states
+    .filter((s) => {
+      const matchesRegion = region === "All" || s.region === region;
+      const matchesQuery =
+        query.trim() === "" ||
+        s.stateName.toLowerCase().includes(query.toLowerCase()) ||
+        s.associationName.toLowerCase().includes(query.toLowerCase());
+      return matchesRegion && matchesQuery;
+    })
+    .sort((a, b) => a.associationName.localeCompare(b.associationName));
 
   return (
     <div>
@@ -69,12 +72,14 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
         </div>
       </div>
 
-      <div className="mt-10 space-y-14">
-        {[...grouped.entries()].map(([regionName, rows]) => (
-          <div key={regionName}>
-            <h2 className="font-display text-xl font-bold text-navy-800">{regionName} Zone</h2>
+      <div className="mt-10">
+        {filtered.length > 0 && (
+          <div>
+            {region !== "All" && (
+              <h2 className="font-display text-xl font-bold text-navy-800">{region} Zone</h2>
+            )}
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {rows.map((s) => (
+              {filtered.map((s) => (
                 <TiltCard key={s.id} maxTilt={6} className="h-full">
                   <Link href={`/about/state-associations/${s.slug}`} className="group block h-full">
                     <GlassCard variant="light" className="flex h-full flex-col">
@@ -102,7 +107,7 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
               ))}
             </div>
           </div>
-        ))}
+        )}
         {filtered.length === 0 && (
           <p className="text-center text-sm text-muted-foreground">No state associations match your search.</p>
         )}

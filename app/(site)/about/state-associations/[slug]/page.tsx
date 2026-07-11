@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Building2, Calendar, Mail, MapPin, Phone, User, Users } from "lucide-react";
+import { ArrowLeft, Building2, Calendar, Globe, Mail, MapPin, Phone, User, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { LogoImage } from "@/components/common/LogoImage";
 
@@ -55,7 +55,7 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_320px]">
           <div>
             <h2 className="font-display text-xl font-bold text-navy-800">About the Association</h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{state.description}</p>
+            <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{state.description}</p>
 
             {state.memberAssociations.length > 0 && (
               <div className="mt-10">
@@ -107,6 +107,21 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
                 {state.contactEmail && (
                   <a href={`mailto:${state.contactEmail}`} className="flex items-center gap-2 text-navy-700 hover:underline">
                     <Mail className="h-4 w-4" /> {state.contactEmail}
+                  </a>
+                )}
+                {state.secretaryEmail && (
+                  <a href={`mailto:${state.secretaryEmail}`} className="flex items-center gap-2 text-navy-700 hover:underline">
+                    <Mail className="h-4 w-4" /> {state.secretaryEmail}
+                  </a>
+                )}
+                {state.websiteUrl && (
+                  <a
+                    href={state.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-navy-700 hover:underline"
+                  >
+                    <Globe className="h-4 w-4" /> {state.websiteUrl.replace(/^https?:\/\//, "")}
                   </a>
                 )}
                 {state.contactPhone && (
