@@ -35,6 +35,8 @@ kuldeep-s-verma.jpg
 ashish-jain.jpg
 kauser-dabhiya.jpg
 gurpreet-singh.jpg
+pankaj-s-shah.jpg
+karthikeyan-shanmugam.jpg (preferred over s-karthikeyan.jpg via lib/leader-profiles.ts)
 sanjeev-jalan.jpg
 mitesh-dave.jpg
 samir-parekh.jpg

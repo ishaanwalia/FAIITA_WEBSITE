@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/common/PageHero";
 import { Leadership } from "@/components/about/Leadership";
-import { withLeaderProfile } from "@/lib/leader-profiles";
+import { extraCurrentLeaders, withLeaderProfile } from "@/lib/leader-profiles";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -19,7 +19,8 @@ export default async function LeadershipPage() {
     })
   ).map(withLeaderProfile);
 
-  const current = allLeaders.filter((l) => l.isCurrent);
+  // Members not yet in the DB are appended from the code-side profile file.
+  const current = [...allLeaders.filter((l) => l.isCurrent), ...extraCurrentLeaders];
   const past = allLeaders.filter((l) => !l.isCurrent);
 
   return (

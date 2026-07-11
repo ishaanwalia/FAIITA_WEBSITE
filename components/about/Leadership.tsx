@@ -24,7 +24,7 @@ export type LeaderData = {
   linkedIn?: string | null;
   focusAreas?: string | null;
   /** Extended profile fields merged in from lib/leader-profiles.ts */
-  journey?: string[];
+  journey?: { text: string; url?: string }[];
   company?: string;
   companyUrl?: string;
   location?: string;
@@ -112,8 +112,20 @@ export function Leadership({
                   </p>
                 )}
                 {featured.journey?.map((step) => (
-                  <p key={step} className="mt-2 flex items-start gap-1.5 text-sm text-white/55">
-                    <History className="mt-0.5 h-3.5 w-3.5 shrink-0 text-electric/70" /> {step}
+                  <p key={step.text} className="mt-2 flex items-start gap-1.5 text-sm text-white/55">
+                    <History className="mt-0.5 h-3.5 w-3.5 shrink-0 text-electric/70" />
+                    {step.url ? (
+                      <a
+                        href={step.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-underline hover:text-white"
+                      >
+                        {step.text}
+                      </a>
+                    ) : (
+                      step.text
+                    )}
                   </p>
                 ))}
                 {featured.bio && <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/60">{featured.bio}</p>}
