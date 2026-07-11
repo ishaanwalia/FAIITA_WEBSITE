@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/common/PageHero";
@@ -35,7 +36,20 @@ export default async function NewsPage() {
               <Link href={`/resources/news/${featured.slug}`} className="group block">
                 <TiltCard maxTilt={3}>
                   <div className="relative overflow-hidden rounded-3xl bg-navy-800 p-10 sm:p-14">
-                    <div className="absolute inset-0 bg-network-grid opacity-15" />
+                    {featured.coverImage ? (
+                      <>
+                        <Image
+                          src={featured.coverImage}
+                          alt=""
+                          fill
+                          className="object-cover opacity-40"
+                          priority
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-900/80 to-navy-900/30" />
+                      </>
+                    ) : (
+                      <div className="absolute inset-0 bg-network-grid opacity-15" />
+                    )}
                     <div className="relative max-w-2xl">
                       <div className="flex flex-wrap items-center gap-2">
                         <Badge variant="accent">Featured · {featured.category}</Badge>

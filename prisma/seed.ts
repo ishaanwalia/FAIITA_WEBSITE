@@ -188,7 +188,8 @@ const realNews = [
     category: "Press Release",
     featured: true,
     publishedAt: new Date("2026-06-18T09:00:00+05:30"),
-    coverImage: publicImage("images/news/faiita-upcdwa-lucknow-june-2026.jpg"),
+    coverImage: publicImage("images/news/faiita-upcdwa-lucknow-june-2026.webp"),
+    heroImage: publicImage("images/news/faiita-upcdwa-lucknow-june-2026-2.webp"),
     sourceUrl: "https://www.dqchannels.com/news/faiita-and-upcdwa-strategic-brand-discussions-in-lucknow-targets-key-challenges-12051477",
     content: [
       "The Federation of All India Information Technology Associations (FAIITA), in association with the Uttar Pradesh Computer Dealers Welfare Association (UPCDWA), successfully conducted a series of strategic discussions with leading IT brands — HP, Lenovo, Dell, Acer and ASUS — on 08–09 June 2026 at The Regnant, Nirala Nagar, Lucknow.",

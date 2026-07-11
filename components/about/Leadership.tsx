@@ -57,13 +57,11 @@ export function Leadership({
     setFeaturedId((t === "current" ? current : past)[0]?.id);
   };
 
-  // On small screens the spotlight card sits above the grid, so tapping a tile
-  // must scroll back up to it — otherwise the selection appears to do nothing.
+  // The spotlight card sits above the grid, so selecting a tile scrolls back
+  // up to it — otherwise the selection appears to do nothing.
   const featureLeader = (id: string) => {
     setFeaturedId(id);
-    if (typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches) {
-      requestAnimationFrame(() => spotlightRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
-    }
+    requestAnimationFrame(() => spotlightRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
   return (

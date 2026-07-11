@@ -38,9 +38,9 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
         </div>
         <h1 className="mt-4 text-balance font-display text-3xl font-bold text-navy-800 sm:text-4xl">{item.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{formatDate(item.publishedAt)}</p>
-        {item.coverImage && (
+        {(item.heroImage ?? item.coverImage) && (
           <Image
-            src={item.coverImage}
+            src={(item.heroImage ?? item.coverImage)!}
             alt={item.title}
             width={1200}
             height={675}

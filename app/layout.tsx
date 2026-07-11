@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     title: "FAIITA — Federation of All India Information Technology Associations",
     description: "Uniting 50,000+ IT entrepreneurs across 28 states under one national federation.",
   },
-  icons: { icon: "/favicon.ico" },
+  icons: { icon: "/favicon.jpg" },
 };
 
 export const viewport: Viewport = {

@@ -92,7 +92,8 @@ model News {
   excerpt       String
   content       String
   category      String // Events | Policy | Initiative | Press Release
-  coverImage    String?
+  coverImage    String? // card/featured background image
+  heroImage     String? // large image shown at the top of the article page
   sourceUrl     String? // link to original coverage (press, magazine)
   featured      Boolean  @default(false)
   isDemo        Boolean  @default(false) // placeholder content, remove when real content lands

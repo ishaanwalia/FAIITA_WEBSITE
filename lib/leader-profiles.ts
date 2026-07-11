@@ -46,6 +46,18 @@ const samirParekhProfile: LeaderOverrides = {
   website: "https://www.brainpointcomputer.in",
   email: "brain2@ymail.com",
   phone: "+91 93215 35453",
+  imageUrl: "/leadership/samir.jpg",
+};
+
+// Shared by the current "Liju P Raju" record and the past-GB "Liju R" record.
+const lijuPRajuProfile: LeaderOverrides = {
+  name: "Liju P Raju",
+  journey: [{ text: "Past President — AKITDA (All Kerala IT Dealers Association)" }],
+  companies: [{ name: "Zeta IT Innovation India Pvt Ltd" }],
+  location: "Thrissur, Kerala",
+  website: "https://www.zetaipl.com",
+  email: "zetaliju@yahoo.in",
+  phone: "+91 93874 25526",
 };
 
 const gurpreetSinghProfile: LeaderOverrides = {
@@ -65,14 +77,7 @@ const profiles: Record<string, LeaderOverrides> = {
     phone: "+91 93347 15522",
     bio: "In the stationery business since 1964 and in IT since 1980, spanning retail, distribution, government, and corporate business. Member of Rotary Pataliputra and the Indian Cancer Society.",
   },
-  "Liju P Raju": {
-    journey: [{ text: "Past President — AKITDA (All Kerala IT Dealers Association)" }],
-    companies: [{ name: "Zeta IT Innovation India Pvt Ltd" }],
-    location: "Thrissur, Kerala",
-    website: "https://www.zetaipl.com",
-    email: "zetaliju@yahoo.in",
-    phone: "+91 93874 25526",
-  },
+  "Liju P Raju": lijuPRajuProfile,
   "Praful Desai": {
     journey: [{ text: "Past President — FITAG (Federation of Information Technology Association of Gujarat)" }],
     companies: [{ name: "Anjali Infocom India", url: "https://share.google/uqBa72Tk08RIy7ouT" }],
@@ -192,6 +197,7 @@ const profiles: Record<string, LeaderOverrides> = {
   "Pawan Agarwal": {
     name: "Pawan Kr Agarwalla",
     journey: [{ text: "Past President — North East Computer Association (NECTA)" }],
+    companies: [{ name: "Datamation" }],
     location: "Guwahati, Assam",
     email: "pkghy1962@gmail.com",
     phone: "+91 94350 47633",
@@ -222,6 +228,8 @@ const profiles: Record<string, LeaderOverrides> = {
     phone: "+91 94180 45351",
   },
   // Past-GB (2022–24) records of members who also appear in the current term
+  // under a differently spelled DB name — same person, same profile.
+  "Liju R": lijuPRajuProfile,
   "Samir Parekh": samirParekhProfile,
   "Gurpreet Singh": gurpreetSinghProfile,
 };
