@@ -18,7 +18,7 @@ const structure = [
 
 const gbComposition = [
   { role: "President", note: "Chief spokesperson and signatory for the federation" },
-  { role: "Senior Vice President", note: "The President's trusted deputy and second-in-command — sharing the weight of national leadership and standing ready to steer the federation whenever the President's chair calls for it" },
+  { role: "Senior Vice President", note: "The President's right hand — second-in-command, ready to lead in his stead" },
   { role: "Secretary", note: "Day-to-day administration and correspondence" },
   { role: "Joint Secretary", note: "Supports the Secretary across administration and member coordination" },
   { role: "Treasurer", note: "Financial planning and membership dues" },
