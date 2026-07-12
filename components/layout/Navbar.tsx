@@ -59,12 +59,12 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
-        scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
+        "navbar-glass fixed inset-x-0 top-0 z-50 transition-shadow duration-500",
+        scrolled && "shadow-lg shadow-black/10"
       )}
     >
       <div className="container-page flex h-20 items-center justify-between">
-        <Logo variant="light" />
+        <Logo variant="light" framed />
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary" onMouseLeave={() => setSpotlit(null)}>
           {navItems.map((item) => {

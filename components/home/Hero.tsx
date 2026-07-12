@@ -39,8 +39,12 @@ export function Hero() {
 
       <ParticleBackground />
 
+      {/* Teal glow gradient from behind the header down to mid-hero — the
+          site-wide ambient light the logo glow sits inside. */}
+      <div aria-hidden className="teal-crown pointer-events-none absolute inset-x-0 top-0 z-[1] h-1/2" />
+
       {/* Slow-drifting glow blobs — subtle depth behind the content layer.
-          (No saffron orb top-left: it competed with the logo's orange glow.) */}
+          (No orb top-left: it competed with the logo glow.) */}
       <div aria-hidden className="absolute inset-0 z-[1] overflow-hidden">
         <div className="aurora-orb right-[4%] bottom-[12%] h-96 w-96 bg-violet-500/10 [animation-delay:-8s]" />
         <div className="aurora-orb left-[45%] bottom-[-6rem] h-80 w-80 bg-teal-400/10 [animation-delay:-4s]" />
@@ -50,21 +54,11 @@ export function Hero() {
       <motion.div style={{ y: contentY, opacity: contentOpacity }} className="container-page relative z-10 py-32 text-center">
         <div className="mx-auto max-w-4xl">
           <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0} className="mx-auto mb-8 flex justify-center">
-            <div className="relative h-20 w-64 sm:h-28 sm:w-80">
-              {/* Saffron-only glow behind the logo — no white, so the navy
-                  tagline at the logo's base keeps its contrast against the
-                  dark hero. */}
-              <div
-                aria-hidden
-                className="absolute -inset-x-14 -inset-y-8 bg-[radial-gradient(ellipse_at_center,rgba(242,146,29,0.55),rgba(242,146,29,0.18)_55%,transparent_78%)] blur-lg"
-              />
-              <Image
-                src="/logo.png"
-                alt="FAIITA Logo"
-                fill
-                priority
-                className="object-contain drop-shadow-[0_0_12px_rgba(242,146,29,0.7)]"
-              />
+            {/* Dynamic-island pill: dark glass + green accent ring + blurred
+                spectral halo (see .hero-logo-wrapper) lifts the navy mark off
+                the cosmic backdrop. */}
+            <div className="hero-logo-wrapper">
+              <Image src="/logo.png" alt="FAIITA Logo" width={320} height={110} priority className="hero-logo" />
             </div>
           </motion.div>
 
