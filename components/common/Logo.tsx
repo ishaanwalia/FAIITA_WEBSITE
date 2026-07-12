@@ -22,7 +22,7 @@ export function Logo({ variant = "light", className }: { variant?: "light" | "da
         <img
           src="/logo.png"
           alt="FAIITA"
-          className="h-14 w-auto object-contain sm:h-16 [filter:brightness(1.35)_contrast(1.1)_drop-shadow(1px_0_0_rgba(255,255,255,0.35))_drop-shadow(-1px_0_0_rgba(255,255,255,0.35))_drop-shadow(0_1px_0_rgba(255,255,255,0.35))_drop-shadow(0_-1px_0_rgba(255,255,255,0.35))]"
+          className="h-14 w-auto object-contain brightness-[1.35] contrast-[1.1] sm:h-16"
           onError={() => setImgFailed(true)}
         />
       ) : (
