@@ -49,8 +49,6 @@ export function PageHero({
         <div aria-hidden className={`aurora-orb ${ACCENT_ORB[variant]}`} />
         <div aria-hidden className="grain absolute inset-0" />
       </motion.div>
-      {/* Site-wide teal glow from behind the header, fading by mid-hero. */}
-      <div aria-hidden className="teal-crown pointer-events-none absolute inset-x-0 top-0 h-full" />
       <div className="container-page relative">
         <SectionHeading eyebrow={eyebrow} title={title} description={description} light />
         {children}

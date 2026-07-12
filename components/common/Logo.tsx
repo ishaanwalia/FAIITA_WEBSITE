@@ -9,33 +9,22 @@ import { cn } from "@/lib/utils";
  * the logo file itself carries the FAIITA mark). Falls back to a styled "F"
  * badge if the file is missing so the header never breaks.
  *
- * `framed` wraps the mark in the glassmorphism .logo-container (semi
- * transparent backdrop + border + shadow) — used in the navbar. The footer
- * renders the plain original with no backdrop.
+ * The mark is lifted on dark surfaces with a brightness/contrast filter
+ * only — no panels, glows or backgrounds — applied everywhere it renders.
  */
-export function Logo({
-  variant = "light",
-  framed = false,
-  className,
-}: {
-  variant?: "light" | "dark";
-  framed?: boolean;
-  className?: string;
-}) {
+export function Logo({ variant = "light", className }: { variant?: "light" | "dark"; className?: string }) {
   const [imgFailed, setImgFailed] = useState(false);
 
   return (
     <Link href="/" className={cn("flex shrink-0 items-center", className)} aria-label="FAIITA — Home">
       {!imgFailed ? (
-        <span className={framed ? "logo-container" : "inline-flex items-center"}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo.png"
-            alt="FAIITA"
-            className={cn("w-auto object-contain", framed ? "h-12 sm:h-[3.25rem]" : "h-14 sm:h-16")}
-            onError={() => setImgFailed(true)}
-          />
-        </span>
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src="/logo.png"
+          alt="FAIITA"
+          className="h-14 w-auto object-contain brightness-[1.25] contrast-[1.1] sm:h-16"
+          onError={() => setImgFailed(true)}
+        />
       ) : (
         <span
           className={cn(

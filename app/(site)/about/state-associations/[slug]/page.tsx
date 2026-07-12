@@ -34,10 +34,8 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
 
   return (
     <>
-      <section className="relative overflow-hidden bg-navy-800 py-20">
-        {/* Site-wide teal glow from behind the header, fading by mid-hero. */}
-        <div aria-hidden className="teal-crown pointer-events-none absolute inset-x-0 top-0 h-full" />
-        <div className="container-page relative">
+      <section className="bg-navy-800 py-20">
+        <div className="container-page">
           <Link href="/about/state-associations" className="flex items-center gap-1.5 text-sm text-white/60 hover:text-white">
             <ArrowLeft className="h-3.5 w-3.5" /> All state associations
           </Link>

@@ -39,12 +39,8 @@ export function Hero() {
 
       <ParticleBackground />
 
-      {/* Teal glow gradient from behind the header down to mid-hero — the
-          site-wide ambient light the logo glow sits inside. */}
-      <div aria-hidden className="teal-crown pointer-events-none absolute inset-x-0 top-0 z-[1] h-1/2" />
-
       {/* Slow-drifting glow blobs — subtle depth behind the content layer.
-          (No orb top-left: it competed with the logo glow.) */}
+          (No saffron orb top-left: it crowded the logo.) */}
       <div aria-hidden className="absolute inset-0 z-[1] overflow-hidden">
         <div className="aurora-orb right-[4%] bottom-[12%] h-96 w-96 bg-violet-500/10 [animation-delay:-8s]" />
         <div className="aurora-orb left-[45%] bottom-[-6rem] h-80 w-80 bg-teal-400/10 [animation-delay:-4s]" />
@@ -54,11 +50,15 @@ export function Hero() {
       <motion.div style={{ y: contentY, opacity: contentOpacity }} className="container-page relative z-10 py-32 text-center">
         <div className="mx-auto max-w-4xl">
           <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0} className="mx-auto mb-8 flex justify-center">
-            {/* Dynamic-island pill: dark glass + green accent ring + blurred
-                spectral halo (see .hero-logo-wrapper) lifts the navy mark off
-                the cosmic backdrop. */}
-            <div className="hero-logo-wrapper">
-              <Image src="/logo.png" alt="FAIITA Logo" width={320} height={110} priority className="hero-logo" />
+            <div className="relative h-20 w-64 sm:h-28 sm:w-80">
+              {/* Brightness/contrast lift only — no panels, glows or backgrounds. */}
+              <Image
+                src="/logo.png"
+                alt="FAIITA Logo"
+                fill
+                priority
+                className="object-contain brightness-[1.25] contrast-[1.1]"
+              />
             </div>
           </motion.div>
 
