@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Building2, Mail, MapPin, Phone, User, Users } from "lucide-react";
+import { ArrowRight, Building2, Mail, MapPin, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { StateMapPoint } from "@/types";
 
@@ -342,23 +342,15 @@ function StateDetailCard({ group, onClose }: { group: StateGroup; onClose: () =>
         {group.associations.map((a) => (
           <div key={a.id} className="rounded-2xl bg-secondary p-4">
             <p className="text-sm font-semibold text-navy-800">{a.associationName}</p>
+            {/* President names and phone numbers are intentionally not shown —
+                office bearers rotate per association; see the state detail page. */}
             <div className="mt-2 space-y-1.5 text-xs text-muted-foreground">
-              {a.presidentName && (
-                <p className="flex items-center gap-1.5">
-                  <User className="h-3.5 w-3.5 shrink-0 text-navy-700" /> {a.presidentName}, President
-                </p>
-              )}
               {a.memberCount > 0 && (
                 <p className="flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5 shrink-0 text-navy-700" />
                   {a.memberCount.toLocaleString("en-IN")} members
                   {a.foundedYear && <> · since {a.foundedYear}</>}
                 </p>
-              )}
-              {a.contactPhone && (
-                <a href={`tel:${a.contactPhone}`} className="flex items-center gap-1.5 hover:text-navy-700">
-                  <Phone className="h-3.5 w-3.5 shrink-0 text-navy-700" /> {a.contactPhone}
-                </a>
               )}
               {a.contactEmail && (
                 <a href={`mailto:${a.contactEmail}`} className="flex items-center gap-1.5 hover:text-navy-700">

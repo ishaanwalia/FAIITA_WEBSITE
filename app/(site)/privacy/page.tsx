@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <p>
             We do not sell or share your personal data with third parties.
             You may request removal from our mailing list at any time by
-            contacting <a href="mailto:info@faiita.co.in" className="text-navy-700 underline">info@faiita.co.in</a>.
+            contacting <a href="mailto:secretary@faiita.co.in" className="text-navy-700 underline">secretary@faiita.co.in</a>.
           </p>
           <p className="text-xs text-muted-foreground/70">
             This is placeholder policy text — replace with FAIITA's reviewed

@@ -20,6 +20,7 @@ import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { prisma } from "@/lib/prisma";
+import { normalizeZone } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Vision & Mission",
@@ -130,13 +131,11 @@ export default async function VisionMissionPage() {
     slug: s.slug,
     stateName: s.stateName,
     stateCode: s.stateCode,
-    region: s.region,
+    region: normalizeZone(s.region),
     associationName: s.associationName,
     memberCount: s.memberCount,
     foundedYear: s.foundedYear,
-    presidentName: s.presidentName,
     contactEmail: s.contactEmail,
-    contactPhone: s.contactPhone,
     logoUrl: s.logoUrl,
     mapX: s.mapX,
     mapY: s.mapY,

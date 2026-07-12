@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/common/PageHero";
 import { StateAssociationsGrid } from "@/components/about/StateAssociationsGrid";
 import { prisma } from "@/lib/prisma";
+import { normalizeZone } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "State Associations",
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function StateAssociationsPage() {
-  const states = await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } });
+  const states = (await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } })).map(
+    (s) => ({ ...s, region: normalizeZone(s.region) })
+  );
 
   return (
     <>

@@ -98,6 +98,43 @@
     clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
   }
 
+  /* Translucent glass plate behind the FAIITA logo. The navy mark disappears
+     against the site's navy surfaces (navbar, footer), so this frosted panel
+     lifts it out everywhere. Corners are cut at 45° — echoing the site's
+     .clip-corner motif — and a ::before layer paints the inner glass so the
+     outer 1px sliver reads as a luminous edge that follows the cut corners. */
+  .logo-glass {
+    --logo-cut: 10px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.9rem;
+    clip-path: polygon(
+      var(--logo-cut) 0,
+      calc(100% - var(--logo-cut)) 0,
+      100% var(--logo-cut),
+      100% calc(100% - var(--logo-cut)),
+      calc(100% - var(--logo-cut)) 100%,
+      var(--logo-cut) 100%,
+      0 calc(100% - var(--logo-cut)),
+      0 var(--logo-cut)
+    );
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.35));
+  }
+  .logo-glass::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    clip-path: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.62));
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+  }
+  .logo-glass > * {
+    position: relative;
+  }
+
   .mix-blend-diff {
     mix-blend-mode: difference;
   }

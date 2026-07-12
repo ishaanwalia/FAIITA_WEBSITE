@@ -21,7 +21,7 @@ model StateAssociation {
   slug             String   @unique
   stateName        String
   stateCode        String // e.g. "MH", "DL" — matches map region ids
-  region           String // North | South | East | West | Central | North-East
+  region           String // North | South | East | West | Central (NECTA/North-East sits under East)
   associationName  String
   foundedYear      Int?
   memberCount      Int      @default(0)

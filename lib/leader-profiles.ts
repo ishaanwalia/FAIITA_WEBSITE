@@ -187,6 +187,8 @@ const profiles: Record<string, LeaderOverrides> = {
     imageUrl: "/leadership/sushil-kumar.jpg",
   },
   "Dharmesh Negandhi": {
+    // The live DB row still says "GB Member" until the next reseed —
+    // prisma/seed.ts already carries the corrected role.
     role: "Joint Treasurer",
     journey: [{ text: "Mahakaushal Computer Dealers' Association" }],
     companies: [{ name: "Multitech Computer", url: "https://share.google/jJgjVCucFTUtybdvT" }],

@@ -18,10 +18,8 @@ export const navItems: NavItem[] = [
     children: [
       { label: "News", href: "/resources/news", description: "Announcements and federation updates" },
       { label: "Events", href: "/resources/events", description: "Summits, AGMs and workshops" },
-      { label: "Blogs", href: "/resources/blogs", description: "Perspectives from the IT trade ecosystem" },
       { label: "Gallery", href: "/resources/gallery", description: "Moments from across the federation" },
       { label: "Newsletter", href: "/resources/newsletter", description: "Our quarterly publication" },
-      { label: "Reports", href: "/resources/policy", description: "Industry research, policy papers, and annual reports" },
     ],
   },
   { label: "Contact", href: "/contact" },

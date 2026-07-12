@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Building2, Calendar, Globe, Mail, MapPin, Phone, User, Users } from "lucide-react";
+import { ArrowLeft, Building2, Calendar, Globe, Mail, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { normalizeZone } from "@/lib/utils";
 import { LogoImage } from "@/components/common/LogoImage";
 
 export const revalidate = 3600;
@@ -39,7 +40,7 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
             <ArrowLeft className="h-3.5 w-3.5" /> All state associations
           </Link>
           <span className="mt-6 inline-block rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
-            {state.region} Zone
+            {normalizeZone(state.region)} Zone
           </span>
           <div className="mt-4 flex items-center gap-4">
             <LogoImage logoUrl={state.logoUrl} alt={state.associationName} size="lg" className="border-white/10 bg-white" />
@@ -93,17 +94,13 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
                   <p className="text-xs text-muted-foreground">Founded</p>
                 </div>
               </div>
+              {/* Only the long-lived facts are shown here (about text, member
+                  count, founding year, emails, website, logo, state name).
+                  President names, phone numbers and city were removed on
+                  purpose — office bearers rotate per association on different
+                  cycles, so that info is added back only when each
+                  association confirms its current details. */}
               <div className="mt-5 space-y-3 border-t border-border pt-5 text-sm">
-                {state.presidentName && state.presidentName !== "REPLACE ME" && (
-                  <p className="flex items-center gap-2 text-muted-foreground">
-                    <User className="h-4 w-4 shrink-0 text-navy-700" /> {state.presidentName}, President
-                  </p>
-                )}
-                {state.address && (
-                  <p className="flex items-start gap-2 text-muted-foreground">
-                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-navy-700" /> {state.address}
-                  </p>
-                )}
                 {state.contactEmail && (
                   <a href={`mailto:${state.contactEmail}`} className="flex items-center gap-2 text-navy-700 hover:underline">
                     <Mail className="h-4 w-4" /> {state.contactEmail}
@@ -124,19 +121,19 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
                     <Globe className="h-4 w-4" /> {state.websiteUrl.replace(/^https?:\/\//, "")}
                   </a>
                 )}
-                {state.contactPhone && (
-                  <a href={`tel:${state.contactPhone}`} className="flex items-center gap-2 text-navy-700 hover:underline">
-                    <Phone className="h-4 w-4" /> {state.contactPhone}
-                  </a>
-                )}
               </div>
             </div>
-            <Link
-              href="/contact"
+            {/* NOTE (partnership CTA): this should reach the association's own
+                secretary. Only FITAG's secretary email (secretary@fitag.in) is
+                verified so far — as each association confirms theirs, set
+                `secretaryEmail` in prisma/seed.ts and reseed; pages without one
+                fall back to FAIITA's national secretary inbox. */}
+            <a
+              href={`mailto:${state.secretaryEmail ?? "secretary@faiita.co.in"}`}
               className="flex items-center justify-center gap-2 rounded-full bg-saffron-500 px-6 py-3 text-sm font-semibold text-navy-900 hover:bg-saffron-400"
             >
               <Building2 className="h-4 w-4" /> Partner with this association
-            </Link>
+            </a>
           </aside>
         </div>
       </section>

@@ -60,9 +60,7 @@ export type StateMapPoint = {
   associationName: string;
   memberCount: number;
   foundedYear: number | null;
-  presidentName: string | null;
   contactEmail: string | null;
-  contactPhone: string | null;
   logoUrl: string | null;
   mapX: number;
   mapY: number;

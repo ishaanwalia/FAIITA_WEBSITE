@@ -67,11 +67,10 @@ const states: StateSeed[] = [
   { stateName: "West Bengal", stateCode: "WB", region: "East", associationName: "COMPASS Kolkata", foundedYear: 2014, memberCount: 3100, city: "Kolkata", mapX: 62, mapY: 38, presidentName: "Manish Lunia", contactPhone: "+91 98311 55806", contactEmail: "manish@shreesales.co.in", logoSlug: "west-bengal" },
   { stateName: "Jharkhand", stateCode: "JH", region: "East", associationName: "Jharkhand Computer Traders Association (JCTA)", foundedYear: 2016, memberCount: 780, city: "Ranchi", mapX: 54, mapY: 38, presidentName: "Mukesh Jha", contactPhone: "+91 93343 90891", contactEmail: "jctajharkhand@yahoo.com", logoSlug: "jharkhand" },
   { stateName: "Odisha", stateCode: "OR", region: "East", associationName: "Information Technology Association Of Orissa (ITAO)", foundedYear: 2016, memberCount: 890, city: "Bhubaneswar", mapX: 55, mapY: 47, presidentName: "Abhinash Patnayak", contactPhone: "+91 98610 63215", contactEmail: "president@itaoodisha.org", logoSlug: "odisha" },
-
-  // — North-East —
   // NECTA covers the whole North-East (Sikkim + the seven sister states) as
-  // one unit, headquartered in Guwahati, Assam.
-  { stateName: "North East", stateCode: "AS", region: "North-East", associationName: "North East Computer Traders Association (NECTA)", foundedYear: 2016, memberCount: 410, city: "Guwahati", mapX: 70, mapY: 29, presidentName: "Ranjan Kumar Das", contactPhone: "+91 94351 18986", contactEmail: "president@necta.co.in", logoSlug: "assam", address: "Guwahati, Assam", description: "North East Computer Traders Association (NECTA) represents IT channel partners, retailers and distributors across the entire North-East — Sikkim, Assam, Arunachal Pradesh, Nagaland, Manipur, Mizoram, Tripura and Meghalaya — headquartered in Guwahati and working under the FAIITA umbrella since 2016." },
+  // one unit, headquartered in Guwahati, Assam. There is no separate
+  // North-East zone — NECTA is grouped under the East zone.
+  { stateName: "North East", stateCode: "AS", region: "East", associationName: "North East Computer Traders Association (NECTA)", foundedYear: 2016, memberCount: 410, city: "Guwahati", mapX: 70, mapY: 29, presidentName: "Ranjan Kumar Das", contactPhone: "+91 94351 18986", contactEmail: "president@necta.co.in", logoSlug: "assam", address: "Guwahati, Assam", description: "North East Computer Traders Association (NECTA) represents IT channel partners, retailers and distributors across the entire North-East — Sikkim, Assam, Arunachal Pradesh, Nagaland, Manipur, Mizoram, Tripura and Meghalaya — headquartered in Guwahati and working under the FAIITA umbrella since 2016." },
 
   // — Central —
   { stateName: "Chhattisgarh", stateCode: "CT", region: "Central", associationName: "Chhattisgarh Computer & Media Dealer Association (CCMDA)", foundedYear: 2017, memberCount: 520, city: "Raipur", mapX: 46, mapY: 44, presidentName: "Avinash Makhija", contactPhone: "+91 98261 62122", contactEmail: "avinash.compu@gmail.com", logoSlug: "chhattisgarh" },
@@ -138,18 +137,21 @@ const leaders = [
   { name: "Sanjeev Walia", role: "Secretary", order: 4, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sanjeev-walia.jpeg" },
   { name: "Deepak Bommisetty", role: "Joint Secretary", order: 5, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/deepak-bommisetty.jpg" },
   { name: "Naveen Gupta", role: "Treasurer", order: 6, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/naveen-gupta.jpg" },
-  { name: "Koushik Pandya", role: "Advisor, IPP", order: 7, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/koushik-pandya.jpg" },
-  { name: "Arun Dey", role: "GB Member", order: 8, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/arun-dey.jpg" },
-  { name: "Pawan Agarwal", role: "GB Member", order: 9, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/pawan-agarwal.jpg" },
-  { name: "Sulalith Gupta", role: "GB Member", order: 10, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sulalith-gupta.jpg" },
-  { name: "Neeraj Agarwal", role: "GB Member", order: 11, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/neeraj-agarwal.jpg" },
-  { name: "Kuldeep S Verma", role: "GB Member", order: 12, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/kuldeep-s-verma.jpg" },
-  { name: "Devesh Rastogi", role: "GB Member", order: 13, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/devesh-rastogi.jpg" },
-  { name: "S. Karthikeyan", role: "GB Member", order: 14, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/s-karthikeyan.jpg" },
-  { name: "Susheel Kumar", role: "GB Member", order: 15, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sushil-kumar.jpg" },
-  { name: "Paresh Salgaonkar", role: "GB Member", order: 16, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/paresh-salgaonkar.jpg" },
-  { name: "Sugreev Singh Ranawat", role: "GB Member", order: 17, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sugreev-singh-ranawat.jpg" },
-  { name: "Dharmesh Negandhi", role: "GB Member", order: 18, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/dharmesh-negandhi.jpg" },
+  // Joint Treasurer sits between Treasurer and Advisor in the GB order.
+  { name: "Dharmesh Negandhi", role: "Joint Treasurer", order: 7, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/dharmesh-negandhi.jpg" },
+  // "PP" (Past President), not "IPP" — the Immediate Past President for this
+  // term is Devesh Rastogi (2022–24), listed below as a GB Member.
+  { name: "Koushik Pandya", role: "Advisor, PP", order: 8, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/koushik-pandya.jpg" },
+  { name: "Arun Dey", role: "GB Member", order: 9, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/arun-dey.jpg" },
+  { name: "Pawan Agarwal", role: "GB Member", order: 10, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/pawan-agarwal.jpg" },
+  { name: "Sulalith Gupta", role: "GB Member", order: 11, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sulalith-gupta.jpg" },
+  { name: "Neeraj Agarwal", role: "GB Member", order: 12, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/neeraj-agarwal.jpg" },
+  { name: "Kuldeep S Verma", role: "GB Member", order: 13, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/kuldeep-s-verma.jpg" },
+  { name: "Devesh Rastogi", role: "GB Member", order: 14, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/devesh-rastogi.jpg" },
+  { name: "S. Karthikeyan", role: "GB Member", order: 15, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/s-karthikeyan.jpg" },
+  { name: "Susheel Kumar", role: "GB Member", order: 16, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sushil-kumar.jpg" },
+  { name: "Paresh Salgaonkar", role: "GB Member", order: 17, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/paresh-salgaonkar.jpg" },
+  { name: "Sugreev Singh Ranawat", role: "GB Member", order: 18, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sugreev-singh-ranawat.jpg" },
 ];
 
 // Previous Governing Body — FAIITA TEAM 22-24 (DAIRY 23 WITH LOGO.pdf).
@@ -183,7 +185,9 @@ const pastLeaders = [
 ];
 
 const stats = [
-  { label: "Affiliated Associations", value: "34", suffix: "", icon: "MapPinned", order: 1 },
+  // 34 affiliated associations operate across 28 covered states — the stat
+  // shows the states figure per FAIITA's preference.
+  { label: "States Covered", value: "28", suffix: "", icon: "MapPinned", order: 1 },
   { label: "Member Associations", value: "100", suffix: "+", icon: "Building2", order: 2 },
   { label: "Channel Partners", value: "50", suffix: "K+", icon: "Users", order: 3 },
   { label: "Employment Generated", value: "5", suffix: "L+", icon: "Briefcase", order: 4 },

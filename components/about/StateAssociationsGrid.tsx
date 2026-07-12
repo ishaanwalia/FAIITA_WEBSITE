@@ -18,7 +18,8 @@ type StateRow = {
   logoUrl?: string | null;
 };
 
-const ZONE_ORDER = ["North", "East", "North-East", "Central", "West", "South"];
+// NECTA (the North-East association) is grouped under the East zone.
+const ZONE_ORDER = ["North", "East", "Central", "West", "South"];
 
 export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
   const [region, setRegion] = useState("All");

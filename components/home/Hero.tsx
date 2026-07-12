@@ -51,8 +51,21 @@ export function Hero() {
         <div className="mx-auto max-w-4xl">
           <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0} className="mx-auto mb-8 flex justify-center">
             <div className="relative h-20 w-64 sm:h-28 sm:w-80">
-              {/* Assumes /public/logo.png — rename this src if your file uses a different name/extension. */}
-              <Image src="/logo.png" alt="FAIITA Logo" fill priority className="object-contain" />
+              {/* Alternative logo-visibility treatment (vs. the frosted glass
+                  plate used in the navbar/footer): a soft radial spotlight
+                  bloom plus a white drop-shadow halo lifts the navy mark off
+                  the dark hero without putting a panel behind it. */}
+              <div
+                aria-hidden
+                className="absolute -inset-x-14 -inset-y-8 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.32),rgba(242,146,29,0.14)_55%,transparent_78%)] blur-xl"
+              />
+              <Image
+                src="/logo.png"
+                alt="FAIITA Logo"
+                fill
+                priority
+                className="object-contain drop-shadow-[0_0_16px_rgba(255,255,255,0.55)]"
+              />
             </div>
           </motion.div>
 

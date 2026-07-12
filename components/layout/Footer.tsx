@@ -14,10 +14,8 @@ const quickLinks = [
 const resourceLinks = [
   { label: "News", href: "/resources/news" },
   { label: "Events", href: "/resources/events" },
-  { label: "Blogs", href: "/resources/blogs" },
   { label: "Gallery", href: "/resources/gallery" },
   { label: "Newsletter", href: "/resources/newsletter" },
-  { label: "Policy", href: "/resources/policy" },
 ];
 
 const socials = [
@@ -73,7 +71,11 @@ export function Footer() {
             </li>
             <li className="flex gap-3">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-saffron-400" />
-              <a href="mailto:info@faiita.co.in" className="hover:text-white">info@faiita.co.in</a>
+              <a href="mailto:president@faiita.co.in" className="hover:text-white">president@faiita.co.in</a>
+            </li>
+            <li className="flex gap-3">
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-saffron-400" />
+              <a href="mailto:secretary@faiita.co.in" className="hover:text-white">secretary@faiita.co.in</a>
             </li>
           </ul>
         </div>

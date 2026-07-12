@@ -5,7 +5,7 @@ import { ContactForm } from "@/components/common/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch with FAIITA — office address, phone, and email of the Secretary General.",
+  description: "Get in touch with FAIITA — office address, phone, and emails of the President and Secretary.",
 };
 
 export default function ContactPage() {
@@ -35,8 +35,8 @@ export default function ContactPage() {
             </div>
 
             <div className="rounded-2xl border border-border bg-card p-7">
-              <h2 className="font-display text-lg font-bold text-navy-800">Secretary General</h2>
-              <p className="mt-1 text-sm font-medium text-saffron-600">Amit Kumar</p>
+              <h2 className="font-display text-lg font-bold text-navy-800">Secretary</h2>
+              <p className="mt-1 text-sm font-medium text-saffron-600">Sanjeev Walia</p>
               <ul className="mt-4 space-y-3 text-sm">
                 <li>
                   <a href="mailto:secretary@faiita.co.in" className="flex items-center gap-3 text-navy-700 hover:underline">
@@ -52,11 +52,11 @@ export default function ContactPage() {
             </div>
 
             <div className="rounded-2xl border border-border bg-secondary/60 p-7">
-              <h2 className="font-display text-lg font-bold text-navy-800">General Enquiries</h2>
+              <h2 className="font-display text-lg font-bold text-navy-800">President&apos;s Office</h2>
               <ul className="mt-4 space-y-3 text-sm">
                 <li>
-                  <a href="mailto:info@faiita.co.in" className="flex items-center gap-3 text-navy-700 hover:underline">
-                    <Mail className="h-4 w-4" /> info@faiita.co.in
+                  <a href="mailto:president@faiita.co.in" className="flex items-center gap-3 text-navy-700 hover:underline">
+                    <Mail className="h-4 w-4" /> president@faiita.co.in
                   </a>
                 </li>
                 <li>

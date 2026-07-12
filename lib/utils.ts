@@ -24,6 +24,13 @@ export function formatDateShort(date: Date | string) {
   };
 }
 
+// There is no separate North-East zone — NECTA is grouped under East.
+// prisma/seed.ts already says "East"; this folds any live DB rows that still
+// say "North-East" until the next reseed.
+export function normalizeZone(region: string) {
+  return region === "North-East" ? "East" : region;
+}
+
 export function slugify(input: string) {
   return input
     .toLowerCase()

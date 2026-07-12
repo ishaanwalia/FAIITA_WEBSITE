@@ -25,14 +25,19 @@ export async function POST(req: Request) {
 
     const submission = await prisma.contactSubmission.create({ data: parsed.data });
 
-    // Optional: email the secretary via Resend if configured.
-    if (process.env.RESEND_API_KEY && process.env.CONTACT_TO_EMAIL) {
+    // Form submissions are delivered to FAIITA's official inboxes. Set
+    // CONTACT_TO_EMAIL (comma-separated) in the environment to override.
+    const recipients = process.env.CONTACT_TO_EMAIL
+      ? process.env.CONTACT_TO_EMAIL.split(",").map((e) => e.trim())
+      : ["president@faiita.co.in", "secretary@faiita.co.in"];
+
+    if (process.env.RESEND_API_KEY) {
       try {
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
           from: "FAIITA Website <onboarding@resend.dev>",
-          to: process.env.CONTACT_TO_EMAIL,
+          to: recipients,
           replyTo: parsed.data.email,
           subject: `New contact form submission: ${parsed.data.subject ?? "General enquiry"}`,
           text: [

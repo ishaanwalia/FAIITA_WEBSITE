@@ -16,6 +16,14 @@ const associationFixes: Record<string, string> = {
   "Kerala IT Dealers Association": "All Kerala IT Dealers Association (AKITDA)",
 };
 
+// The live DB still holds the old "Affiliated Associations / 34" stat —
+// FAIITA prefers the states figure (34 associations span 28 states).
+// prisma/seed.ts is already corrected; this keeps production right until
+// the next reseed.
+const statFixes: Record<string, { label: string; value: string }> = {
+  "Affiliated Associations": { label: "States Covered", value: "28" },
+};
+
 export default async function HomePage() {
   const [stats, testimonials, news, events, states] = await Promise.all([
     prisma.stat.findMany({ orderBy: { order: "asc" } }),
@@ -29,7 +37,7 @@ export default async function HomePage() {
     <>
       <Hero />
       <StateMarquee states={[...new Set(states.map((s) => s.stateName))]} />
-      <Stats stats={stats} />
+      <Stats stats={stats.map((s) => (statFixes[s.label] ? { ...s, ...statFixes[s.label] } : s))} />
       <MembershipBenefits />
       <JoinCta />
       <Testimonials
