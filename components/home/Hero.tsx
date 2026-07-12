@@ -57,7 +57,7 @@ export function Hero() {
                 alt="FAIITA Logo"
                 fill
                 priority
-                className="object-contain brightness-[1.25] contrast-[1.1]"
+                className="object-contain [filter:brightness(1.35)_contrast(1.1)_drop-shadow(1px_0_0_rgba(255,255,255,0.35))_drop-shadow(-1px_0_0_rgba(255,255,255,0.35))_drop-shadow(0_1px_0_rgba(255,255,255,0.35))_drop-shadow(0_-1px_0_rgba(255,255,255,0.35))]"
               />
             </div>
           </motion.div>
