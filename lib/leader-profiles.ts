@@ -217,6 +217,18 @@ const profiles: Record<string, LeaderOverrides> = {
     email: "rajshreesystems.udaipur@gmail.com",
     phone: "+91 94140 72413",
   },
+  "Devesh Rastogi": {
+    journey: [
+      { text: "Past President (2022–2024) — FAIITA" },
+      { text: "President — AISIE (All-India Small IT & Electronics Manufacturers Association)" },
+    ],
+    companies: [{ name: "Laps & Tabs Technology Private Limited" }],
+    location: "Lucknow, Uttar Pradesh",
+    website: "https://www.acxxel.com",
+    email: "devesh.rastogi@gmail.com",
+    phone: "+91 940970032",
+    bio: "Corporate contact: corporate@acxxel.com",
+  },
   "Kuldeep S Verma": {
     name: "Kuldeep Singh",
     journey: [{ text: "SITDA (Shimla IT Dealer Association), Himachal Pradesh" }],
