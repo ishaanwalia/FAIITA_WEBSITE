@@ -17,7 +17,7 @@ const benefits = [
     icon: Landmark,
     title: "Shape the Future",
     description: "Influence national IT policies and be part of decisions that shape India's technology landscape.",
-    image: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&q=80",
+    image: "/images/gallery/election.jpg",
   },
   {
     icon: Network,
