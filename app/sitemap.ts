@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { memberAssociations } from "@/lib/member-associations";
 import { prisma } from "@/lib/prisma";
+import { excludeRemovedStates } from "@/lib/state-overrides";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faiita.co.in";
 
@@ -34,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes,
-    ...states.map((s) => ({ url: `${siteUrl}/about/state-associations/${s.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
+    ...excludeRemovedStates(states).map((s) => ({ url: `${siteUrl}/about/state-associations/${s.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...memberAssociations.filter((m) => !m.isDemo).map((m) => ({ url: `${siteUrl}/about/member-associations/${m.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...news.map((n) => ({ url: `${siteUrl}/resources/news/${n.slug}`, lastModified: n.publishedAt, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...events.map((e) => ({ url: `${siteUrl}/resources/events/${e.slug}`, lastModified: e.startDate, changeFrequency: "monthly" as const, priority: 0.5 })),

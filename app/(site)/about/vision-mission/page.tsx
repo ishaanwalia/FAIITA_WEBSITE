@@ -20,12 +20,13 @@ import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { prisma } from "@/lib/prisma";
+import { excludeRemovedStates } from "@/lib/state-overrides";
 import { normalizeZone } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Vision & Mission",
   description:
-    "Team FAIITA '25–27 — Empowering IT dealers and strengthening the industry across 28 states.",
+    "Team FAIITA '25–27 — Empowering IT dealers and strengthening the industry across 26 states.",
 };
 
 export const revalidate = 3600;
@@ -125,7 +126,9 @@ const initiatives = [
 ];
 
 export default async function VisionMissionPage() {
-  const states = await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } });
+  const states = excludeRemovedStates(
+    await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } })
+  );
   const mapPoints = states.map((s) => ({
     id: s.id,
     slug: s.slug,
@@ -218,7 +221,7 @@ export default async function VisionMissionPage() {
           <div className="mt-24">
             <SectionHeading
               eyebrow="Our Reach"
-              title="A Vision Realized Across 28 States"
+              title="A Vision Realized Across 26 States"
               description="Explore where FAIITA's member associations operate today."
             />
             <div className="mt-10">

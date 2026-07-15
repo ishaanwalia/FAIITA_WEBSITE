@@ -57,7 +57,7 @@ export default function OpengraphImage() {
           }}
         >
           Federation of All India Information Technology Associations —
-          50,000+ IT entrepreneurs across 28 states, one national voice.
+          50,000+ IT entrepreneurs across 26 states, one national voice.
         </div>
         <div
           style={{

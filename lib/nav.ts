@@ -8,7 +8,7 @@ export const navItems: NavItem[] = [
     children: [
       { label: "Vision & Mission", href: "/about/vision-mission", description: "What we stand for and where we're headed" },
       { label: "About FAIITA", href: "/about/about-faiita", description: "Our structure, history and how the federation works" },
-      { label: "State Associations", href: "/about/state-associations", description: "28 states, one federated network" },
+      { label: "State Associations", href: "/about/state-associations", description: "26 states, one federated network" },
       { label: "Member Associations", href: "/about/member-associations", description: "Associations affiliated under FAIITA" },
     ],
   },

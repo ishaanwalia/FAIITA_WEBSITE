@@ -11,19 +11,20 @@ export const metadata: Metadata = {
 
 const structure = [
   { icon: Building2, title: "National Governing Body", subtitle: "FAIITA Executive Committee", detail: "President, Senior Vice President, Secretary & Treasurer set national policy and represent the federation to government bodies." },
-  { icon: Network, title: "State Associations", subtitle: "28 States Covered", detail: "Each state operates its own registered IT association, electing its own leadership and running local programs." },
+  { icon: Network, title: "State Associations", subtitle: "26 States Covered", detail: "Each state operates its own registered IT association, electing its own leadership and running local programs." },
   { icon: Building2, title: "Member Associations", subtitle: "100+ Associations", detail: "City and regional associations affiliate with their state body, focused on Retail, Distribution, Services & Solutions." },
   { icon: Users, title: "Channel Partners", subtitle: "50,000+ Individuals & Businesses", detail: "The IT retailers, resellers, system integrators, and service providers who form the federation's grassroots base." },
 ];
 
 const gbComposition = [
   { role: "President", note: "Chief spokesperson and signatory for the federation" },
+  { role: "Chairman", note: "Presides over the Governing Body, steering strategy and continuity" },
+  { role: "Advisor", note: "Past leadership guiding the Governing Body with institutional wisdom" },
   { role: "Senior Vice President", note: "The President's right hand — second-in-command, ready to lead in his stead" },
   { role: "Secretary", note: "Day-to-day administration and correspondence" },
   { role: "Joint Secretary", note: "Supports the Secretary across administration and member coordination" },
   { role: "Treasurer", note: "Financial planning and membership dues" },
   { role: "Joint Treasurer", note: "Assists the Treasurer with accounts and financial record-keeping" },
-  { role: "Advisor", note: "Past leadership guiding the Governing Body with institutional wisdom" },
   { role: "State Representatives", note: "One delegate nominated per affiliated state association" },
 ];
 
@@ -56,7 +57,7 @@ export default function AboutFaiitaPage() {
                 coordinated national impact.
               </p>
               <p>
-                Today, FAIITA represents state associations across 28 states, 100+ member
+                Today, FAIITA represents state associations across 26 states, 100+ member
                 associations, and over 50,000 channel partners spanning
                 retail, distribution, services, and solutions businesses
                 across India.

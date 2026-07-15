@@ -44,7 +44,7 @@ type StateSeed = {
 };
 
 // Authoritative list of FAIITA state associations — Faiita_President_XL_2025 27.xlsx
-// (34 associations; states like Maharashtra, Delhi, MP and Rajasthan have several).
+// (31 associations; states like Maharashtra, Delhi, MP and Rajasthan have several).
 // Some states have no dedicated state association, so a member association is
 // recognised as the state association — hence multiple entries share a state.
 // x/y are relative (0-100) positions on the illustrated India map viewBox.
@@ -58,7 +58,6 @@ const states: StateSeed[] = [
   { stateName: "Delhi", stateCode: "DL", region: "North", associationName: "All Delhi Computers Traders Association (ADCTA)", foundedYear: 2014, memberCount: 5200, city: "New Delhi", mapX: 37, mapY: 25, presidentName: "Mahinder Agrawal", contactPhone: "+91 92121 27937", contactEmail: "adcta.nehruplace@gmail.com", logoSlug: "adcta.webp" },
   { slug: "delhi-cmda", stateName: "Delhi", stateCode: "DL", region: "North", associationName: "Computer Media Dealers Association, Delhi (CMDA)", memberCount: 0, city: "New Delhi", mapX: 37, mapY: 25, presidentName: "Puneet Singhal", contactPhone: "+91 98100 48176", contactEmail: "infocmda@gmail.com", logoSlug: "cmda-delhi.webp" },
   { slug: "delhi-pcait", stateName: "Delhi", stateCode: "DL", region: "North", associationName: "Progressive Channels Association Of Information Technology (PCAIT)", memberCount: 0, city: "New Delhi", mapX: 37, mapY: 25, presidentName: "Alok Gupta", contactPhone: "+91 98101 98881", contactEmail: "alokgupta@unistal.com", logoSlug: "pcait.webp" },
-  { slug: "delhi-cimeit", stateName: "Delhi", stateCode: "DL", region: "North", associationName: "Confederation of Indian MSME in ESDM & IT (CIMEIT)", memberCount: 0, city: "New Delhi", mapX: 37, mapY: 25, presidentName: "Milan Agrawal", contactPhone: "+91 98102 39199", contactEmail: "dg@ciemei.in" },
   { stateName: "Rajasthan", stateCode: "RJ", region: "North", associationName: "Rajasthan Computer Traders Association (RCTA)", foundedYear: 2014, memberCount: 2100, city: "Jaipur", mapX: 26, mapY: 31, presidentName: "Sugriv Singh", contactPhone: "+91 94140 72413", contactEmail: "rajshreesystems.udaipur@gmail.com", logoSlug: "rcta.webp" },
   { slug: "rajasthan-ucta", stateName: "Rajasthan", stateCode: "RJ", region: "North", associationName: "Udaipur Computer Traders Association (UCTA)", memberCount: 0, city: "Udaipur", mapX: 26, mapY: 31, presidentName: "Ajay Srivastava", contactPhone: "+91 98290 42643", contactEmail: "info@ucta.org.in", logoSlug: "ucta.png" },
   { stateName: "Uttar Pradesh", stateCode: "UP", region: "North", associationName: "Uttar Pradesh Computer Dealers Welfare Association (UPCDWA)", foundedYear: 2014, memberCount: 550, city: "Lucknow", mapX: 46, mapY: 30, contactEmail: "president@upcdwa.com", secretaryEmail: "secretary@upcdwa.com", websiteUrl: "https://www.upcdwa.com", logoSlug: "upcdwa.jpeg", description: "The Uttar Pradesh Computer Dealers Welfare Association (UPCDWA) is the premier industry body representing IT hardware and software dealers, retailers, and distributors across the state of Uttar Pradesh. Operating under the national umbrella of the Federation of All India IT Associations (FAIITA) since 2014, the association unites over 550 members to give local IT businesses a collective voice." },
@@ -74,7 +73,6 @@ const states: StateSeed[] = [
   { stateName: "North East", stateCode: "AS", region: "East", associationName: "North East Computer Traders Association (NECTA)", foundedYear: 2016, memberCount: 410, city: "Guwahati", mapX: 70, mapY: 29, presidentName: "Ranjan Kumar Das", contactPhone: "+91 94351 18986", contactEmail: "president@necta.co.in", logoSlug: "necta.png", address: "Guwahati, Assam", description: "North East Computer Traders Association (NECTA) represents IT channel partners, retailers and distributors across the entire North-East — Sikkim, Assam, Arunachal Pradesh, Nagaland, Manipur, Mizoram, Tripura and Meghalaya — headquartered in Guwahati and working under the FAIITA umbrella since 2016." },
 
   // — Central —
-  { stateName: "Chhattisgarh", stateCode: "CT", region: "Central", associationName: "Chhattisgarh Computer & Media Dealer Association (CCMDA)", foundedYear: 2017, memberCount: 520, city: "Raipur", mapX: 46, mapY: 44, presidentName: "Avinash Makhija", contactPhone: "+91 98261 62122", contactEmail: "avinash.compu@gmail.com", logoSlug: "ccmda.webp" },
   { stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Bhoj Information Technology & Office Automation Dealers Association (BITOAA)", foundedYear: 2015, memberCount: 1980, city: "Bhopal", mapX: 38, mapY: 41, presidentName: "Manish Gupta", contactPhone: "+91 98260 99941", contactEmail: "president.bitoaa@gmail.com", logoSlug: "biotaa.png" },
   { slug: "madhya-pradesh-mpctas", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "M.P. Computer Telecom Association Samiti (MPCTAS)", memberCount: 0, city: "Indore", mapX: 38, mapY: 41, presidentName: "Rakesh Daga", contactPhone: "+91 93032 88083", contactEmail: "indoredb@gmail.com", logoSlug: "mpcta.jpg" },
   { slug: "madhya-pradesh-mcda", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Mahakaushal Computer Dealer's Association (MCDA)", memberCount: 0, city: "Jabalpur", mapX: 38, mapY: 41, presidentName: "B.L. Patel", contactPhone: "+91 93007 64155", contactEmail: "mcdajbp2003@gmail.com", logoSlug: "mcda.webp" },
@@ -117,7 +115,6 @@ const states: StateSeed[] = [
 
   // — South —
   { stateName: "Andhra Pradesh", stateCode: "AP", region: "South", associationName: "Computer Dealers Association Of Nellore Distt (CDAN)", foundedYear: 2015, memberCount: 1620, city: "Nellore", mapX: 46, mapY: 64, presidentName: "B.V. Deepak", contactPhone: "+91 98481 75765", contactEmail: "deepak@sv-technologies.net", logoSlug: "cdan.webp" },
-  { stateName: "Karnataka", stateCode: "KA", region: "South", associationName: "Federation Of IT Dealer's Association Of Karnataka (FITDAK)", foundedYear: 2014, memberCount: 4200, city: "Bengaluru", mapX: 33, mapY: 68, presidentName: "G. N. Mahesha", contactPhone: "+91 99866 32220", contactEmail: "gnmahesh9@gmail.com", logoSlug: "fitdak.png" },
   { stateName: "Kerala", stateCode: "KL", region: "South", associationName: "All Kerala IT Dealers Association (AKITDA)", foundedYear: 2014, memberCount: 2600, city: "Kochi", mapX: 31, mapY: 84, presidentName: "Hareesh Kollam", contactPhone: "+91 94470 75216", contactEmail: "statepresident@akitda.co.in", logoSlug: "akitda.png" },
   { stateName: "Tamil Nadu", stateCode: "TN", region: "South", associationName: "Confederation Of IT Associations (CONFED ITA)", foundedYear: 2014, memberCount: 3800, city: "Chennai", mapX: 39, mapY: 84, presidentName: "Vasudevan", contactPhone: "+91 99444 40980", contactEmail: "president@confedita.com", logoSlug: "confed.webp", description: "Confederation Of IT Associations (CONFED ITA) represents IT channel partners, retailers and distributors across Tamil Nadu and Puducherry, working under the FAIITA umbrella since 2014." },
 ];
@@ -145,14 +142,16 @@ const leaders = [
   // Joint Treasurer sits between Treasurer and Advisor in the GB order.
   { name: "Dharmesh Negandhi", role: "Joint Treasurer", order: 7, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/dharmesh-negandhi.jpg" },
   // "PP" (Past President), not "IPP" — the Immediate Past President for this
-  // term is Devesh Rastogi (2022–24), listed below as a GB Member.
+  // term is Devesh Rastogi (2022–24), listed below as Chairman.
   { name: "Koushik Pandya", role: "Advisor, PP", order: 8, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/koushik-pandya.jpg" },
   { name: "Arun Dey", role: "GB Member", order: 9, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/arun-dey.jpg" },
   { name: "Pawan Agarwal", role: "GB Member", order: 10, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/pawan-agarwal.jpg" },
   { name: "Sulalith Gupta", role: "GB Member", order: 11, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sulalith-gupta.jpg" },
   { name: "Neeraj Agarwal", role: "GB Member", order: 12, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/neeraj-agarwal.jpg" },
   { name: "Kuldeep S Verma", role: "GB Member", order: 13, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/kuldeep-s-verma.jpg" },
-  { name: "Devesh Rastogi", role: "GB Member", order: 14, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/devesh-rastogi.jpg" },
+  // Chairman — display position (right after the President) is handled by the
+  // leadership page's office-bearer ordering, not this DB order.
+  { name: "Devesh Rastogi", role: "Chairman", order: 14, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/devesh-rastogi.jpg" },
   { name: "S. Karthikeyan", role: "GB Member", order: 15, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/s-karthikeyan.jpg" },
   { name: "Susheel Kumar", role: "GB Member", order: 16, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/sushil-kumar.jpg" },
   { name: "Paresh Salgaonkar", role: "GB Member", order: 17, category: "national", term: "2025–2027", isCurrent: true, imageUrl: "/leadership/paresh-salgaonkar.jpg" },
@@ -190,9 +189,9 @@ const pastLeaders = [
 ];
 
 const stats = [
-  // 34 affiliated associations operate across 28 covered states — the stat
+  // 31 affiliated associations operate across 26 covered states — the stat
   // shows the states figure per FAIITA's preference.
-  { label: "States Covered", value: "28", suffix: "", icon: "MapPinned", order: 1 },
+  { label: "States Covered", value: "26", suffix: "", icon: "MapPinned", order: 1 },
   { label: "Member Associations", value: "100", suffix: "+", icon: "Building2", order: 2 },
   { label: "Channel Partners", value: "50", suffix: "K+", icon: "Users", order: 3 },
   { label: "Employment Generated", value: "5", suffix: "L+", icon: "Briefcase", order: 4 },
@@ -229,7 +228,7 @@ const realNews = [
 // Placeholder items kept only so the section doesn't look empty — all flagged
 // isDemo and dated well before any real post. Delete as real news lands.
 const newsItems = [
-  { slug: "faiita-hosts-national-it-summit-2025", title: "FAIITA Hosts National IT Summit 2025 in New Delhi", excerpt: "Leaders from state associations across all 28 states convened to chart the federation's advocacy roadmap for the year ahead.", category: "Events", featured: false, daysAgo: 160 },
+  { slug: "faiita-hosts-national-it-summit-2025", title: "FAIITA Hosts National IT Summit 2025 in New Delhi", excerpt: "Leaders from state associations across all 26 states convened to chart the federation's advocacy roadmap for the year ahead.", category: "Events", featured: false, daysAgo: 160 },
   { slug: "new-gst-guidelines-for-it-products", title: "New GST Guidelines for IT Products Announced", excerpt: "FAIITA's sustained advocacy leads to simplified GST compliance for IT dealers and distributors nationwide.", category: "Policy", featured: false, daysAgo: 175 },
   { slug: "digital-india-skill-development", title: "Digital India Initiative: FAIITA's Role in Skill Development", excerpt: "Partnership with government agencies to train 10,000+ IT professionals in emerging technologies.", category: "Initiative", featured: false, daysAgo: 190 },
   { slug: "faiita-emerging-tech-roundtable", title: "FAIITA Convenes Roundtable on Emerging Technology Retail", excerpt: "State association leaders discussed the shift toward AI-enabled devices and its impact on channel partners.", category: "Press Release", featured: false, daysAgo: 205 },

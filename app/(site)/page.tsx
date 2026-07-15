@@ -8,6 +8,7 @@ import { NewsSection } from "@/components/home/NewsSection";
 import { EventsSection } from "@/components/home/EventsSection";
 import { ReadyToConnect } from "@/components/home/ReadyToConnect";
 import { prisma } from "@/lib/prisma";
+import { excludeRemovedStates } from "@/lib/state-overrides";
 
 export const revalidate = 3600; // ISR — refresh homepage content hourly
 
@@ -16,12 +17,13 @@ const associationFixes: Record<string, string> = {
   "Kerala IT Dealers Association": "All Kerala IT Dealers Association (AKITDA)",
 };
 
-// The live DB still holds the old "Affiliated Associations / 34" stat —
-// FAIITA prefers the states figure (34 associations span 28 states).
+// Display fixes for stat rows the live DB still carries with old figures —
+// FAIITA prefers the states figure (31 associations span 26 states).
 // prisma/seed.ts is already corrected; this keeps production right until
 // the next reseed.
 const statFixes: Record<string, { label: string; value: string }> = {
-  "Affiliated Associations": { label: "States Covered", value: "28" },
+  "Affiliated Associations": { label: "States Covered", value: "26" },
+  "States Covered": { label: "States Covered", value: "26" },
 };
 
 export default async function HomePage() {
@@ -30,13 +32,13 @@ export default async function HomePage() {
     prisma.testimonial.findMany({ orderBy: { order: "asc" } }),
     prisma.news.findMany({ orderBy: { publishedAt: "desc" }, take: 3 }),
     prisma.event.findMany({ where: { isUpcoming: true }, orderBy: { startDate: "asc" }, take: 3 }),
-    prisma.stateAssociation.findMany({ select: { stateName: true }, orderBy: { stateName: "asc" } }),
+    prisma.stateAssociation.findMany({ select: { slug: true, stateName: true }, orderBy: { stateName: "asc" } }),
   ]);
 
   return (
     <>
       <Hero />
-      <StateMarquee states={[...new Set(states.map((s) => s.stateName))]} />
+      <StateMarquee states={[...new Set(excludeRemovedStates(states).map((s) => s.stateName))]} />
       <Stats stats={stats.map((s) => (statFixes[s.label] ? { ...s, ...statFixes[s.label] } : s))} />
       <MembershipBenefits />
       <JoinCta />

@@ -2,26 +2,26 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/common/PageHero";
 import { StateAssociationsGrid } from "@/components/about/StateAssociationsGrid";
 import { prisma } from "@/lib/prisma";
-import { applyStateOverrides } from "@/lib/state-overrides";
+import { applyStateOverrides, excludeRemovedStates } from "@/lib/state-overrides";
 import { normalizeZone } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "State Associations",
-  description: "Browse FAIITA's state-level IT associations spanning 28 states across India.",
+  description: "Browse FAIITA's state-level IT associations spanning 26 states across India.",
 };
 
 export const revalidate = 3600;
 
 export default async function StateAssociationsPage() {
-  const states = (await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } })).map(
-    (s) => ({ ...applyStateOverrides(s), region: normalizeZone(s.region) })
-  );
+  const states = excludeRemovedStates(
+    await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } })
+  ).map((s) => ({ ...applyStateOverrides(s), region: normalizeZone(s.region) }));
 
   return (
     <>
       <PageHero
         eyebrow="About / State Associations"
-        title="28 States, One Federation"
+        title="26 States, One Federation"
         description="Every state association operates independently while sharing in FAIITA's national advocacy and resources."
       />
 

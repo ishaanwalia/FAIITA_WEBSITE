@@ -89,7 +89,7 @@ export function Hero() {
             custom={0.45}
             className="mx-auto mb-10 max-w-2xl text-balance text-lg leading-relaxed text-white/70"
           >
-            Uniting 50,000+ IT entrepreneurs across 28 states — one federated
+            Uniting 50,000+ IT entrepreneurs across 26 states — one federated
             voice driving growth in Retail, Distribution, Services & Solutions.
           </motion.p>
 

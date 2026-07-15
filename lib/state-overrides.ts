@@ -148,3 +148,20 @@ export function applyStateOverrides<T extends { slug: string }>(state: T): T {
   const fix = overrides[state.slug];
   return fix ? { ...state, ...fix } : state;
 }
+
+/**
+ * Associations removed from FAIITA's data in July 2026 — CCMDA (Chhattisgarh),
+ * FITDAK (Karnataka) and CIMEIT (Delhi). prisma/seed.ts no longer carries
+ * them, but the production rows survive until the next reseed, so every
+ * state query filters them out here. Idempotent: once the reseed runs this
+ * matches nothing and the set can be emptied.
+ */
+const removedStateSlugs = new Set(["chhattisgarh", "karnataka", "delhi-cimeit"]);
+
+export function isRemovedStateSlug(slug: string): boolean {
+  return removedStateSlugs.has(slug);
+}
+
+export function excludeRemovedStates<T extends { slug: string }>(states: T[]): T[] {
+  return states.filter((s) => !removedStateSlugs.has(s.slug));
+}
