@@ -7,7 +7,7 @@ import { GradientMesh } from "@/components/common/GradientMesh";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
-import { excludeRemovedStates } from "@/lib/state-overrides";
+import { applyStateOverrides, excludeRemovedStates } from "@/lib/state-overrides";
 
 export const metadata: Metadata = {
   title: "About FAIITA",
@@ -29,7 +29,7 @@ export default async function AboutPage() {
     await prisma.stateAssociation.findMany({
       orderBy: { stateName: "asc" },
     })
-  );
+  ).map(applyStateOverrides);
 
   const mapPoints = states.map((s) => ({
     id: s.id,

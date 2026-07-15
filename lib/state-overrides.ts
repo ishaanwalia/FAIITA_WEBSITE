@@ -47,7 +47,7 @@ const overrides: Record<string, StateOverride> = {
   },
   // UITTA Uttarakhand — verified details supplied July 2026 (matches seed.ts).
   uttarakhand: {
-    associationName: "Uttarakhand IT Trade Association (UITTA)",
+    associationName: "Uttaranchal IT Traders Association (UITTA)",
     foundedYear: 2001,
     memberCount: 120,
     presidentName: null,
