@@ -21,7 +21,9 @@ export type MemberAssociationSeed = {
   website?: string;
   presidentName?: string;
   contactEmail?: string;
+  /** President's phone */
   contactPhone?: string;
+  secretaryPhone?: string;
   /** Path under /public, e.g. /logos/member/<file> */
   logoUrl?: string;
 };
@@ -41,6 +43,7 @@ export const memberAssociations: MemberAssociationSeed[] = [
     website: "https://www.jjita.com",
     contactEmail: "itajalgaonjilha@gmail.com",
     contactPhone: "+91 98601 28301",
+    secretaryPhone: "+91 98349 67776",
     logoUrl: "/logos/member/JJITA.png",
   },
   {
@@ -55,6 +58,8 @@ export const memberAssociations: MemberAssociationSeed[] = [
     description:
       "A collective of over 100 IT entrepreneurs dedicated to fostering the growth and development of the IT industry in the Jalandhar region since 1999. Operating on a “No Profit – No Loss” model, JCDA utilises member contributions to organise impactful initiatives and support noble causes in the community.",
     website: "https://jcdaonline.com",
+    contactEmail: "info@jcdaonline.com",
+    contactPhone: "+91 98140 54189",
     logoUrl: "/logos/member/jcda.jpg",
   },
 ];

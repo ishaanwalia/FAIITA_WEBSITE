@@ -1,102 +1,76 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
+import { Carousel } from "@ark-ui/react/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { cn } from "@/lib/utils";
 import type { GalleryAlbum } from "@/lib/gallery-albums";
 
-/** One scrollable card per album — swipe/scroll or use the arrows to move
- *  through the event's photos. Mixed aspect ratios are letterboxed on navy. */
+/**
+ * Compact album card sized for a 3-per-row grid. Slide 1 is the album's info
+ * card (what the photos are about); the remaining slides are the photos,
+ * letterboxed with object-contain so mixed aspect ratios are never cropped.
+ * Built on @ark-ui/react/carousel (see components/ui/carousel-1.tsx).
+ */
 export function AlbumCarousel({ album }: { album: GalleryAlbum }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-
-  const scrollTo = useCallback((index: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const clamped = Math.max(0, Math.min(index, album.photos.length - 1));
-    track.scrollTo({ left: clamped * track.clientWidth, behavior: "smooth" });
-  }, [album.photos.length]);
-
-  const onScroll = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    setActive(Math.round(track.scrollLeft / track.clientWidth));
-  }, []);
-
   return (
-    <GlassCard variant="light" className="overflow-hidden !p-0">
-      <div className="p-6 sm:p-8">
-        <span className="text-xs font-semibold uppercase tracking-wide text-saffron-600">{album.eyebrow}</span>
-        <h2 className="mt-1 font-display text-xl font-bold text-navy-800 sm:text-2xl">{album.title}</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">{album.description}</p>
-      </div>
-
-      <div className="group relative">
-        <div
-          ref={trackRef}
-          onScroll={onScroll}
-          className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth bg-navy-900 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
+    <GlassCard variant="light" className="h-full overflow-hidden !p-0">
+      <Carousel.Root defaultPage={0} slideCount={album.photos.length + 1} className="flex h-full flex-col">
+        <Carousel.ItemGroup className="flex-1">
+          <Carousel.Item index={0}>
+            <div className="flex h-[300px] flex-col justify-center overflow-y-auto p-6">
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-600">{album.eyebrow}</span>
+              <h2 className="mt-1 font-display text-base font-bold leading-snug text-navy-800">{album.title}</h2>
+              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{album.description}</p>
+            </div>
+          </Carousel.Item>
           {album.photos.map((photo, i) => (
-            <figure key={photo.src} className="w-full shrink-0 snap-center">
-              <div className="relative h-[320px] w-full sm:h-[440px]">
-                <Image
-                  src={photo.src}
-                  alt={photo.caption}
-                  fill
-                  sizes="(min-width: 1024px) 960px, 100vw"
-                  className="object-contain"
-                  priority={i === 0}
-                />
-              </div>
-              <figcaption className="border-t border-white/10 px-6 py-4 text-center text-xs text-white/70 sm:text-sm">
-                {photo.caption}
-              </figcaption>
-            </figure>
+            <Carousel.Item key={photo.src} index={i + 1}>
+              <figure className="flex h-[300px] flex-col bg-navy-900">
+                <div className="relative min-h-0 flex-1">
+                  <Image
+                    src={photo.src}
+                    alt={photo.caption}
+                    fill
+                    sizes="(min-width: 1024px) 400px, 100vw"
+                    className="object-contain"
+                  />
+                </div>
+                <figcaption className="border-t border-white/10 px-4 py-2.5 text-center text-[11px] leading-snug text-white/70">
+                  {photo.caption}
+                </figcaption>
+              </figure>
+            </Carousel.Item>
           ))}
-        </div>
+        </Carousel.ItemGroup>
 
-        <button
-          type="button"
-          aria-label="Previous photo"
-          onClick={() => scrollTo(active - 1)}
-          disabled={active === 0}
-          className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-navy-800 shadow-md transition-opacity hover:bg-white disabled:opacity-30"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <button
-          type="button"
-          aria-label="Next photo"
-          onClick={() => scrollTo(active + 1)}
-          disabled={active === album.photos.length - 1}
-          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-navy-800 shadow-md transition-opacity hover:bg-white disabled:opacity-30"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
+        <Carousel.Control className="flex items-center justify-between gap-3 border-t border-border px-4 py-3">
+          <Carousel.PrevTrigger
+            aria-label="Previous"
+            className="rounded-full border border-border p-1.5 text-navy-700 transition-colors hover:bg-navy-700/5 disabled:opacity-30"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Carousel.PrevTrigger>
 
-        <div className="absolute right-4 top-4 rounded-full bg-navy-900/70 px-3 py-1 font-mono text-xs text-white/90">
-          {active + 1} / {album.photos.length}
-        </div>
-      </div>
+          <Carousel.IndicatorGroup className="flex items-center gap-1.5">
+            {Array.from({ length: album.photos.length + 1 }).map((_, i) => (
+              <Carousel.Indicator
+                key={i}
+                index={i}
+                aria-label={i === 0 ? "About this album" : `Photo ${i}`}
+                className="h-1.5 w-1.5 cursor-pointer rounded-full bg-navy-700/20 transition-all data-[current]:w-4 data-[current]:bg-saffron-500"
+              />
+            ))}
+          </Carousel.IndicatorGroup>
 
-      <div className="flex items-center justify-center gap-2 bg-navy-900 pb-5">
-        {album.photos.map((photo, i) => (
-          <button
-            key={photo.src}
-            type="button"
-            aria-label={`Go to photo ${i + 1}`}
-            onClick={() => scrollTo(i)}
-            className={cn(
-              "h-2 rounded-full transition-all",
-              i === active ? "w-6 bg-saffron-400" : "w-2 bg-white/30 hover:bg-white/50"
-            )}
-          />
-        ))}
-      </div>
+          <Carousel.NextTrigger
+            aria-label="Next"
+            className="rounded-full border border-border p-1.5 text-navy-700 transition-colors hover:bg-navy-700/5 disabled:opacity-30"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Carousel.NextTrigger>
+        </Carousel.Control>
+      </Carousel.Root>
     </GlassCard>
   );
 }
