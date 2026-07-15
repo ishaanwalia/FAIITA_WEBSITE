@@ -9,6 +9,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { PrismaClient } from "@prisma/client";
+import { memberAssociations } from "../lib/member-associations";
 
 const prisma = new PrismaClient();
 
@@ -93,7 +94,18 @@ const states: StateSeed[] = [
       "• Flourish — to flourish and co-exist by being united and supportive of each other.\n• Knowledge — to share the knowledge available by all means.\n• Networking — to increase awareness through extensive networking with each other.\n• Strength — to stay united and utilise the collective strength.\n• Protection — to protect the common interest.",
     ].join("\n\n"),
   },
-  { stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Computer Media Dealers Association, Mumbai (CMDA)", foundedYear: 2014, memberCount: 6100, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Mihir Shah", contactPhone: "+91 98200 67580", contactEmail: "mihir@datatradeindia.com", logoSlug: "cmda-mumbai.webp" },
+  {
+    stateName: "Maharashtra", stateCode: "MH", region: "West",
+    associationName: "Computer Media Dealers Association, Mumbai (CMDA)",
+    foundedYear: 1981, memberCount: 225, city: "Mumbai", mapX: 30, mapY: 54,
+    presidentName: "Samir Parekh", contactEmail: "Brain2@ymail.com",
+    secretaryEmail: "devang@3findia.com",
+    websiteUrl: "https://www.cmdamumbai.in", logoSlug: "cmda-mumbai.webp",
+    description: [
+      "CMDA Mumbai is a premier IT channel association in Maharashtra, recently revitalised into a highly active hub of collaboration. Under the visionary guidance of industry leaders, it unites IT business owners, resellers, system integrators, cybersecurity experts and hardware manufacturers across Mumbai. The association serves as a powerful collective voice — driving networking, financial literacy and regulatory advocacy to empower Mumbai's technology trade community.",
+      "Founded in 1981 and registered under the Ministry of Corporate Affairs as Computer Media Dealers' Association, CMDA Mumbai today brings together nearly 225 senior, reputable business owners — under recent leadership the association grew its active base from a dwindling 25 members to its current strength.",
+    ].join("\n\n"),
+  },
   { slug: "maharashtra-asirt", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Association Of System Integrators & Retailers Technology (ASIRT)", memberCount: 0, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Bharat Chheda", contactPhone: "+91 98212 46565", contactEmail: "president@asirt.in", logoSlug: "asirt.webp" },
   { slug: "maharashtra-tait", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Trade Association Of Information Technology (TAIT)", memberCount: 0, city: "Mumbai", mapX: 30, mapY: 54, presidentName: "Rushabh Shah", contactPhone: "+91 93222 13274", contactEmail: "taitoffice@tait.in", logoSlug: "tait.webp" },
   { slug: "maharashtra-nmit", stateName: "Maharashtra", stateCode: "MH", region: "West", associationName: "Navi Mumbai IT Association (NMIT)", memberCount: 0, city: "Navi Mumbai", mapX: 30, mapY: 54, presidentName: "Hemant Gupta", contactPhone: "+91 98198 10100", contactEmail: "twinklesystems@gmail.com" },
@@ -109,17 +121,9 @@ const states: StateSeed[] = [
   { stateName: "Tamil Nadu", stateCode: "TN", region: "South", associationName: "Confederation Of IT Associations (CONFED ITA)", foundedYear: 2014, memberCount: 3800, city: "Chennai", mapX: 39, mapY: 84, presidentName: "Vasudevan", contactPhone: "+91 99444 40980", contactEmail: "president@confedita.com", logoSlug: "confed.webp", description: "Confederation Of IT Associations (CONFED ITA) represents IT channel partners, retailers and distributors across Tamil Nadu and Puducherry, working under the FAIITA umbrella since 2014." },
 ];
 
-// Member associations are intentionally reduced to a single demo/placeholder
-// card until FAIITA supplies the verified member-association list.
-const demoMemberAssociation = {
-  slug: "demo-member-association",
-  name: "Your Association Name (Demo)",
-  city: "Your City",
-  type: "Demo",
-  memberCount: 0,
-  description:
-    "This is a sample card. City and district associations affiliated to FAIITA will be listed here with their logo, leadership and contact details.",
-};
+// Verified member associations live in lib/member-associations.ts — the
+// member-associations page renders straight from that file, and the seed
+// mirrors it into the DB so state detail pages list them as member chapters.
 
 const testimonials = [
   { name: "Navin Gupta", role: "President, FAIITA", association: "Bihar IT Association", quote: "FAIITA has been instrumental in uniting IT dealers across India. Through sustained advocacy, our members have seen real policy change.", order: 1 },
@@ -243,14 +247,9 @@ const blogs = [
   { slug: "building-a-state-association", title: "Building a State IT Association From the Ground Up", excerpt: "Lessons from associations that grew from a handful of founding members to thousands strong.", author: "FAIITA Editorial Desk", tags: "Associations,Leadership" },
 ];
 
-const galleryItems = [
-  { title: "National IT Summit — Plenary Session", category: "Summits", order: 1, imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80" },
-  { title: "State Presidents' Roundtable", category: "Leadership", order: 2, imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&q=80" },
-  { title: "Regional Meet, East Zone", category: "Regional Meets", order: 3, imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80" },
-  { title: "AGM 2025 — Delegate Address", category: "Events", order: 4, imageUrl: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&q=80" },
-  { title: "Channel Partners Summit Networking", category: "Summits", order: 5, imageUrl: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&q=80" },
-  { title: "Digital Transformation Workshop", category: "Events", order: 6, imageUrl: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&q=80" },
-];
+// Real gallery albums live in lib/gallery-albums.ts and render straight from
+// code — no demo gallery items are seeded anymore. The galleryItem table is
+// kept for future one-off photos (seeded empty; the page filters isDemo).
 
 // FAIITA Patrika — the federation's real e-bulletin. Vol 2 & 3 are hosted
 // Heyzine flip-books; Vol 1 is a PDF served from /public/newsletters.
@@ -305,7 +304,7 @@ async function main() {
   await prisma.newsletter.deleteMany();
   await prisma.policy.deleteMany();
 
-  let firstStateId: string | null = null;
+  const stateIdBySlug = new Map<string, string>();
 
   for (const s of states) {
     const slug = s.slug ?? s.stateName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -332,12 +331,30 @@ async function main() {
         mapY: s.mapY,
       },
     });
-    firstStateId ??= state.id;
+    stateIdBySlug.set(slug, state.id);
   }
 
-  if (firstStateId) {
+  for (const m of memberAssociations) {
+    const stateId = stateIdBySlug.get(m.stateSlug);
+    if (!stateId) {
+      console.warn(`Skipping member association ${m.slug} — no state with slug "${m.stateSlug}"`);
+      continue;
+    }
     await prisma.memberAssociation.create({
-      data: { ...demoMemberAssociation, stateId: firstStateId },
+      data: {
+        slug: m.slug,
+        name: m.name,
+        city: m.city,
+        type: m.type,
+        memberCount: m.memberCount,
+        description: m.description,
+        website: m.website,
+        presidentName: m.presidentName,
+        contactEmail: m.contactEmail,
+        contactPhone: m.contactPhone,
+        logoUrl: m.logoUrl,
+        stateId,
+      },
     });
   }
 
@@ -386,8 +403,6 @@ async function main() {
       isDemo: true,
     })),
   });
-
-  await prisma.galleryItem.createMany({ data: galleryItems.map((g) => ({ ...g, isDemo: true })) });
 
   await prisma.newsletter.createMany({ data: newsletters });
 

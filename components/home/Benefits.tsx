@@ -23,7 +23,7 @@ const benefits = [
     icon: Network,
     title: "Strategic Networking",
     description: "Connect with 50,000+ IT entrepreneurs, vendors, and government stakeholders across India.",
-    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&q=80",
+    image: "/images/gallery/2022-1.jpeg",
   },
   {
     icon: BookOpenText,
@@ -47,7 +47,7 @@ const benefits = [
     icon: Handshake,
     title: "Collaboration",
     description: "Partner with fellow state associations for joint initiatives, events, and business opportunities.",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80",
+    image: "/images/gallery/2022.jpeg",
   },
 ];
 

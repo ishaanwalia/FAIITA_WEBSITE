@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Building2, Calendar, Globe, Mail, Users } from "lucide-react";
+import { memberAssociations } from "@/lib/member-associations";
 import { prisma } from "@/lib/prisma";
+import { applyStateOverrides } from "@/lib/state-overrides";
 import { normalizeZone } from "@/lib/utils";
 import { LogoImage } from "@/components/common/LogoImage";
 
@@ -25,12 +27,31 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function StateDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const state = await prisma.stateAssociation.findUnique({
+  const row = await prisma.stateAssociation.findUnique({
     where: { slug },
-    include: { memberAssociations: true },
+    // type "Demo" excludes the old placeholder row until the DB is reseeded.
+    include: { memberAssociations: { where: { type: { not: "Demo" } } } },
   });
 
-  if (!state) notFound();
+  if (!row) notFound();
+  const state = applyStateOverrides(row);
+
+  // Verified member chapters come from lib/member-associations.ts; DB rows
+  // (same data once reseeded) are deduped by slug so nothing shows twice.
+  const libChapters = memberAssociations.filter((m) => m.stateSlug === slug);
+  const libSlugs = new Set(libChapters.map((m) => m.slug));
+  const chapters = [
+    ...libChapters.map((m) => ({
+      id: m.slug,
+      name: m.name,
+      city: m.city,
+      type: m.type,
+      presidentName: m.presidentName ?? null,
+      memberCount: m.memberCount,
+      logoUrl: m.logoUrl ?? null,
+    })),
+    ...state.memberAssociations.filter((m) => !libSlugs.has(m.slug)),
+  ];
 
   return (
     <>
@@ -58,11 +79,11 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
             <h2 className="font-display text-xl font-bold text-navy-800">About the Association</h2>
             <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{state.description}</p>
 
-            {state.memberAssociations.length > 0 && (
+            {chapters.length > 0 && (
               <div className="mt-10">
                 <h2 className="font-display text-xl font-bold text-navy-800">Member Chapters</h2>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                  {state.memberAssociations.map((m) => (
+                  {chapters.map((m) => (
                     <div key={m.id} className="flex gap-3 rounded-2xl border border-border bg-card p-5">
                       <LogoImage logoUrl={m.logoUrl} alt={m.name} size="sm" />
                       <div>

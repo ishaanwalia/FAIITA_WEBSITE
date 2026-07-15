@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Building2, MapPin, Search, User, Users } from "lucide-react";
+import { Building2, Globe, MapPin, Search, User, Users } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ type MemberRow = {
   type: string;
   memberCount: number;
   description: string | null;
+  website?: string | null;
   presidentName?: string | null;
   logoUrl?: string | null;
   state: { stateName: string };
@@ -84,6 +85,16 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
                   <p className="mt-3 flex items-center gap-1.5 text-xs text-navy-700/70">
                     <User className="h-3.5 w-3.5" /> {m.presidentName}, President
                   </p>
+                )}
+                {m.website && (
+                  <a
+                    href={m.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 flex items-center gap-1.5 text-xs text-navy-700 hover:underline"
+                  >
+                    <Globe className="h-3.5 w-3.5" /> {m.website.replace(/^https?:\/\/(www\.)?/, "")}
+                  </a>
                 )}
                 <p className="mt-2 flex items-center gap-1.5 border-t border-navy-700/10 pt-4 text-xs font-semibold text-saffron-600">
                   <Users className="h-3.5 w-3.5" /> {m.memberCount.toLocaleString("en-IN")} members

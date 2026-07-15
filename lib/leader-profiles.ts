@@ -226,7 +226,7 @@ const profiles: Record<string, LeaderOverrides> = {
     location: "Lucknow, Uttar Pradesh",
     website: "https://www.acxxel.com",
     email: "devesh.rastogi@gmail.com",
-    phone: "+91 940970032",
+    phone: "+91 9140970032",
     bio: "Corporate contact: corporate@acxxel.com",
   },
   "Kuldeep S Verma": {
