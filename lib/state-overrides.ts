@@ -80,6 +80,51 @@ const overrides: Record<string, StateOverride> = {
     websiteUrl: "https://www.tait.in",
     description: "Trade Association of Information Technology (TAIT) was formed in March 1996 to represent the interest of IT community in the ecosystem of Distributors / Sub-distributors / Resellers, System Integrators & Service Providers.\n\nTAIT has over 450+ members representing the complete spectrum of IT organizations. The association was formed to uphold the larger interest of the IT trade, which represents 70% of Mumbai's IT industry. It's a forum where the challenges of Mumbai's domestic IT Industry business is heard and understood. TAIT is a pro-active, leading IT association of India.\n\nTAIT enjoys cordial relations with all OEMs. TAIT's role has also been lauded by various IT / non IT media on several occasions and partnered with them from time to time. TAIT is also fortunate to have very resourceful members who bring in expertise to share their perspective with fellow members. TAIT has very cordial working relationship with other representative associations like MAIT, NASSCOM, IMC and work closely with them on issues related to IT industry.\n\nTAIT over the past years have interacted with state Government Departments, Central Government Departments to brief and resolution of IT channel community business challenges. It continues to do so in future.\n\nTAIT has its own office in Mumbai managed by professional team. It has team of consultants on board on various taxation and policy matters.\n\nTAIT organizes regular meetings on member's issues like non-payments / warranty / service, SI meet, Technology sessions, Product Promotion meets, and Media Meets. It sponsors ICT events / meets organized by the government, IT media, and industry players at regional & national level. TAIT Knowledge Series Events focus on Seminars / workshops on technology awareness and professional / personal skills development of the member community.",
   },
+  // GIBA Goa — verified details supplied July 2026 (matches seed.ts).
+  goa: {
+    foundedYear: 1996,
+    memberCount: 105,
+    presidentName: null,
+    contactEmail: "gibaofficegoa@gmail.com",
+    secretaryEmail: null,
+    contactPhone: null,
+    websiteUrl: "https://gibagoa.co.in",
+    description: "Goa IT Business Association (GIBA) was formed in the year 1996. GIBA has around 105 members at present and its primary objective is to offer guidance, support and most importantly an opportunity to grow their businesses.\n\nEvery year GIBA organises events such as Tech Days, Blood Donation Camps, GIBA Family Get-together and sports activities such as the GIBA Cricket event, technical training for GIBA members and their employees, medical check-up camps and more.\n\nGIBA's objective is to unite all the IT dealers of Goa and extend whatever help is needed to ensure they develop and grow their respective business in this highly competitive environment.\n\nGIBA has members from the fields of IT hardware, software, Internet Service Providers, CCTV and more.",
+  },
+  // JCTA Jharkhand — verified details supplied July 2026 (matches seed.ts).
+  jharkhand: {
+    foundedYear: 2007,
+    memberCount: 145,
+    presidentName: null,
+    contactEmail: "president@jcta.org.in",
+    secretaryEmail: "secretary@jcta.org.in",
+    contactPhone: null,
+    websiteUrl: "https://www.jcta.org.in",
+    description: "The Jharkhand Computer Traders Association (JCTA) is the premier association representing the IT trade, dealers, distributors, and system integrators across Jharkhand. Dedicated to uniting the IT fraternity and fostering a collaborative ecosystem, JCTA plays a pivotal role in protecting local traders' interests, resolving business challenges, and bridging them with national bodies. Promoting ethical trade practices, our mission is to drive digital empowerment, technological growth, and support a robust, progressive IT trade ecosystem in the region.",
+  },
+  // VCMDWA Nagpur — verified details supplied July 2026 (matches seed.ts).
+  "maharashtra-vcmdwa": {
+    associationName: "Vidarbha Computer & Media Dealers Welfare Association (VCMDWA)",
+    foundedYear: 1991,
+    memberCount: 125,
+    presidentName: "Dinesh Naidu",
+    contactEmail: "dinesh@dineshnaidu.com",
+    secretaryEmail: "lg40@hotmail.com",
+    contactPhone: null,
+    websiteUrl: "https://www.vcmdwa.org",
+    description: "The Vidarbha Computer & Media Dealers Welfare Association (VCMDWA), established in 1991, is a registered charitable trust under the Societies Registration Act, 1860. It is one of Central India's most active and respected industry associations representing the interests of computer hardware, software, digital media, surveillance, and IT service providers.\n\nWith a robust network of over 125+ active members, VCMDWA functions as a non-profit, non-political body, promoting ethical business practices, industry collaboration, customer trust, and community welfare in the IT and electronics sector.",
+  },
+  // UPCDWA Uttar Pradesh — verified details supplied July 2026 (matches seed.ts).
+  "uttar-pradesh": {
+    foundedYear: 2014,
+    memberCount: 550,
+    presidentName: null,
+    contactEmail: "president@upcdwa.com",
+    secretaryEmail: "secretary@upcdwa.com",
+    contactPhone: null,
+    websiteUrl: "https://www.upcdwa.com",
+    description: "The Uttar Pradesh Computer Dealers Welfare Association (UPCDWA) is the premier industry body representing IT hardware and software dealers, retailers, and distributors across the state of Uttar Pradesh. Operating under the national umbrella of the Federation of All India IT Associations (FAIITA) since 2014, the association unites over 550 members to give local IT businesses a collective voice.",
+  },
   // PACT Punjab — verified details supplied July 2026 (matches seed.ts).
   punjab: {
     associationName: "Punjab Association of Computer Traders (PACT)",

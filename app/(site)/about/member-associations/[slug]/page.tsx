@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Building2, Calendar, Globe, Mail, Phone, Users } from "lucide-react";
 import { memberAssociations } from "@/lib/member-associations";
 import { LogoImage } from "@/components/common/LogoImage";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 
 export function generateStaticParams() {
   return memberAssociations.map((m) => ({ slug: m.slug }));
@@ -31,9 +32,12 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ s
           <Link href="/about/member-associations" className="flex items-center gap-1.5 text-sm text-white/60 hover:text-white">
             <ArrowLeft className="h-3.5 w-3.5" /> All member associations
           </Link>
-          <span className="mt-6 inline-block rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
-            {member.city}, {member.stateName}
-          </span>
+          <div className="mt-6 flex items-center gap-2">
+            <span className="inline-block rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
+              {member.city}, {member.stateName}
+            </span>
+            {member.isDemo && <DemoBadge />}
+          </div>
           <div className="mt-4 flex items-center gap-4">
             <LogoImage logoUrl={member.logoUrl} alt={member.name} size="lg" className="border-white/10 bg-white" />
             <div>

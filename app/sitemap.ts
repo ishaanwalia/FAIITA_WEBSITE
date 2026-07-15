@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticRoutes,
     ...states.map((s) => ({ url: `${siteUrl}/about/state-associations/${s.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
-    ...memberAssociations.map((m) => ({ url: `${siteUrl}/about/member-associations/${m.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
+    ...memberAssociations.filter((m) => !m.isDemo).map((m) => ({ url: `${siteUrl}/about/member-associations/${m.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...news.map((n) => ({ url: `${siteUrl}/resources/news/${n.slug}`, lastModified: n.publishedAt, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...events.map((e) => ({ url: `${siteUrl}/resources/events/${e.slug}`, lastModified: e.startDate, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...newsletters.map((n) => ({ url: `${siteUrl}/resources/newsletter/${n.slug}`, lastModified: n.issueDate, changeFrequency: "monthly" as const, priority: 0.5 })),

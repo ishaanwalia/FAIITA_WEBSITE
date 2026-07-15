@@ -7,6 +7,10 @@
  *
  * `stateSlug` must match the state association slug generated in
  * prisma/seed.ts (slugified stateName, or the explicit `slug` override).
+ *
+ * Entries flagged `isDemo: true` are placeholder cards shown only so the page
+ * doesn't look empty — they carry a Demo badge, are NOT seeded into the DB,
+ * and should be deleted as verified member listings come in.
  */
 export type MemberAssociationSeed = {
   slug: string;
@@ -26,40 +30,21 @@ export type MemberAssociationSeed = {
   secretaryPhone?: string;
   /** Path under /public, e.g. /logos/member/<file> */
   logoUrl?: string;
+  /** Placeholder card — shown with a Demo badge, never seeded into the DB. */
+  isDemo?: boolean;
 };
 
 export const memberAssociations: MemberAssociationSeed[] = [
   {
-    slug: "jjita-jalgaon",
-    name: "Jalgaon Jilha Information Technology Association (JJITA)",
-    city: "Jalgaon",
-    stateName: "Maharashtra",
-    stateSlug: "maharashtra",
-    type: "District Association",
-    memberCount: 127,
-    foundedYear: 2022,
-    description:
-      "A registered association representing IT dealers, system integrators and technology entrepreneurs across Jalgaon district. Founded in 2022, JJITA brings the district's IT community together to foster collaboration, share knowledge and create business opportunities — driving industry growth through collective advocacy, business networking and skill development initiatives.",
-    website: "https://www.jjita.com",
-    contactEmail: "itajalgaonjilha@gmail.com",
-    contactPhone: "+91 98601 28301",
-    secretaryPhone: "+91 98349 67776",
-    logoUrl: "/logos/member/JJITA.png",
-  },
-  {
-    slug: "jcda-jalandhar",
-    name: "Jalandhar Computer Dealers Association (JCDA)",
-    city: "Jalandhar",
-    stateName: "Punjab",
-    stateSlug: "punjab",
+    slug: "demo-city-it-association",
+    name: "Sample City IT Association",
+    city: "Sample City",
+    stateName: "India",
+    stateSlug: "",
     type: "City Association",
-    memberCount: 98,
-    foundedYear: 1999,
+    memberCount: 0,
     description:
-      "A collective of over 100 IT entrepreneurs dedicated to fostering the growth and development of the IT industry in the Jalandhar region since 1999. Operating on a “No Profit – No Loss” model, JCDA utilises member contributions to organise impactful initiatives and support noble causes in the community.",
-    website: "https://jcdaonline.com",
-    contactEmail: "info@jcdaonline.com",
-    contactPhone: "+91 98140 54189",
-    logoUrl: "/logos/member/jcda.jpg",
+      "This is a placeholder listing. Verified FAIITA member associations — the city and district bodies working under each state chapter — are being onboarded and will appear here with their real details, logos and contact information.",
+    isDemo: true,
   },
 ];

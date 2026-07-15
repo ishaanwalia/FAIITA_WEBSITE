@@ -6,6 +6,7 @@ import { ArrowRight, Search, Users } from "lucide-react";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { LogoImage } from "@/components/common/LogoImage";
+import { DemoBadge } from "@/components/ui/DemoBadge";
 import { cn } from "@/lib/utils";
 
 type MemberRow = {
@@ -15,6 +16,7 @@ type MemberRow = {
   stateName: string;
   memberCount: number;
   logoUrl?: string | null;
+  isDemo?: boolean;
 };
 
 // Mirrors StateAssociationsGrid: filter tabs (by state) + search, compact
@@ -82,6 +84,7 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
                       <div>
                         <h3 className="font-display text-sm font-bold leading-snug text-navy-800">{m.name}</h3>
                         <p className="mt-1 text-xs font-medium text-saffron-600">{m.city}, {m.stateName}</p>
+                        {m.isDemo && <DemoBadge className="mt-2" />}
                       </div>
                     </div>
                     <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
