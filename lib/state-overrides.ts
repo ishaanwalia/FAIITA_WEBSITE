@@ -131,6 +131,7 @@ const overrides: Record<string, StateOverride> = {
   },
   // PACT Punjab — verified details supplied July 2026 (matches seed.ts).
   punjab: {
+    logoUrl: "/logos/state/pact.webp",
     associationName: "Punjab Association of Computer Traders (PACT)",
     foundedYear: 2012,
     memberCount: 800,
