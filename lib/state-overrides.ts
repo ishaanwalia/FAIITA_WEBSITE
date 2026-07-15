@@ -56,6 +56,18 @@ const overrides: Record<string, StateOverride> = {
     websiteUrl: null,
     description: "UITTA is a group of individuals who come together with a shared vision and common purpose established in year 2001. We as UITTA promotes unity, cooperation and support to their members and also collective efforts for the betterment of our members.",
   },
+  // ASIRT Maharashtra — verified details supplied July 2026 (matches seed.ts).
+  "maharashtra-asirt": {
+    associationName: "Association Of System Integrators & Retailers in Technology (ASIRT)",
+    foundedYear: 2012,
+    memberCount: 270,
+    presidentName: null,
+    contactEmail: "president@asirt.in",
+    secretaryEmail: "secretary@asirt.in",
+    contactPhone: null,
+    websiteUrl: "https://www.asirt.in",
+    description: "ASIRT (Association of System Integrators and Retailers in Technology) is one of India's most dynamic IT channel associations, dedicated to empowering System Integrators, Solution Providers, Retailers, Cloud Partners, and IT Services companies. Founded in Mumbai and serving the IT community since 2012, ASIRT provides a powerful platform for collaboration, networking, business growth, and knowledge sharing.\n\nWith a vibrant community of over 270 members, ASIRT brings together technology entrepreneurs and business leaders to create meaningful partnerships and new business opportunities. Through regular technology seminars, business conclaves, training programs, consortium initiatives, and industry interactions, ASIRT helps members evolve, expand, and stay ahead in a rapidly changing technology landscape.\n\nASIRT also acts as a strong voice for the IT channel community, facilitating engagement with OEMs and vendors, addressing member grievances, and fostering a healthy and profitable business ecosystem. Beyond business, ASIRT nurtures a spirit of camaraderie through events such as the ASIRT Synergy Biz Conclave, ACPL cricket tournament, social gatherings, and family-oriented activities.\n\nDriven by its philosophy of Partner, Progress, and Evolve, ASIRT continues to build a unified, future-ready IT partner ecosystem where members learn, grow, and win together.",
+  },
 };
 
 export function applyStateOverrides<T extends { slug: string }>(state: T): T {
