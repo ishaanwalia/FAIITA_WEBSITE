@@ -15,6 +15,7 @@ type StateOverride = {
   contactPhone?: string | null;
   websiteUrl?: string | null;
   description?: string | null;
+  logoUrl?: string | null;
 };
 
 const overrides: Record<string, StateOverride> = {
@@ -93,6 +94,7 @@ const overrides: Record<string, StateOverride> = {
   },
   // JCTA Jharkhand — verified details supplied July 2026 (matches seed.ts).
   jharkhand: {
+    logoUrl: "/logos/state/jcta.jpeg",
     foundedYear: 2007,
     memberCount: 145,
     presidentName: null,
@@ -104,6 +106,7 @@ const overrides: Record<string, StateOverride> = {
   },
   // VCMDWA Nagpur — verified details supplied July 2026 (matches seed.ts).
   "maharashtra-vcmdwa": {
+    logoUrl: "/logos/state/vcmdwa.png",
     associationName: "Vidarbha Computer & Media Dealers Welfare Association (VCMDWA)",
     foundedYear: 1991,
     memberCount: 125,
@@ -116,6 +119,7 @@ const overrides: Record<string, StateOverride> = {
   },
   // UPCDWA Uttar Pradesh — verified details supplied July 2026 (matches seed.ts).
   "uttar-pradesh": {
+    logoUrl: "/logos/state/upcdwa.jpeg",
     foundedYear: 2014,
     memberCount: 550,
     presidentName: null,
