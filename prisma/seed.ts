@@ -115,7 +115,21 @@ const states: StateSeed[] = [
 
   // — South —
   { stateName: "Andhra Pradesh", stateCode: "AP", region: "South", associationName: "Computer Dealers Association Of Nellore Distt (CDAN)", foundedYear: 2015, memberCount: 1620, city: "Nellore", mapX: 46, mapY: 64, presidentName: "B.V. Deepak", contactPhone: "+91 98481 75765", contactEmail: "deepak@sv-technologies.net", logoSlug: "cdan.webp" },
-  { stateName: "Kerala", stateCode: "KL", region: "South", associationName: "All Kerala IT Dealers Association (AKITDA)", foundedYear: 2014, memberCount: 2600, city: "Kochi", mapX: 31, mapY: 84, presidentName: "Hareesh Kollam", contactPhone: "+91 94470 75216", contactEmail: "statepresident@akitda.co.in", logoSlug: "akitda.png" },
+  {
+    stateName: "Kerala", stateCode: "KL", region: "South",
+    associationName: "All Kerala IT Dealers Association (AKITDA)",
+    foundedYear: 2004, memberCount: 1500, city: "Ernakulam", mapX: 31, mapY: 84,
+    presidentName: "Hareesh Kollam", contactPhone: "+91 94470 75216",
+    contactEmail: "statepresident@akitda.co.in", secretaryEmail: "stategs@akitda.co.in",
+    websiteUrl: "https://www.akitda.co.in", logoSlug: "akitda.png",
+    address: "ER-366/2004, Ist Floor, Krishnakripa, KSN Menon Road, Near South Over Bridge, Ernakulam, Kerala – 682016",
+    description: [
+      "AKITDA was formed in April 2004 for the welfare and protection of the rights of people associated with the production, sales and service of computers, computer-associated products and spare parts. Thousands of IT dealers are part of this association, which develops organizational skills, plans welfare schemes and helps in members' professional development. Exhibitions and seminars that help in the expansion of business are also conducted for the welfare of members. The association helps IT dealers overcome all sorts of troubles they experience and helps them get their claimed benefits — Snehasparsham is the programme introduced for implementing this.",
+      "The main objectives of the association are:\n• To develop organizational awareness and financial support by mutual cooperation among computer dealers.\n• To provide scientific and technical knowledge which results in the uplifting of dealers and merchants.\n• To develop projects for the financial security of dealers.\n• To develop an atmosphere for co-existence and for the consolidation of IT dealers all over India.\n• To protect the best interests of the IT business community, of the public and of the country.\n• To develop the qualities of honesty, compassion, patriotism and willingness to sacrifice among the members.",
+      "Registered Office: ER-366/2004, Ist Floor, Krishnakripa, KSN Menon Road, Near South Over Bridge, Ernakulam, Kerala – 682016.",
+      "Websites: www.akitda.co.in · www.akitda.org · www.akitda.in",
+    ].join("\n\n"),
+  },
   { stateName: "Tamil Nadu", stateCode: "TN", region: "South", associationName: "Confederation Of IT Associations (CONFED ITA)", foundedYear: 2014, memberCount: 3800, city: "Chennai", mapX: 39, mapY: 84, presidentName: "Vasudevan", contactPhone: "+91 99444 40980", contactEmail: "president@confedita.com", logoSlug: "confed.webp", description: "Confederation Of IT Associations (CONFED ITA) represents IT channel partners, retailers and distributors across Tamil Nadu and Puducherry, working under the FAIITA umbrella since 2014." },
 ];
 

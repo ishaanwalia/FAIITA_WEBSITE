@@ -52,7 +52,10 @@ const samirParekhProfile: LeaderOverrides = {
 // Shared by the current "Liju P Raju" record and the past-GB "Liju R" record.
 const lijuPRajuProfile: LeaderOverrides = {
   name: "Liju P Raju",
-  journey: [{ text: "Past President — AKITDA (All Kerala IT Dealers Association)" }],
+  journey: [
+    { text: "Past President — AKITDA (All Kerala IT Dealers Association)" },
+    { text: "Founder Member — FAIITA" },
+  ],
   companies: [{ name: "Zeta IT Innovation India Pvt Ltd" }],
   location: "Thrissur, Kerala",
   website: "https://www.zetaipl.com",
@@ -175,7 +178,8 @@ const profiles: Record<string, LeaderOverrides> = {
     website: "https://bloomonline.in",
     phone: "+91 88830 44433",
     bio: "In the IT industry since 1991, Bloom Electronics develops software for major Fortune 500 companies. He is a director of the second-greenest building in the world, located in Coimbatore.",
-    imageUrl: "/leadership/karthikeyan-shanmugam.jpg",
+    // No imageUrl override — /leadership/karthikeyan-shanmugam.jpg is NOT him;
+    // the DB's /leadership/s-karthikeyan.jpg is the correct photo.
   },
   "Susheel Kumar": {
     name: "Sushil Kumar",

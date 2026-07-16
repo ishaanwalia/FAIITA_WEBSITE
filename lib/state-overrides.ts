@@ -16,6 +16,7 @@ type StateOverride = {
   websiteUrl?: string | null;
   description?: string | null;
   logoUrl?: string | null;
+  address?: string | null;
 };
 
 const overrides: Record<string, StateOverride> = {
@@ -128,6 +129,20 @@ const overrides: Record<string, StateOverride> = {
     contactPhone: null,
     websiteUrl: "https://www.upcdwa.com",
     description: "The Uttar Pradesh Computer Dealers Welfare Association (UPCDWA) is the premier industry body representing IT hardware and software dealers, retailers, and distributors across the state of Uttar Pradesh. Operating under the national umbrella of the Federation of All India IT Associations (FAIITA) since 2014, the association unites over 550 members to give local IT businesses a collective voice.",
+  },
+  // AKITDA Kerala — verified details supplied July 2026 (matches seed.ts).
+  kerala: {
+    foundedYear: 2004,
+    memberCount: 1500,
+    secretaryEmail: "stategs@akitda.co.in",
+    websiteUrl: "https://www.akitda.co.in",
+    address: "ER-366/2004, Ist Floor, Krishnakripa, KSN Menon Road, Near South Over Bridge, Ernakulam, Kerala – 682016",
+    description: [
+      "AKITDA was formed in April 2004 for the welfare and protection of the rights of people associated with the production, sales and service of computers, computer-associated products and spare parts. Thousands of IT dealers are part of this association, which develops organizational skills, plans welfare schemes and helps in members' professional development. Exhibitions and seminars that help in the expansion of business are also conducted for the welfare of members. The association helps IT dealers overcome all sorts of troubles they experience and helps them get their claimed benefits — Snehasparsham is the programme introduced for implementing this.",
+      "The main objectives of the association are:\n• To develop organizational awareness and financial support by mutual cooperation among computer dealers.\n• To provide scientific and technical knowledge which results in the uplifting of dealers and merchants.\n• To develop projects for the financial security of dealers.\n• To develop an atmosphere for co-existence and for the consolidation of IT dealers all over India.\n• To protect the best interests of the IT business community, of the public and of the country.\n• To develop the qualities of honesty, compassion, patriotism and willingness to sacrifice among the members.",
+      "Registered Office: ER-366/2004, Ist Floor, Krishnakripa, KSN Menon Road, Near South Over Bridge, Ernakulam, Kerala – 682016.",
+      "Websites: www.akitda.co.in · www.akitda.org · www.akitda.in",
+    ].join("\n\n"),
   },
   // PACT Punjab — verified details supplied July 2026 (matches seed.ts).
   punjab: {

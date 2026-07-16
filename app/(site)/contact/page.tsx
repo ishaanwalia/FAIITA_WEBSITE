@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, Phone, Clock } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { PageHero } from "@/components/common/PageHero";
 import { ContactForm } from "@/components/common/ContactForm";
 
@@ -21,47 +21,45 @@ export default function ContactPage() {
         <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.3fr]">
           <div className="space-y-6">
             <div className="rounded-2xl border border-border bg-card p-7">
-              <h2 className="font-display text-lg font-bold text-navy-800">Federation Office</h2>
-              <ul className="mt-5 space-y-4 text-sm">
+              <h2 className="font-display text-lg font-bold text-navy-800">President Office</h2>
+              <p className="mt-1 text-sm font-medium text-saffron-600">Navin Gupta — President</p>
+              <ul className="mt-4 space-y-3 text-sm">
                 <li className="flex gap-3">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-navy-700" />
-                  <span className="text-muted-foreground">404/95, Nehru Place, New Delhi — 110019, India</span>
+                  <span className="text-muted-foreground">01, Boring Road, Patna 800001</span>
                 </li>
-                <li className="flex gap-3">
-                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-navy-700" />
-                  <span className="text-muted-foreground">Monday – Saturday, 10:00 AM – 6:00 PM IST</span>
+                <li className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 shrink-0 text-navy-700" />
+                  <span>
+                    <a href="tel:+919334715522" className="text-navy-700 hover:underline">9334715522</a>
+                    <span className="text-muted-foreground">, </span>
+                    <a href="tel:+919709401552" className="text-navy-700 hover:underline">9709401552</a>
+                  </span>
                 </li>
-              </ul>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-card p-7">
-              <h2 className="font-display text-lg font-bold text-navy-800">Secretary</h2>
-              <p className="mt-1 text-sm font-medium text-saffron-600">Sanjeev Walia</p>
-              <ul className="mt-4 space-y-3 text-sm">
-                <li>
-                  <a href="mailto:secretary@faiita.co.in" className="flex items-center gap-3 text-navy-700 hover:underline">
-                    <Mail className="h-4 w-4" /> secretary@faiita.co.in
-                  </a>
-                </li>
-                <li>
-                  <a href="tel:+911141620001" className="flex items-center gap-3 text-navy-700 hover:underline">
-                    <Phone className="h-4 w-4" /> +91 11 4162 0001
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-secondary/60 p-7">
-              <h2 className="font-display text-lg font-bold text-navy-800">President&apos;s Office</h2>
-              <ul className="mt-4 space-y-3 text-sm">
                 <li>
                   <a href="mailto:president@faiita.co.in" className="flex items-center gap-3 text-navy-700 hover:underline">
                     <Mail className="h-4 w-4" /> president@faiita.co.in
                   </a>
                 </li>
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-card p-7">
+              <h2 className="font-display text-lg font-bold text-navy-800">Secretary Office</h2>
+              <p className="mt-1 text-sm font-medium text-saffron-600">Sanjeev Walia — Secretary</p>
+              <ul className="mt-4 space-y-3 text-sm">
+                <li className="flex gap-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-navy-700" />
+                  <span className="text-muted-foreground">SCO-12, 1st Floor, Sector-17/E, Chandigarh 160017 (U.T.)</span>
+                </li>
                 <li>
-                  <a href="tel:+911141620000" className="flex items-center gap-3 text-navy-700 hover:underline">
-                    <Phone className="h-4 w-4" /> +91 11 4162 0000
+                  <a href="tel:+919814958290" className="flex items-center gap-3 text-navy-700 hover:underline">
+                    <Phone className="h-4 w-4" /> 9814958290
+                  </a>
+                </li>
+                <li>
+                  <a href="mailto:secretary@faiita.co.in" className="flex items-center gap-3 text-navy-700 hover:underline">
+                    <Mail className="h-4 w-4" /> secretary@faiita.co.in
                   </a>
                 </li>
               </ul>

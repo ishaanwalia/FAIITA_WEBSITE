@@ -60,18 +60,36 @@ export function Footer() {
 
         <div>
           <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-white">Contact Us</h3>
-          <ul className="mt-5 space-y-3 text-sm text-white/50">
+
+          <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-saffron-400">President Office</p>
+          <ul className="mt-2 space-y-2 text-sm text-white/50">
             <li className="flex gap-3">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-saffron-400" />
-              <span>404/95, Nehru Place, New Delhi — 110019, India</span>
+              <span>Navin Gupta — 01, Boring Road, Patna 800001</span>
             </li>
             <li className="flex gap-3">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-saffron-400" />
-              <a href="tel:+911141620000" className="hover:text-white">+91 11 4162 0000</a>
+              <span>
+                <a href="tel:+919334715522" className="hover:text-white">9334715522</a>
+                {", "}
+                <a href="tel:+919709401552" className="hover:text-white">9709401552</a>
+              </span>
             </li>
             <li className="flex gap-3">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-saffron-400" />
               <a href="mailto:president@faiita.co.in" className="hover:text-white">president@faiita.co.in</a>
+            </li>
+          </ul>
+
+          <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-saffron-400">Secretary Office</p>
+          <ul className="mt-2 space-y-2 text-sm text-white/50">
+            <li className="flex gap-3">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-saffron-400" />
+              <span>Sanjeev Walia — SCO-12, 1st Floor, Sector-17/E, Chandigarh 160017 (U.T.)</span>
+            </li>
+            <li className="flex gap-3">
+              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-saffron-400" />
+              <a href="tel:+919814958290" className="hover:text-white">9814958290</a>
             </li>
             <li className="flex gap-3">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-saffron-400" />
