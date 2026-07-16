@@ -35,15 +35,14 @@ export async function POST(req: Request) {
       try {
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
-        await resend.emails.send({
+        const email = {
           // Until faiita.co.in is verified in Resend, only the resend.dev
           // sender works (and delivers solely to the Resend account owner).
           // After DNS verification, set CONTACT_FROM_EMAIL to e.g.
           // "FAIITA Website <forms@faiita.co.in>" for delivery to all inboxes.
           from: process.env.CONTACT_FROM_EMAIL ?? "FAIITA Website <onboarding@resend.dev>",
-          to: recipients,
           replyTo: parsed.data.email,
-          subject: `New contact form submission: ${parsed.data.subject ?? "General enquiry"}`,
+          subject: `New contact form submission: ${parsed.data.subject || "General enquiry"}`,
           text: [
             `Name: ${parsed.data.name}`,
             `Email: ${parsed.data.email}`,
@@ -52,7 +51,20 @@ export async function POST(req: Request) {
             "",
             parsed.data.message,
           ].join("\n"),
-        });
+        };
+
+        // Resend returns errors instead of throwing. A combined send fails
+        // entirely if ANY recipient is disallowed (e.g. Resend test mode only
+        // permits the account owner's address until the domain is verified),
+        // so fall back to per-recipient sends to reach whoever is deliverable.
+        const { error } = await resend.emails.send({ ...email, to: recipients });
+        if (error) {
+          console.error("Contact email (combined) failed:", error);
+          for (const to of recipients) {
+            const single = await resend.emails.send({ ...email, to });
+            if (single.error) console.error(`Contact email to ${to} failed:`, single.error);
+          }
+        }
       } catch (emailError) {
         // Don't fail the request if email delivery fails — the submission is already saved.
         console.error("Contact email failed to send:", emailError);
