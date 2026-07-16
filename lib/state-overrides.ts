@@ -103,7 +103,12 @@ const overrides: Record<string, StateOverride> = {
     secretaryEmail: "secretary@jcta.org.in",
     contactPhone: null,
     websiteUrl: "https://www.jcta.org.in",
-    description: "The Jharkhand Computer Traders Association (JCTA) is the premier association representing the IT trade, dealers, distributors, and system integrators across Jharkhand. Dedicated to uniting the IT fraternity and fostering a collaborative ecosystem, JCTA plays a pivotal role in protecting local traders' interests, resolving business challenges, and bridging them with national bodies. Promoting ethical trade practices, our mission is to drive digital empowerment, technological growth, and support a robust, progressive IT trade ecosystem in the region.",
+    description: [
+      "The Jharkhand Computer Traders Association (JCTA) is the premier association representing the IT trade, dealers, distributors, and system integrators across Jharkhand. Dedicated to uniting the IT fraternity and fostering a collaborative ecosystem, JCTA plays a pivotal role in protecting local traders' interests, resolving business challenges, and bridging them with national bodies. Promoting ethical trade practices, our mission is to drive digital empowerment, technological growth, and support a robust, progressive IT trade ecosystem in the region.",
+      "Our Strength:\n• Unity & Emotional Bonding\n• Collective Celebrations\n• Problem Solving & Support\n• Knowledge Sharing\n• Business Growth & Protection",
+      "Together We Create Impact\n• Microsoft issues resolved across India with FAIITA support.\n• Avita issue resolved across India, ensuring partners received their money.",
+      "Our Mission:\nTo promote the growth of the IT industry in Jharkhand by uniting computer traders, solving industry issues, sharing knowledge, celebrating togetherness, and protecting members' rights and benefits.",
+    ].join("\n\n"),
   },
   // VCMDWA Nagpur — verified details supplied July 2026 (matches seed.ts).
   "maharashtra-vcmdwa": {
@@ -136,10 +141,9 @@ const overrides: Record<string, StateOverride> = {
     memberCount: 350,
     contactEmail: "shailesh@anagencies.in",
     secretaryEmail: "bitabiharitassociation@gmail.com",
-    description: [
+    logoUrl: "/logos/state/bita.jpg",
+    description:
       "The Bihar IT Association (BITA) is the premier association representing IT trade professionals, dealers, distributors, retailers, and system integrators across Bihar. Dedicated to uniting the regional IT fraternity and fostering a collaborative, growth-oriented ecosystem, BITA plays a pivotal role in protecting local traders' interests, resolving key industry and business challenges, and connecting members with national IT bodies. By promoting ethical trade practices, BITA's mission is to drive digital empowerment, technological expansion, and build a robust, progressive IT trade landscape throughout Bihar.",
-      "Contact emails: shailesh@anagencies.in · bitabiharitassociation@gmail.com · shobhit@krishnaagencies.co.in",
-    ].join("\n\n"),
   },
   // AKITDA Kerala — verified details supplied July 2026 (matches seed.ts).
   kerala: {

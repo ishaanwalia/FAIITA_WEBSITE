@@ -69,15 +69,19 @@ const states: StateSeed[] = [
     foundedYear: 2015, memberCount: 350, city: "Patna", mapX: 55, mapY: 33,
     presidentName: "Rajiv Agrawal", contactPhone: "+91 94310 18295",
     contactEmail: "shailesh@anagencies.in", secretaryEmail: "bitabiharitassociation@gmail.com",
-    logoSlug: "bita.webp",
-    // Website is in process — set websiteUrl once BITA shares it.
-    description: [
+    logoSlug: "bita.jpg",
+    // Website is in process — set websiteUrl once BITA shares it. Third
+    // contact: shobhit@krishnaagencies.co.in (not displayed per BITA).
+    description:
       "The Bihar IT Association (BITA) is the premier association representing IT trade professionals, dealers, distributors, retailers, and system integrators across Bihar. Dedicated to uniting the regional IT fraternity and fostering a collaborative, growth-oriented ecosystem, BITA plays a pivotal role in protecting local traders' interests, resolving key industry and business challenges, and connecting members with national IT bodies. By promoting ethical trade practices, BITA's mission is to drive digital empowerment, technological expansion, and build a robust, progressive IT trade landscape throughout Bihar.",
-      "Contact emails: shailesh@anagencies.in · bitabiharitassociation@gmail.com · shobhit@krishnaagencies.co.in",
-    ].join("\n\n"),
   },
   { stateName: "West Bengal", stateCode: "WB", region: "East", associationName: "COMPASS Kolkata", foundedYear: 2014, memberCount: 3100, city: "Kolkata", mapX: 62, mapY: 38, presidentName: "Manish Lunia", contactPhone: "+91 98311 55806", contactEmail: "manish@shreesales.co.in", logoSlug: "compass.webp" },
-  { stateName: "Jharkhand", stateCode: "JH", region: "East", associationName: "Jharkhand Computer Traders Association (JCTA)", foundedYear: 2007, memberCount: 145, city: "Ranchi", mapX: 54, mapY: 38, contactEmail: "president@jcta.org.in", secretaryEmail: "secretary@jcta.org.in", websiteUrl: "https://www.jcta.org.in", logoSlug: "jcta.jpeg", description: "The Jharkhand Computer Traders Association (JCTA) is the premier association representing the IT trade, dealers, distributors, and system integrators across Jharkhand. Dedicated to uniting the IT fraternity and fostering a collaborative ecosystem, JCTA plays a pivotal role in protecting local traders' interests, resolving business challenges, and bridging them with national bodies. Promoting ethical trade practices, our mission is to drive digital empowerment, technological growth, and support a robust, progressive IT trade ecosystem in the region." },
+  { stateName: "Jharkhand", stateCode: "JH", region: "East", associationName: "Jharkhand Computer Traders Association (JCTA)", foundedYear: 2007, memberCount: 145, city: "Ranchi", mapX: 54, mapY: 38, contactEmail: "president@jcta.org.in", secretaryEmail: "secretary@jcta.org.in", websiteUrl: "https://www.jcta.org.in", logoSlug: "jcta.jpeg", description: [
+    "The Jharkhand Computer Traders Association (JCTA) is the premier association representing the IT trade, dealers, distributors, and system integrators across Jharkhand. Dedicated to uniting the IT fraternity and fostering a collaborative ecosystem, JCTA plays a pivotal role in protecting local traders' interests, resolving business challenges, and bridging them with national bodies. Promoting ethical trade practices, our mission is to drive digital empowerment, technological growth, and support a robust, progressive IT trade ecosystem in the region.",
+    "Our Strength:\n• Unity & Emotional Bonding\n• Collective Celebrations\n• Problem Solving & Support\n• Knowledge Sharing\n• Business Growth & Protection",
+    "Together We Create Impact\n• Microsoft issues resolved across India with FAIITA support.\n• Avita issue resolved across India, ensuring partners received their money.",
+    "Our Mission:\nTo promote the growth of the IT industry in Jharkhand by uniting computer traders, solving industry issues, sharing knowledge, celebrating togetherness, and protecting members' rights and benefits.",
+  ].join("\n\n") },
   { stateName: "Odisha", stateCode: "OR", region: "East", associationName: "Information Technology Association Of Orissa (ITAO)", foundedYear: 2016, memberCount: 890, city: "Bhubaneswar", mapX: 55, mapY: 47, presidentName: "Abhinash Patnayak", contactPhone: "+91 98610 63215", contactEmail: "president@itaoodisha.org", logoSlug: "itao.webp" },
   // NECTA covers the whole North-East (Sikkim + the seven sister states) as
   // one unit, headquartered in Guwahati, Assam. There is no separate
