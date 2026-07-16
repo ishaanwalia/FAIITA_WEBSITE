@@ -29,14 +29,18 @@ export async function POST(req: Request) {
     // CONTACT_TO_EMAIL (comma-separated) in the environment to override.
     const recipients = process.env.CONTACT_TO_EMAIL
       ? process.env.CONTACT_TO_EMAIL.split(",").map((e) => e.trim())
-      : ["president@faiita.co.in", "secretary@faiita.co.in"];
+      : ["secretary@faiita.co.in", "president@faiita.co.in", "ishaan.walia.148@gmail.com"];
 
     if (process.env.RESEND_API_KEY) {
       try {
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
-          from: "FAIITA Website <onboarding@resend.dev>",
+          // Until faiita.co.in is verified in Resend, only the resend.dev
+          // sender works (and delivers solely to the Resend account owner).
+          // After DNS verification, set CONTACT_FROM_EMAIL to e.g.
+          // "FAIITA Website <forms@faiita.co.in>" for delivery to all inboxes.
+          from: process.env.CONTACT_FROM_EMAIL ?? "FAIITA Website <onboarding@resend.dev>",
           to: recipients,
           replyTo: parsed.data.email,
           subject: `New contact form submission: ${parsed.data.subject ?? "General enquiry"}`,
