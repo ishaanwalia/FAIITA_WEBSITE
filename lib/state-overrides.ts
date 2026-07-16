@@ -135,6 +135,25 @@ const overrides: Record<string, StateOverride> = {
     websiteUrl: "https://www.upcdwa.com",
     description: "The Uttar Pradesh Computer Dealers Welfare Association (UPCDWA) is the premier industry body representing IT hardware and software dealers, retailers, and distributors across the state of Uttar Pradesh. Operating under the national umbrella of the Federation of All India IT Associations (FAIITA) since 2014, the association unites over 550 members to give local IT businesses a collective voice.",
   },
+  // BITOAA Bhopal — verified details supplied July 2026 (matches seed.ts).
+  "madhya-pradesh": {
+    foundedYear: 2007,
+    memberCount: 260,
+    contactEmail: "president@bitoaa.com",
+    secretaryEmail: "secretary.bitoaa@gmail.com",
+    websiteUrl: "https://bitoaa.com",
+    description: [
+      "“Grow Your Business Through Relations”",
+      "At the outset, we are pleased to introduce BITOAA (Bhoj Information Technology & Office Automation Dealers Association, Bhopal), a prestigious association representing Information Technology, Security Systems, Power Systems, and Office Automation dealers in Bhopal for the past 19 years.",
+      "BITOAA was established with the objective of bringing all professionals and businesses from the Information Technology, Security Systems, Power Systems, and Office Automation sectors under one umbrella. Over the years, the association has grown significantly and currently boasts a strong membership base of more than 256 members. The primary mission of BITOAA is to promote ethical business practices and ensure the delivery of genuine products, superior quality, and timely services to customers.",
+      "The association organizes four General Body Meetings annually to encourage collaboration, knowledge sharing, and business development among its members. BITOAA continuously strives to keep its members informed about the latest industry trends, technologies, and market opportunities.",
+      "In addition to its business-focused initiatives, BITOAA actively fulfills its social responsibilities through various community welfare programs, including:\n• Health check-up camps for members and their families.\n• Blood donation drives.\n• Contributions and support to old age homes and orphanages.\n• Tree plantation campaigns on the occasion of World Environment Day.",
+      "To strengthen the bond among its members, BITOAA regularly organizes family-oriented events such as MILAP gatherings and family picnics twice a year. The association also promotes a healthy and competitive spirit by conducting sports events, including cricket tournaments and badminton competitions.",
+      "For the year 2026–2027, BITOAA is inviting sponsorship opportunities that offer mutual benefits to both sponsors and members. Sponsors will receive extensive visibility and engagement opportunities through various association events and activities. Detailed sponsorship proposals and event schedules will be shared with interested organizations in due course.",
+      "The BITOAA Event Team is committed to ensuring that all sponsors receive maximum value through enhanced visibility, brand recognition, market reach, sales opportunities, and direct proximity to end users and business decision-makers.",
+      "We look forward to your valuable support and contribution in helping us continue our journey of excellence and community development.",
+    ].join("\n\n"),
+  },
   // NMITA Navi Mumbai — verified details supplied July 2026 (matches seed.ts).
   "maharashtra-nmit": {
     associationName: "Navi Mumbai IT Association (NMITA)",

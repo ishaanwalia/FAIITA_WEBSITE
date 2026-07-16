@@ -89,7 +89,26 @@ const states: StateSeed[] = [
   { stateName: "North East", stateCode: "AS", region: "East", associationName: "North East Computer Traders Association (NECTA)", foundedYear: 2016, memberCount: 410, city: "Guwahati", mapX: 70, mapY: 29, presidentName: "Ranjan Kumar Das", contactPhone: "+91 94351 18986", contactEmail: "president@necta.co.in", logoSlug: "necta.png", address: "Guwahati, Assam", description: "North East Computer Traders Association (NECTA) represents IT channel partners, retailers and distributors across the entire North-East — Sikkim, Assam, Arunachal Pradesh, Nagaland, Manipur, Mizoram, Tripura and Meghalaya — headquartered in Guwahati and working under the FAIITA umbrella since 2016." },
 
   // — Central —
-  { stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Bhoj Information Technology & Office Automation Dealers Association (BITOAA)", foundedYear: 2015, memberCount: 1980, city: "Bhopal", mapX: 38, mapY: 41, presidentName: "Manish Gupta", contactPhone: "+91 98260 99941", contactEmail: "president.bitoaa@gmail.com", logoSlug: "biotaa.png" },
+  {
+    stateName: "Madhya Pradesh", stateCode: "MP", region: "Central",
+    associationName: "Bhoj Information Technology & Office Automation Dealers Association (BITOAA)",
+    foundedYear: 2007, memberCount: 260, city: "Bhopal", mapX: 38, mapY: 41,
+    presidentName: "Manish Gupta", contactPhone: "+91 98260 99941",
+    // President also uses president.bitoaa@gmail.com (alternate address).
+    contactEmail: "president@bitoaa.com", secretaryEmail: "secretary.bitoaa@gmail.com",
+    websiteUrl: "https://bitoaa.com", logoSlug: "biotaa.png",
+    description: [
+      "“Grow Your Business Through Relations”",
+      "At the outset, we are pleased to introduce BITOAA (Bhoj Information Technology & Office Automation Dealers Association, Bhopal), a prestigious association representing Information Technology, Security Systems, Power Systems, and Office Automation dealers in Bhopal for the past 19 years.",
+      "BITOAA was established with the objective of bringing all professionals and businesses from the Information Technology, Security Systems, Power Systems, and Office Automation sectors under one umbrella. Over the years, the association has grown significantly and currently boasts a strong membership base of more than 256 members. The primary mission of BITOAA is to promote ethical business practices and ensure the delivery of genuine products, superior quality, and timely services to customers.",
+      "The association organizes four General Body Meetings annually to encourage collaboration, knowledge sharing, and business development among its members. BITOAA continuously strives to keep its members informed about the latest industry trends, technologies, and market opportunities.",
+      "In addition to its business-focused initiatives, BITOAA actively fulfills its social responsibilities through various community welfare programs, including:\n• Health check-up camps for members and their families.\n• Blood donation drives.\n• Contributions and support to old age homes and orphanages.\n• Tree plantation campaigns on the occasion of World Environment Day.",
+      "To strengthen the bond among its members, BITOAA regularly organizes family-oriented events such as MILAP gatherings and family picnics twice a year. The association also promotes a healthy and competitive spirit by conducting sports events, including cricket tournaments and badminton competitions.",
+      "For the year 2026–2027, BITOAA is inviting sponsorship opportunities that offer mutual benefits to both sponsors and members. Sponsors will receive extensive visibility and engagement opportunities through various association events and activities. Detailed sponsorship proposals and event schedules will be shared with interested organizations in due course.",
+      "The BITOAA Event Team is committed to ensuring that all sponsors receive maximum value through enhanced visibility, brand recognition, market reach, sales opportunities, and direct proximity to end users and business decision-makers.",
+      "We look forward to your valuable support and contribution in helping us continue our journey of excellence and community development.",
+    ].join("\n\n"),
+  },
   { slug: "madhya-pradesh-mpctas", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "M.P. Computer Telecom Association Samiti (MPCTAS)", memberCount: 0, city: "Indore", mapX: 38, mapY: 41, presidentName: "Rakesh Daga", contactPhone: "+91 93032 88083", contactEmail: "indoredb@gmail.com", logoSlug: "mpcta.jpg" },
   { slug: "madhya-pradesh-mcda", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Mahakaushal Computer Dealer's Association (MCDA)", memberCount: 0, city: "Jabalpur", mapX: 38, mapY: 41, presidentName: "B.L. Patel", contactPhone: "+91 93007 64155", contactEmail: "mcdajbp2003@gmail.com", logoSlug: "mcda.webp" },
 
