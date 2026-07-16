@@ -130,6 +130,17 @@ const overrides: Record<string, StateOverride> = {
     websiteUrl: "https://www.upcdwa.com",
     description: "The Uttar Pradesh Computer Dealers Welfare Association (UPCDWA) is the premier industry body representing IT hardware and software dealers, retailers, and distributors across the state of Uttar Pradesh. Operating under the national umbrella of the Federation of All India IT Associations (FAIITA) since 2014, the association unites over 550 members to give local IT businesses a collective voice.",
   },
+  // BITA Bihar — verified details supplied July 2026 (matches seed.ts).
+  bihar: {
+    foundedYear: 2015,
+    memberCount: 350,
+    contactEmail: "shailesh@anagencies.in",
+    secretaryEmail: "bitabiharitassociation@gmail.com",
+    description: [
+      "The Bihar IT Association (BITA) is the premier association representing IT trade professionals, dealers, distributors, retailers, and system integrators across Bihar. Dedicated to uniting the regional IT fraternity and fostering a collaborative, growth-oriented ecosystem, BITA plays a pivotal role in protecting local traders' interests, resolving key industry and business challenges, and connecting members with national IT bodies. By promoting ethical trade practices, BITA's mission is to drive digital empowerment, technological expansion, and build a robust, progressive IT trade landscape throughout Bihar.",
+      "Contact emails: shailesh@anagencies.in · bitabiharitassociation@gmail.com · shobhit@krishnaagencies.co.in",
+    ].join("\n\n"),
+  },
   // AKITDA Kerala — verified details supplied July 2026 (matches seed.ts).
   kerala: {
     foundedYear: 2004,

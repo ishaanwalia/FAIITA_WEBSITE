@@ -63,7 +63,19 @@ const states: StateSeed[] = [
   { stateName: "Uttar Pradesh", stateCode: "UP", region: "North", associationName: "Uttar Pradesh Computer Dealers Welfare Association (UPCDWA)", foundedYear: 2014, memberCount: 550, city: "Lucknow", mapX: 46, mapY: 30, contactEmail: "president@upcdwa.com", secretaryEmail: "secretary@upcdwa.com", websiteUrl: "https://www.upcdwa.com", logoSlug: "upcdwa.jpeg", description: "The Uttar Pradesh Computer Dealers Welfare Association (UPCDWA) is the premier industry body representing IT hardware and software dealers, retailers, and distributors across the state of Uttar Pradesh. Operating under the national umbrella of the Federation of All India IT Associations (FAIITA) since 2014, the association unites over 550 members to give local IT businesses a collective voice." },
 
   // — East —
-  { stateName: "Bihar", stateCode: "BR", region: "East", associationName: "Bihar IT Association (BITA)", foundedYear: 2015, memberCount: 1600, city: "Patna", mapX: 55, mapY: 33, presidentName: "Rajiv Agrawal", contactPhone: "+91 94310 18295", contactEmail: "rajivagrawal1989@gmail.com", logoSlug: "bita.webp" },
+  {
+    stateName: "Bihar", stateCode: "BR", region: "East",
+    associationName: "Bihar IT Association (BITA)",
+    foundedYear: 2015, memberCount: 350, city: "Patna", mapX: 55, mapY: 33,
+    presidentName: "Rajiv Agrawal", contactPhone: "+91 94310 18295",
+    contactEmail: "shailesh@anagencies.in", secretaryEmail: "bitabiharitassociation@gmail.com",
+    logoSlug: "bita.webp",
+    // Website is in process — set websiteUrl once BITA shares it.
+    description: [
+      "The Bihar IT Association (BITA) is the premier association representing IT trade professionals, dealers, distributors, retailers, and system integrators across Bihar. Dedicated to uniting the regional IT fraternity and fostering a collaborative, growth-oriented ecosystem, BITA plays a pivotal role in protecting local traders' interests, resolving key industry and business challenges, and connecting members with national IT bodies. By promoting ethical trade practices, BITA's mission is to drive digital empowerment, technological expansion, and build a robust, progressive IT trade landscape throughout Bihar.",
+      "Contact emails: shailesh@anagencies.in · bitabiharitassociation@gmail.com · shobhit@krishnaagencies.co.in",
+    ].join("\n\n"),
+  },
   { stateName: "West Bengal", stateCode: "WB", region: "East", associationName: "COMPASS Kolkata", foundedYear: 2014, memberCount: 3100, city: "Kolkata", mapX: 62, mapY: 38, presidentName: "Manish Lunia", contactPhone: "+91 98311 55806", contactEmail: "manish@shreesales.co.in", logoSlug: "compass.webp" },
   { stateName: "Jharkhand", stateCode: "JH", region: "East", associationName: "Jharkhand Computer Traders Association (JCTA)", foundedYear: 2007, memberCount: 145, city: "Ranchi", mapX: 54, mapY: 38, contactEmail: "president@jcta.org.in", secretaryEmail: "secretary@jcta.org.in", websiteUrl: "https://www.jcta.org.in", logoSlug: "jcta.jpeg", description: "The Jharkhand Computer Traders Association (JCTA) is the premier association representing the IT trade, dealers, distributors, and system integrators across Jharkhand. Dedicated to uniting the IT fraternity and fostering a collaborative ecosystem, JCTA plays a pivotal role in protecting local traders' interests, resolving business challenges, and bridging them with national bodies. Promoting ethical trade practices, our mission is to drive digital empowerment, technological growth, and support a robust, progressive IT trade ecosystem in the region." },
   { stateName: "Odisha", stateCode: "OR", region: "East", associationName: "Information Technology Association Of Orissa (ITAO)", foundedYear: 2016, memberCount: 890, city: "Bhubaneswar", mapX: 55, mapY: 47, presidentName: "Abhinash Patnayak", contactPhone: "+91 98610 63215", contactEmail: "president@itaoodisha.org", logoSlug: "itao.webp" },
