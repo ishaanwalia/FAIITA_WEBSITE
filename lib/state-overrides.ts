@@ -135,6 +135,21 @@ const overrides: Record<string, StateOverride> = {
     websiteUrl: "https://www.upcdwa.com",
     description: "The Uttar Pradesh Computer Dealers Welfare Association (UPCDWA) is the premier industry body representing IT hardware and software dealers, retailers, and distributors across the state of Uttar Pradesh. Operating under the national umbrella of the Federation of All India IT Associations (FAIITA) since 2014, the association unites over 550 members to give local IT businesses a collective voice.",
   },
+  // NMITA Navi Mumbai — verified details supplied July 2026 (matches seed.ts).
+  "maharashtra-nmit": {
+    associationName: "Navi Mumbai IT Association (NMITA)",
+    foundedYear: 2025,
+    memberCount: 100,
+    contactEmail: "tssvision1@gmail.com",
+    secretaryEmail: "deepak.manodara@gmail.com",
+    logoUrl: "/logos/state/nmit.png",
+    description: [
+      "The Navi Mumbai IT Association (NMITA) is a prominent regional tech coalition established in 2025 to support the rapidly growing digital ecosystem in Navi Mumbai. Spurred by major infrastructure developments like the Navi Mumbai International Airport, NMITA serves as the unified voice for the city's expanding information technology sector.",
+      "Formed just a year ago, the association has already brought together a powerful network of 100+ members, ranging from early-stage tech startups to established software houses, system integrators, and IT consultants.",
+      "The primary objective is to cultivate Navi Mumbai into a premier destination for tech entrepreneurship, bridging the gap between local companies, industry mentors, and institutional giants like the WTC Navi Mumbai.",
+      "NMITA actively hosts knowledge-sharing sessions, fosters internal B2B referral networks, and interfaces with local municipal bodies to ensure robust IT infrastructure, stable power, and favorable tech policies.",
+    ].join("\n\n"),
+  },
   // BITA Bihar — verified details supplied July 2026 (matches seed.ts).
   bihar: {
     foundedYear: 2015,
