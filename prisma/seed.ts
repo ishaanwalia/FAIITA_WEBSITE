@@ -66,7 +66,7 @@ const states: StateSeed[] = [
   {
     stateName: "Bihar", stateCode: "BR", region: "East",
     associationName: "Bihar IT Association (BITA)",
-    foundedYear: 2015, memberCount: 350, city: "Patna", mapX: 55, mapY: 33,
+    foundedYear: 1995, memberCount: 350, city: "Patna", mapX: 55, mapY: 33,
     presidentName: "Rajiv Agrawal", contactPhone: "+91 94310 18295",
     contactEmail: "shailesh@anagencies.in", secretaryEmail: "bitabiharitassociation@gmail.com",
     logoSlug: "bita.jpg",

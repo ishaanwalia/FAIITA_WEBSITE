@@ -171,7 +171,7 @@ const overrides: Record<string, StateOverride> = {
   },
   // BITA Bihar — verified details supplied July 2026 (matches seed.ts).
   bihar: {
-    foundedYear: 2015,
+    foundedYear: 1995,
     memberCount: 350,
     contactEmail: "shailesh@anagencies.in",
     secretaryEmail: "bitabiharitassociation@gmail.com",
