@@ -193,6 +193,26 @@ const overrides: Record<string, StateOverride> = {
       "Websites: www.akitda.co.in · www.akitda.org · www.akitda.in",
     ].join("\n\n"),
   },
+  // COMPASS West Bengal — verified details supplied July 2026 (matches seed.ts).
+  "west-bengal": {
+    associationName: "Computer Association of Eastern India (COMPASS)",
+    foundedYear: 1994,
+    memberCount: 457,
+    presidentName: null,
+    contactEmail: "crown@crown.org.in",
+    secretaryEmail: "info@vikasinfo.in",
+    contactPhone: null,
+    websiteUrl: "https://www.compassindia.com/",
+    logoUrl: "/logos/state/compass.png",
+    description: [
+      "COMPASS – Powering the IT Ecosystem of Eastern India",
+      "In the early 1990s, a group of twelve visionary IT dealers gathered at 25 Ganesh Chandra Avenue, Kolkata, with a shared conviction — that the IT industry in Eastern India needed a unified voice. That conversation sparked a movement. By 1994, nineteen IT entrepreneurs assembled at the Lynton Hotel and gave shape to what would become one of the most influential IT bodies in the region. On 9th June 1994, the Computer Association of Eastern India — COMPASS — was formally registered under the Companies Act.",
+      "Over three decades later, COMPASS stands tall as the nodal agency for IT trade and industry development in Eastern India, with a membership base of over 457 IT entrepreneurs spread across the region, all anchored by its headquarters in Kolkata.",
+      "COMPASS was built on four founding pillars: to exchange ideas for a better tomorrow, to protect the rights and interests of its members, to collectively engage with statutory authorities, and to spread IT awareness across Eastern India. These values continue to drive the association today.",
+      "As a non-profit and proactive industry body, COMPASS works closely with government on policy matters, advises on industry issues, and consistently acts as a facilitator and catalyst for growth. Through advisory, consultative, and networking services, it has helped create an ecosystem where IT businesses can thrive — enhancing efficiency, competitiveness, and expanding market opportunities for its members.",
+      "From a small gathering three decades ago to becoming the most important IT forum in Eastern India, COMPASS continues its mission — building a stronger, smarter, and more connected digital future for the region.",
+    ].join("\n\n"),
+  },
   // PACT Punjab — verified details supplied July 2026 (matches seed.ts).
   punjab: {
     logoUrl: "/logos/state/pact.webp",

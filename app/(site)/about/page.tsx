@@ -7,6 +7,7 @@ import { GradientMesh } from "@/components/common/GradientMesh";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
+import { withExtraStates } from "@/lib/extra-states";
 import { applyStateOverrides, excludeRemovedStates } from "@/lib/state-overrides";
 
 export const metadata: Metadata = {
@@ -25,10 +26,12 @@ const hubLinks = [
 ];
 
 export default async function AboutPage() {
-  const states = excludeRemovedStates(
-    await prisma.stateAssociation.findMany({
-      orderBy: { stateName: "asc" },
-    })
+  const states = withExtraStates(
+    excludeRemovedStates(
+      await prisma.stateAssociation.findMany({
+        orderBy: { stateName: "asc" },
+      })
+    )
   ).map(applyStateOverrides);
 
   const mapPoints = states.map((s) => ({

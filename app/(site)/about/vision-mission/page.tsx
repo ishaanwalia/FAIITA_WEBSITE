@@ -20,6 +20,7 @@ import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { prisma } from "@/lib/prisma";
+import { withExtraStates } from "@/lib/extra-states";
 import { applyStateOverrides, excludeRemovedStates } from "@/lib/state-overrides";
 import { normalizeZone } from "@/lib/utils";
 
@@ -126,8 +127,8 @@ const initiatives = [
 ];
 
 export default async function VisionMissionPage() {
-  const states = excludeRemovedStates(
-    await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } })
+  const states = withExtraStates(
+    excludeRemovedStates(await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } }))
   ).map(applyStateOverrides);
   const mapPoints = states.map((s) => ({
     id: s.id,

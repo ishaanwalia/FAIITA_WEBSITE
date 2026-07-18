@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Building2, Calendar, Globe, Mail, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { findExtraState, withExtraStates } from "@/lib/extra-states";
 import { applyStateOverrides, excludeRemovedStates, isRemovedStateSlug } from "@/lib/state-overrides";
 import { normalizeZone } from "@/lib/utils";
 import { LogoImage } from "@/components/common/LogoImage";
@@ -11,14 +12,14 @@ export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const states = await prisma.stateAssociation.findMany({ select: { slug: true } });
-  return excludeRemovedStates(states).map((s) => ({ slug: s.slug }));
+  return withExtraStates(excludeRemovedStates(states)).map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const state = isRemovedStateSlug(slug)
     ? null
-    : await prisma.stateAssociation.findUnique({ where: { slug } });
+    : (await prisma.stateAssociation.findUnique({ where: { slug } })) ?? findExtraState(slug);
   if (!state) return { title: "State Association" };
   return {
     title: state.stateName,
@@ -30,7 +31,7 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const row = isRemovedStateSlug(slug)
     ? null
-    : await prisma.stateAssociation.findUnique({ where: { slug } });
+    : (await prisma.stateAssociation.findUnique({ where: { slug } })) ?? findExtraState(slug);
 
   if (!row) notFound();
   const state = applyStateOverrides(row);

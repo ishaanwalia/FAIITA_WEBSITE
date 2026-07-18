@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/common/PageHero";
 import { StateAssociationsGrid } from "@/components/about/StateAssociationsGrid";
 import { prisma } from "@/lib/prisma";
+import { withExtraStates } from "@/lib/extra-states";
 import { applyStateOverrides, excludeRemovedStates } from "@/lib/state-overrides";
 import { normalizeZone } from "@/lib/utils";
 
@@ -13,8 +14,8 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function StateAssociationsPage() {
-  const states = excludeRemovedStates(
-    await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } })
+  const states = withExtraStates(
+    excludeRemovedStates(await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } }))
   ).map((s) => ({ ...applyStateOverrides(s), region: normalizeZone(s.region) }));
 
   return (

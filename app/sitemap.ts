@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { withExtraStates } from "@/lib/extra-states";
 import { memberAssociations } from "@/lib/member-associations";
 import { prisma } from "@/lib/prisma";
 import { excludeRemovedStates } from "@/lib/state-overrides";
@@ -35,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes,
-    ...excludeRemovedStates(states).map((s) => ({ url: `${siteUrl}/about/state-associations/${s.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
+    ...withExtraStates(excludeRemovedStates(states)).map((s) => ({ url: `${siteUrl}/about/state-associations/${s.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...memberAssociations.filter((m) => !m.isDemo).map((m) => ({ url: `${siteUrl}/about/member-associations/${m.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...news.map((n) => ({ url: `${siteUrl}/resources/news/${n.slug}`, lastModified: n.publishedAt, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...events.map((e) => ({ url: `${siteUrl}/resources/events/${e.slug}`, lastModified: e.startDate, changeFrequency: "monthly" as const, priority: 0.5 })),

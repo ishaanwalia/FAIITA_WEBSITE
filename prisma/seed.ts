@@ -44,7 +44,8 @@ type StateSeed = {
 };
 
 // Authoritative list of FAIITA state associations — Faiita_President_XL_2025 27.xlsx
-// (31 associations; states like Maharashtra, Delhi, MP and Rajasthan have several).
+// (31 associations per the Excel, plus AISIE added July 2026; states like
+// Maharashtra, Delhi, MP and Rajasthan have several).
 // Some states have no dedicated state association, so a member association is
 // recognised as the state association — hence multiple entries share a state.
 // x/y are relative (0-100) positions on the illustrated India map viewBox.
@@ -75,7 +76,23 @@ const states: StateSeed[] = [
     description:
       "The Bihar IT Association (BITA) is the premier association representing IT trade professionals, dealers, distributors, retailers, and system integrators across Bihar. Dedicated to uniting the regional IT fraternity and fostering a collaborative, growth-oriented ecosystem, BITA plays a pivotal role in protecting local traders' interests, resolving key industry and business challenges, and connecting members with national IT bodies. By promoting ethical trade practices, BITA's mission is to drive digital empowerment, technological expansion, and build a robust, progressive IT trade landscape throughout Bihar.",
   },
-  { stateName: "West Bengal", stateCode: "WB", region: "East", associationName: "COMPASS Kolkata", foundedYear: 2014, memberCount: 3100, city: "Kolkata", mapX: 62, mapY: 38, presidentName: "Manish Lunia", contactPhone: "+91 98311 55806", contactEmail: "manish@shreesales.co.in", logoSlug: "compass.webp" },
+  {
+    stateName: "West Bengal", stateCode: "WB", region: "East",
+    associationName: "Computer Association of Eastern India (COMPASS)",
+    // COMPASS's own about text says it was formally registered 9 June 1994.
+    foundedYear: 1994, memberCount: 457, city: "Kolkata", mapX: 62, mapY: 38,
+    presidentName: "Manish Lunia", contactPhone: "+91 98311 55806",
+    contactEmail: "crown@crown.org.in", secretaryEmail: "info@vikasinfo.in",
+    websiteUrl: "https://www.compassindia.com/", logoSlug: "compass.png",
+    description: [
+      "COMPASS – Powering the IT Ecosystem of Eastern India",
+      "In the early 1990s, a group of twelve visionary IT dealers gathered at 25 Ganesh Chandra Avenue, Kolkata, with a shared conviction — that the IT industry in Eastern India needed a unified voice. That conversation sparked a movement. By 1994, nineteen IT entrepreneurs assembled at the Lynton Hotel and gave shape to what would become one of the most influential IT bodies in the region. On 9th June 1994, the Computer Association of Eastern India — COMPASS — was formally registered under the Companies Act.",
+      "Over three decades later, COMPASS stands tall as the nodal agency for IT trade and industry development in Eastern India, with a membership base of over 457 IT entrepreneurs spread across the region, all anchored by its headquarters in Kolkata.",
+      "COMPASS was built on four founding pillars: to exchange ideas for a better tomorrow, to protect the rights and interests of its members, to collectively engage with statutory authorities, and to spread IT awareness across Eastern India. These values continue to drive the association today.",
+      "As a non-profit and proactive industry body, COMPASS works closely with government on policy matters, advises on industry issues, and consistently acts as a facilitator and catalyst for growth. Through advisory, consultative, and networking services, it has helped create an ecosystem where IT businesses can thrive — enhancing efficiency, competitiveness, and expanding market opportunities for its members.",
+      "From a small gathering three decades ago to becoming the most important IT forum in Eastern India, COMPASS continues its mission — building a stronger, smarter, and more connected digital future for the region.",
+    ].join("\n\n"),
+  },
   { stateName: "Jharkhand", stateCode: "JH", region: "East", associationName: "Jharkhand Computer Traders Association (JCTA)", foundedYear: 2007, memberCount: 145, city: "Ranchi", mapX: 54, mapY: 38, contactEmail: "president@jcta.org.in", secretaryEmail: "secretary@jcta.org.in", websiteUrl: "https://www.jcta.org.in", logoSlug: "jcta.jpeg", description: [
     "The Jharkhand Computer Traders Association (JCTA) is the premier association representing the IT trade, dealers, distributors, and system integrators across Jharkhand. Dedicated to uniting the IT fraternity and fostering a collaborative ecosystem, JCTA plays a pivotal role in protecting local traders' interests, resolving business challenges, and bridging them with national bodies. Promoting ethical trade practices, our mission is to drive digital empowerment, technological growth, and support a robust, progressive IT trade ecosystem in the region.",
     "Our Strength:\n• Unity & Emotional Bonding\n• Collective Celebrations\n• Problem Solving & Support\n• Knowledge Sharing\n• Business Growth & Protection",
@@ -179,6 +196,23 @@ const states: StateSeed[] = [
     ].join("\n\n"),
   },
   { stateName: "Tamil Nadu", stateCode: "TN", region: "South", associationName: "Confederation Of IT Associations (CONFED ITA)", foundedYear: 2014, memberCount: 3800, city: "Chennai", mapX: 39, mapY: 84, presidentName: "Vasudevan", contactPhone: "+91 99444 40980", contactEmail: "president@confedita.com", logoSlug: "confed.webp", description: "Confederation Of IT Associations (CONFED ITA) represents IT channel partners, retailers and distributors across Tamil Nadu and Puducherry, working under the FAIITA umbrella since 2014." },
+
+  // AISIE — all-India manufacturers' body (added July 2026), headquartered in
+  // New Delhi, so it sits in the Delhi cluster.
+  {
+    slug: "aisie", stateName: "Delhi", stateCode: "DL", region: "North",
+    associationName: "All India Small IT & Electronics Manufacturers Association (AISIE)",
+    foundedYear: 2025, memberCount: 500, city: "New Delhi", mapX: 37, mapY: 25,
+    contactEmail: "president@aisie.org", secretaryEmail: "secretariat@aisie.org",
+    websiteUrl: "https://www.aisie.org", logoSlug: "aisie.png",
+    // Registered office per aisie.org.
+    address: "1105, 11th Floor, KLJ Towers North, Netaji Subhash Place, Delhi 110034",
+    description: [
+      "The All-India Small IT & Electronics Manufacturers Association (AISIE) is a national industry body representing MSMEs engaged in the IT and electronics manufacturing sector. AISIE is dedicated to strengthening domestic manufacturing under the Make in India and Digital India initiatives by promoting innovation, skill development, regulatory compliance, government procurement opportunities, and global market access. The Association serves as a collaborative platform for manufacturers, suppliers, and technology enterprises, enabling sustainable growth, industry collaboration, and enhanced competitiveness.",
+      "Our Vision:\nTo build a globally competitive, innovation-driven, and self-reliant IT & Electronics manufacturing ecosystem that empowers MSMEs and contributes to India's manufacturing excellence.",
+      "Our Mission:\n• Promote Make in India through indigenous manufacturing and local value addition.\n• Support MSMEs with compliance guidance, training, and business opportunities.\n• Enhance market access through government procurement, trade fairs, and international collaborations.\n• Encourage quality, innovation, and sustainable manufacturing practices.\n• Foster collaboration among manufacturers, suppliers, and industry stakeholders.",
+    ].join("\n\n"),
+  },
 ];
 
 // Verified member associations live in lib/member-associations.ts — the
