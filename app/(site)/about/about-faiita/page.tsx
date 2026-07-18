@@ -21,6 +21,7 @@ const gbComposition = [
   { role: "Chairman", note: "Presides over the Governing Body, steering strategy and continuity" },
   { role: "Advisor", note: "Past leadership guiding the Governing Body with institutional wisdom" },
   { role: "Senior Vice President", note: "The President's right hand — second-in-command, ready to lead in his stead" },
+  { role: "Vice President", note: "Supports national leadership and champions member programs across regions" },
   { role: "Secretary", note: "Day-to-day administration and correspondence" },
   { role: "Joint Secretary", note: "Supports the Secretary across administration and member coordination" },
   { role: "Treasurer", note: "Financial planning and membership dues" },

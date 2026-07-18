@@ -6,21 +6,20 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Leadership",
-  description: "Meet FAIITA's current and past national governing bodies.",
+  description: "Meet FAIITA's national Governing Body 2025–27.",
 };
 
 export const revalidate = 3600;
 
-// Office bearers lead the current GB grid in this order; GB Members follow in
-// their DB order. The grid gives the first two tiles (President, Chairman) the
-// larger card spans — nobody else.
+// Office bearers lead the GB grid in this order; GB Members follow,
+// alphabetically by name.
 const OFFICE_ORDER = [
   "President",
   "Chairman",
   "Advisor, PP",
+  "Secretary",
   "Senior Vice President",
   "Vice President",
-  "Secretary",
   "Treasurer",
   "Joint Secretary",
   "Joint Treasurer",
@@ -33,7 +32,7 @@ const officeRank = (role: string) => {
 export default async function LeadershipPage() {
   const allLeaders = (
     await prisma.leader.findMany({
-      where: { category: "national" },
+      where: { category: "national", isCurrent: true },
       orderBy: { order: "asc" },
     })
   )
@@ -48,22 +47,22 @@ export default async function LeadershipPage() {
     .map((l) => (l.isCurrent && l.name === "Devesh Rastogi" ? { ...l, role: "Chairman" } : l));
 
   // Members not yet in the DB are appended from the code-side profile file.
+  // GB Members (equal office rank) are ordered alphabetically by name.
   const current = [...allLeaders.filter((l) => l.isCurrent), ...extraCurrentLeaders].sort(
-    (a, b) => officeRank(a.role) - officeRank(b.role)
+    (a, b) => officeRank(a.role) - officeRank(b.role) || a.name.localeCompare(b.name)
   );
-  const past = allLeaders.filter((l) => !l.isCurrent);
 
   return (
     <>
       <PageHero
         eyebrow="About / Leadership"
         title="National Leadership"
-        description="FAIITA's Governing Body (GB) serves a two-year term. Browse the current GB, or look back at the previous term below."
+        description="FAIITA's Governing Body (GB) serves a two-year term. Meet the office bearers and GB members leading the federation through 2025–27."
       />
 
       <section className="bg-background py-24">
         <div className="container-page">
-          <Leadership current={current} past={past} />
+          <Leadership leaders={current} />
         </div>
       </section>
     </>

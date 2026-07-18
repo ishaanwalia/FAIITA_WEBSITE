@@ -39,23 +39,30 @@ function initials(name: string) {
   return name.split(" ").map((n) => n[0]).slice(0, 2).join("");
 }
 
-export function Leadership({
-  current,
-  past,
-}: {
-  current: LeaderData[];
-  past: LeaderData[];
-}) {
-  const [tab, setTab] = useState<"current" | "past">("current");
-  const activeList = tab === "current" ? current : past;
-  const [featuredId, setFeaturedId] = useState<string | undefined>(current[0]?.id);
-  const featured = activeList.find((l) => l.id === featuredId) ?? activeList[0];
-  const spotlightRef = useRef<HTMLDivElement>(null);
+// Desktop (lg+) rows, driven by role: President full-width; Chairman/Advisor/
+// Secretary then Sr VP/VP/Treasurer as rows of three; Joint Secretary + Joint
+// Treasurer as a centered pair the same size; GB Members four per row.
+const ROW_OF_THREE = [
+  "Chairman",
+  "Advisor, PP",
+  "Secretary",
+  "Senior Vice President",
+  "Vice President",
+  "Treasurer",
+];
 
-  const selectTab = (t: "current" | "past") => {
-    setTab(t);
-    setFeaturedId((t === "current" ? current : past)[0]?.id);
-  };
+function gridSpan(role: string) {
+  if (role === "President") return "col-span-2 row-span-2 lg:col-span-12";
+  if (ROW_OF_THREE.includes(role)) return "lg:col-span-4";
+  if (role === "Joint Secretary") return "lg:col-span-4 lg:col-start-3";
+  if (role === "Joint Treasurer") return "lg:col-span-4";
+  return "lg:col-span-3";
+}
+
+export function Leadership({ leaders }: { leaders: LeaderData[] }) {
+  const [featuredId, setFeaturedId] = useState<string | undefined>(leaders[0]?.id);
+  const featured = leaders.find((l) => l.id === featuredId) ?? leaders[0];
+  const spotlightRef = useRef<HTMLDivElement>(null);
 
   // The spotlight card sits above the grid, so selecting a tile scrolls back
   // up to it — otherwise the selection appears to do nothing.
@@ -66,19 +73,10 @@ export function Leadership({
 
   return (
     <div>
-      <div className="mx-auto flex w-fit gap-1 rounded-full border border-border bg-secondary/60 p-1">
-        {(["current", "past"] as const).map((t) => (
-          <button
-            key={t}
-            onClick={() => selectTab(t)}
-            className={cn(
-              "rounded-full px-5 py-2 text-sm font-semibold transition-colors",
-              tab === t ? "bg-navy-700 text-white" : "text-muted-foreground hover:text-navy-700"
-            )}
-          >
-            {t === "current" ? `Current GB (${current[0]?.term ?? ""})` : `Past GB (${past[0]?.term ?? ""})`}
-          </button>
-        ))}
+      <div className="mx-auto w-fit rounded-full border border-border bg-secondary/60 px-6 py-2.5">
+        <span className="text-sm font-semibold uppercase tracking-wide text-navy-700">
+          The Governing Body 2025–27
+        </span>
       </div>
 
       {/* Spotlight — longer card, with extra info not shown on the grid tiles.
@@ -181,12 +179,12 @@ export function Leadership({
                 )}
 
                 <div className="mt-6 flex flex-wrap gap-4 border-t border-white/10 pt-5">
-                  {tab === "current" && featured.email && (
+                  {featured.email && (
                     <a href={`mailto:${featured.email}`} className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white">
                       <Mail className="h-3.5 w-3.5" /> {featured.email}
                     </a>
                   )}
-                  {tab === "current" && featured.phone && (
+                  {featured.phone && (
                     <a href={`tel:${featured.phone}`} className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white">
                       <Phone className="h-3.5 w-3.5" /> {featured.phone}
                     </a>
@@ -206,12 +204,11 @@ export function Leadership({
 
       {/* Bento grid — click a tile to feature it above; hover a tile to see
           its photo zoom in, click the info icon to flip for contact details. */}
-      <div className="mt-8 grid auto-rows-[172px] grid-cols-2 gap-4 sm:grid-cols-4" style={{ perspective: 1400 }}>
-        {activeList.map((l, i) => {
-          const spanClass =
-            i === 0 ? "col-span-2 row-span-2" : i === 1 ? "col-span-2 row-span-1" : "col-span-1 row-span-1";
+      <div className="mt-8 grid auto-rows-[172px] grid-cols-2 gap-4 lg:grid-cols-12" style={{ perspective: 1400 }}>
+        {leaders.map((l, i) => {
+          const isPresident = l.role === "President";
           const isFeatured = featured?.id === l.id;
-          const hasContact = tab === "current" && (l.email || l.phone || l.website);
+          const hasContact = Boolean(l.email || l.phone || l.website);
 
           const frontFace = (
             <GlassCard
@@ -225,15 +222,15 @@ export function Leadership({
               <PhotoAvatar
                 initials={initials(l.name)}
                 imageUrl={l.imageUrl}
-                size={i === 0 ? "xl" : "md"}
+                size={isPresident ? "2xl" : "md"}
                 hoverZoom
                 className="mx-auto"
               />
-              <h4 className={cn("font-display font-bold text-white", i === 0 ? "mt-6 text-xl" : "mt-4 text-sm")}>
+              <h4 className={cn("font-display font-bold text-white", isPresident ? "mt-6 text-xl" : "mt-4 text-sm")}>
                 {l.name}
               </h4>
-              <p className={cn("font-semibold text-saffron-400", i === 0 ? "text-sm" : "text-xs")}>{l.role}</p>
-              {l.associationName && i < 2 && <p className="mt-1 text-xs text-white/50">{l.associationName}</p>}
+              <p className={cn("font-semibold text-saffron-400", isPresident ? "text-sm" : "text-xs")}>{l.role}</p>
+              {l.stateName && <p className={cn("mt-1 text-white/50", isPresident ? "text-sm" : "text-xs")}>{l.stateName}</p>}
             </GlassCard>
           );
 
@@ -264,7 +261,7 @@ export function Leadership({
           );
 
           return (
-            <ScrollReveal key={l.id} direction="up" delay={i * 0.05} className={spanClass}>
+            <ScrollReveal key={l.id} direction="up" delay={i * 0.05} className={gridSpan(l.role)}>
               <TiltCard maxTilt={8} className="h-full">
                 {hasContact ? (
                   <FlipCard
