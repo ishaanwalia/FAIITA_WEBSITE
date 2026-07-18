@@ -49,7 +49,7 @@ export default async function HomePage() {
           association: associationFixes[t.association] ?? t.association,
         }))}
       />
-      <NewsSection news={mergeNews(news).slice(0, 3)} />
+      <NewsSection news={mergeNews(news).slice(0, 1)} />
       <EventsSection events={events} />
       <ReadyToConnect />
     </>
