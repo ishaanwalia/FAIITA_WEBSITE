@@ -53,9 +53,9 @@ const ROW_OF_THREE = [
 
 function gridSpan(role: string) {
   if (role === "President") return "col-span-2 row-span-2 lg:col-span-12";
-  if (ROW_OF_THREE.includes(role)) return "lg:col-span-4";
-  if (role === "Joint Secretary") return "lg:col-span-4 lg:col-start-3";
-  if (role === "Joint Treasurer") return "lg:col-span-4";
+  if (ROW_OF_THREE.includes(role)) return "lg:col-span-4 lg:row-span-2";
+  if (role === "Joint Secretary") return "lg:col-span-4 lg:row-span-2 lg:col-start-3";
+  if (role === "Joint Treasurer") return "lg:col-span-4 lg:row-span-2";
   return "lg:col-span-3";
 }
 
@@ -207,6 +207,9 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
       <div className="mt-8 grid auto-rows-[172px] grid-cols-2 gap-4 lg:grid-cols-12" style={{ perspective: 1400 }}>
         {leaders.map((l, i) => {
           const isPresident = l.role === "President";
+          // Office bearers get President-height cards on desktop, so their
+          // photos scale up too; GB Members keep the compact tile.
+          const isOfficer = !isPresident && l.role !== "GB Member";
           const isFeatured = featured?.id === l.id;
           const hasContact = Boolean(l.email || l.phone || l.website);
 
@@ -224,7 +227,7 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
                 imageUrl={l.imageUrl}
                 size={isPresident ? "2xl" : "md"}
                 hoverZoom
-                className="mx-auto"
+                className={cn("mx-auto", isOfficer && "lg:h-28 lg:w-28")}
               />
               <h4 className={cn("font-display font-bold text-white", isPresident ? "mt-6 text-xl" : "mt-4 text-sm")}>
                 {l.name}
