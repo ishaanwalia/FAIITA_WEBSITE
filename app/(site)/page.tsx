@@ -31,7 +31,7 @@ export default async function HomePage() {
   const [stats, testimonials, news, events, states] = await Promise.all([
     prisma.stat.findMany({ orderBy: { order: "asc" } }),
     prisma.testimonial.findMany({ orderBy: { order: "asc" } }),
-    prisma.news.findMany({ orderBy: { publishedAt: "desc" }, take: 3 }),
+    prisma.news.findMany({ where: { isDemo: false }, orderBy: { publishedAt: "desc" }, take: 3 }),
     prisma.event.findMany({ where: { isUpcoming: true }, orderBy: { startDate: "asc" }, take: 3 }),
     prisma.stateAssociation.findMany({ select: { slug: true, stateName: true }, orderBy: { stateName: "asc" } }),
   ]);
@@ -49,7 +49,7 @@ export default async function HomePage() {
           association: associationFixes[t.association] ?? t.association,
         }))}
       />
-      <NewsSection news={mergeNews(news).slice(0, 1)} />
+      <NewsSection news={mergeNews(news).slice(0, 3)} />
       <EventsSection events={events} />
       <ReadyToConnect />
     </>
