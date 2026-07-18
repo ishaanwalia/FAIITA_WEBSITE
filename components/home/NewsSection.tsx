@@ -72,12 +72,12 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                 <TiltCard maxTilt={5} className="h-full">
                   <Link href={`/resources/news/${n.slug}`} className="group block h-full">
                     <GlassCard variant="light" className="flex h-full flex-col overflow-hidden !p-0">
-                      <div className="relative h-28 w-full shrink-0 overflow-hidden">
+                      <div className="relative aspect-[5/2] w-full shrink-0 overflow-hidden">
                         <Image
                           src={n.coverImage ?? NEWS_IMAGES[(i + 1) % NEWS_IMAGES.length]}
                           alt=""
                           fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                       <div className="flex flex-1 flex-col justify-between p-5">

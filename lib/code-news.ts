@@ -50,7 +50,7 @@ export const codeNews: CodeNewsItem[] = [
     category: "Events",
     featured: false,
     isDemo: false,
-    publishedAt: new Date("2024-07-01T09:00:00+05:30"),
+    publishedAt: new Date("2024-01-15T10:15:00+05:30"),
     coverImage: "/images/news/india-it-mall-launch-2024.jpg",
     heroImage: "/images/news/india-it-mall-launch-2024.jpg",
     sourceUrl: null,
