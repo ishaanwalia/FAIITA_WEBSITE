@@ -9,6 +9,7 @@ import { EventsSection } from "@/components/home/EventsSection";
 import { ReadyToConnect } from "@/components/home/ReadyToConnect";
 import { prisma } from "@/lib/prisma";
 import { excludeRemovedStates } from "@/lib/state-overrides";
+import { mergeNews } from "@/lib/code-news";
 
 export const revalidate = 3600; // ISR — refresh homepage content hourly
 
@@ -48,7 +49,7 @@ export default async function HomePage() {
           association: associationFixes[t.association] ?? t.association,
         }))}
       />
-      <NewsSection news={news} />
+      <NewsSection news={mergeNews(news).slice(0, 3)} />
       <EventsSection events={events} />
       <ReadyToConnect />
     </>

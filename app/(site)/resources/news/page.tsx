@@ -9,6 +9,7 @@ import { NewsGrid } from "@/components/resources/NewsGrid";
 import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
 import { prisma } from "@/lib/prisma";
+import { mergeNews } from "@/lib/code-news";
 
 export const metadata: Metadata = {
   title: "News",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function NewsPage() {
-  const news = await prisma.news.findMany({ orderBy: { publishedAt: "desc" } });
+  const news = mergeNews(await prisma.news.findMany({ orderBy: { publishedAt: "desc" } }));
   const [featured, ...rest] = news;
 
   return (

@@ -213,6 +213,26 @@ const overrides: Record<string, StateOverride> = {
       "From a small gathering three decades ago to becoming the most important IT forum in Eastern India, COMPASS continues its mission — building a stronger, smarter, and more connected digital future for the region.",
     ].join("\n\n"),
   },
+  // ADCTA Delhi — verified details supplied July 2026 (matches seed.ts).
+  delhi: {
+    associationName: "All Delhi Computer Traders Association (Regd.) — ADCTA",
+    foundedYear: 1990,
+    memberCount: 2500,
+    contactEmail: "adcta.nehruplace@gmail.com",
+    secretaryEmail: "broadwaydelhi@gmail.com",
+    websiteUrl: "https://www.adcta.com",
+    logoUrl: "/logos/state/adcta.jpg",
+    address: "Nehru Place, New Delhi",
+    description: [
+      "All Delhi Computer Traders Association (Regd.) (ADCTA) is one of India's oldest and most respected associations representing the IT trade and computer business community. Established in 1990 with the vision of uniting computer dealers, distributors, retailers, importers, manufacturers and service providers, ADCTA has been dedicated to protecting the interests of the IT industry while promoting ethical business practices and sustainable growth.",
+      "With its registered office in Nehru Place, New Delhi — one of India's largest IT hardware markets — ADCTA has played a significant role in strengthening the computer and information technology trade across Delhi and the NCR. The association has grown into a strong and influential platform representing a large network of around 2,500 IT businesses and professionals.",
+      "For over three decades, ADCTA has worked closely with government departments, industry leaders, technology brands and business stakeholders to address trade-related issues, advocate for fair business policies and create a transparent and progressive business environment. The association actively supports its members through awareness programs, legal guidance, networking opportunities, business events, seminars and industry collaborations.",
+      "Our Mission: to protect and promote the interests of the IT trade community; to encourage ethical, transparent and responsible business practices; to represent members before government authorities and regulatory bodies; to foster collaboration, innovation and knowledge sharing within the technology ecosystem; and to strengthen the growth of the IT industry through education, networking and advocacy.",
+      "Our Vision: to be the leading voice of the computer and information technology trade, creating a trusted, innovative and sustainable business ecosystem that empowers every member to grow and succeed.",
+      "What We Do: represent the interests of IT traders and businesses; provide guidance on business regulations, taxation and compliance; resolve trade-related concerns and disputes through collective representation; and build strong partnerships between members, technology brands, distributors and policymakers.",
+      "Today, ADCTA continues to serve as a trusted platform for the IT business community, working towards the collective growth of the industry while upholding the values of integrity, cooperation, professionalism and innovation. With its strong legacy and commitment to excellence, ADCTA remains dedicated to empowering businesses and shaping the future of India's IT trade.",
+    ].join("\n\n"),
+  },
   // PACT Punjab — verified details supplied July 2026 (matches seed.ts).
   punjab: {
     logoUrl: "/logos/state/pact.webp",

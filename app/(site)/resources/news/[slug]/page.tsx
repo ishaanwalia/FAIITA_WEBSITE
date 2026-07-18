@@ -7,23 +7,24 @@ import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
+import { codeNews, findCodeNews } from "@/lib/code-news";
 
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const items = await prisma.news.findMany({ select: { slug: true } });
-  return items.map((n) => ({ slug: n.slug }));
+  return [...items, ...codeNews].map((n) => ({ slug: n.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const item = await prisma.news.findUnique({ where: { slug } });
+  const item = (await prisma.news.findUnique({ where: { slug } })) ?? findCodeNews(slug);
   return item ? { title: item.title, description: item.excerpt } : { title: "News" };
 }
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const item = await prisma.news.findUnique({ where: { slug } });
+  const item = (await prisma.news.findUnique({ where: { slug } })) ?? findCodeNews(slug);
   if (!item) notFound();
 
   return (
