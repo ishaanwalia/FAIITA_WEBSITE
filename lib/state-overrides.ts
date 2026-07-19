@@ -246,6 +246,20 @@ const overrides: Record<string, StateOverride> = {
     websiteUrl: "https://www.pactpunjab.com",
     description: "Punjab Association of Computer Traders - PACT is the apex body representing the IT trade across Punjab and Chandigarh. It unites computer dealers, distributors, system integrators, networking and surveillance solution providers and technology businesses on a common platform. PACT is committed to safeguarding the interests of the IT industry, promoting ethical business practices, fostering collaboration and representing the trade before government authorities and industry stakeholders. Through advocacy, networking and knowledge-sharing initiatives, PACT is working towards building a stronger, more progressive and future-ready IT ecosystem for Punjab. United for the Growth of Punjab's IT Industry.",
   },
+  // MCDA Jabalpur — verified details supplied July 2026 (matches seed.ts).
+  "madhya-pradesh-mcda": {
+    foundedYear: 2003,
+    memberCount: 150,
+    contactEmail: "akhilesh_cin@yahoo.com",
+    secretaryEmail: "mpcomputerse@rediffmail.com",
+    websiteUrl: "https://www.mcda.in",
+    logoUrl: "/logos/state/mcda.png",
+    description: [
+      "We at Mahakaushal Computer Dealer's Association (MCDA), situated at Jabalpur (Madhya Pradesh) are one of the oldest IT associations in Madhya Pradesh. Established in 2003, with a nominal strength of 13 members, we have grown to 150 members till now. These numbers are increasing year on year. We operate under a registered society.",
+      "Our mission is to make a healthy business environment for the IT Sector in the Mahakaushal Region of Madhya Pradesh. We have members from almost all the southern part of our state. We are also collaborated with small regional associations operating at District level in our territory.",
+      "We are also involved in Social Activities like Plantation (Go Green Earth), Orphanage Visits, IT Seminars, Health Check-up Camps, Medical Emergency Equipment Help, Insurance Schemes for Office Workers, Offline Business Promotion via Coupon Schemes, etc.",
+    ].join("\n\n"),
+  },
 };
 
 export function applyStateOverrides<T extends { slug: string }>(state: T): T {

@@ -17,13 +17,13 @@ const benefits = [
     icon: Landmark,
     title: "Shape the Future",
     description: "Influence national IT policies and be part of decisions that shape India's technology landscape.",
-    image: "/images/gallery/election.jpg",
+    image: "/images/gallery/faiita-election-highlight.jpg",
   },
   {
     icon: Network,
     title: "Strategic Networking",
     description: "Connect with 50,000+ IT entrepreneurs, vendors, and government stakeholders across India.",
-    image: "/images/gallery/2022-1.jpeg",
+    image: "/images/gallery/faiita-election-2022-chandigarh-02.jpeg",
   },
   {
     icon: BookOpenText,
@@ -47,7 +47,7 @@ const benefits = [
     icon: Handshake,
     title: "Collaboration",
     description: "Partner with fellow state associations for joint initiatives, events, and business opportunities.",
-    image: "/images/gallery/2022.jpeg",
+    image: "/images/gallery/faiita-election-2022-chandigarh-01.jpeg",
   },
 ];
 

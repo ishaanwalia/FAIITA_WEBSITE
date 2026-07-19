@@ -55,14 +55,23 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
           ))}
         </div>
         {item.sourceUrl && (
-          <a
-            href={item.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-saffron-600"
-          >
-            Read the original coverage <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
+          item.sourceUrl.startsWith("/") ? (
+            <Link
+              href={item.sourceUrl}
+              className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-saffron-600"
+            >
+              Read every issue in the Newsletter archive <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          ) : (
+            <a
+              href={item.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-saffron-600"
+            >
+              Read the original coverage <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+          )
         )}
       </div>
     </article>

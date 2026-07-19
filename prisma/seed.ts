@@ -127,7 +127,11 @@ const states: StateSeed[] = [
     ].join("\n\n"),
   },
   { slug: "madhya-pradesh-mpctas", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "M.P. Computer Telecom Association Samiti (MPCTAS)", memberCount: 0, city: "Indore", mapX: 38, mapY: 41, presidentName: "Rakesh Daga", contactPhone: "+91 93032 88083", contactEmail: "indoredb@gmail.com", logoSlug: "mpcta.jpg" },
-  { slug: "madhya-pradesh-mcda", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Mahakaushal Computer Dealer's Association (MCDA)", memberCount: 0, city: "Jabalpur", mapX: 38, mapY: 41, presidentName: "B.L. Patel", contactPhone: "+91 93007 64155", contactEmail: "mcdajbp2003@gmail.com", logoSlug: "mcda.webp" },
+  { slug: "madhya-pradesh-mcda", stateName: "Madhya Pradesh", stateCode: "MP", region: "Central", associationName: "Mahakaushal Computer Dealer's Association (MCDA)", foundedYear: 2003, memberCount: 150, city: "Jabalpur", mapX: 38, mapY: 41, presidentName: "B.L. Patel", contactPhone: "+91 93007 64155", contactEmail: "akhilesh_cin@yahoo.com", secretaryEmail: "mpcomputerse@rediffmail.com", websiteUrl: "https://www.mcda.in", logoSlug: "mcda.png", description: [
+    "We at Mahakaushal Computer Dealer's Association (MCDA), situated at Jabalpur (Madhya Pradesh) are one of the oldest IT associations in Madhya Pradesh. Established in 2003, with a nominal strength of 13 members, we have grown to 150 members till now. These numbers are increasing year on year. We operate under a registered society.",
+    "Our mission is to make a healthy business environment for the IT Sector in the Mahakaushal Region of Madhya Pradesh. We have members from almost all the southern part of our state. We are also collaborated with small regional associations operating at District level in our territory.",
+    "We are also involved in Social Activities like Plantation (Go Green Earth), Orphanage Visits, IT Seminars, Health Check-up Camps, Medical Emergency Equipment Help, Insurance Schemes for Office Workers, Offline Business Promotion via Coupon Schemes, etc.",
+  ].join("\n\n") },
 
   // — West —
   {
@@ -321,14 +325,9 @@ const realNews = [
   },
 ];
 
-// Placeholder items kept only so the section doesn't look empty — all flagged
-// isDemo and dated well before any real post. Delete as real news lands.
-const newsItems = [
-  { slug: "faiita-hosts-national-it-summit-2025", title: "FAIITA Hosts National IT Summit 2025 in New Delhi", excerpt: "Leaders from state associations across all 26 states convened to chart the federation's advocacy roadmap for the year ahead.", category: "Events", featured: false, daysAgo: 160 },
-  { slug: "new-gst-guidelines-for-it-products", title: "New GST Guidelines for IT Products Announced", excerpt: "FAIITA's sustained advocacy leads to simplified GST compliance for IT dealers and distributors nationwide.", category: "Policy", featured: false, daysAgo: 175 },
-  { slug: "digital-india-skill-development", title: "Digital India Initiative: FAIITA's Role in Skill Development", excerpt: "Partnership with government agencies to train 10,000+ IT professionals in emerging technologies.", category: "Initiative", featured: false, daysAgo: 190 },
-  { slug: "faiita-emerging-tech-roundtable", title: "FAIITA Convenes Roundtable on Emerging Technology Retail", excerpt: "State association leaders discussed the shift toward AI-enabled devices and its impact on channel partners.", category: "Press Release", featured: false, daysAgo: 205 },
-];
+// Placeholder news items removed July 2026 — enough real news (seeded +
+// lib/code-news.ts) now fills the section, so the demo rows are no longer
+// needed to avoid an empty page.
 
 const events = [
   { slug: "faiita-agm-2026", title: "FAIITA Annual General Meeting 2026", category: "AGM", description: "The federation's flagship annual gathering of all member associations to review the year and set priorities.", city: "Hyderabad", state: "Telangana", daysFromNow: 30 },
@@ -461,18 +460,6 @@ async function main() {
 
   const now = Date.now();
   await prisma.news.createMany({ data: realNews });
-  await prisma.news.createMany({
-    data: newsItems.map((n) => ({
-      slug: n.slug,
-      title: n.title,
-      excerpt: n.excerpt,
-      content: n.excerpt,
-      category: n.category,
-      featured: n.featured,
-      isDemo: true,
-      publishedAt: new Date(now - n.daysAgo * 86400000),
-    })),
-  });
 
   await prisma.event.createMany({
     data: events.map((e) => ({
@@ -513,7 +500,7 @@ async function main() {
     })),
   });
 
-  console.log(`Seeded ${states.length} state associations, ${testimonials.length} testimonials, ${newsItems.length} news items, ${events.length} events.`);
+  console.log(`Seeded ${states.length} state associations, ${testimonials.length} testimonials, ${realNews.length} news items, ${events.length} events.`);
 }
 
 main()
