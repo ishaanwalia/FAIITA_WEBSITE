@@ -86,21 +86,12 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
-    /* Keeps this layer's own GPU composite alive during momentum scroll —
-       without it, fixed + backdrop-filter elements go transparent mid-scroll
-       on iOS/Android WebKit until the scroll settles. */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: transform;
   }
   .glass-light {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.45));
     border: 1px solid rgba(11, 42, 74, 0.08);
     backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: transform;
   }
 
   .clip-corner {

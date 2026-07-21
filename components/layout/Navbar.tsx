@@ -60,7 +60,7 @@ export function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50">
       <div
         className={cn(
-          "transition-all duration-500",
+          "[transform:translateZ(0)] will-change-transform transition-all duration-500",
           scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
         )}
       >
