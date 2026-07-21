@@ -57,12 +57,13 @@ export function Navbar() {
   const isActive = (href?: string) => !!href && (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
-        scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
-      )}
-    >
+    <header className="fixed inset-x-0 top-0 z-50">
+      <div
+        className={cn(
+          "transition-all duration-500",
+          scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
+        )}
+      >
       <div className="container-page flex h-20 items-center justify-between">
         <Logo variant="light" />
 
@@ -149,6 +150,7 @@ export function Navbar() {
         >
           {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
+      </div>
       </div>
 
       <AnimatePresence>
