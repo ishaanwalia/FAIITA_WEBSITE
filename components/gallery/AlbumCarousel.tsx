@@ -14,19 +14,25 @@ import type { GalleryAlbum } from "@/lib/gallery-albums";
  */
 export function AlbumCarousel({ album }: { album: GalleryAlbum }) {
   return (
-    <GlassCard variant="light" className="h-full overflow-hidden !p-0">
-      <Carousel.Root defaultPage={0} slideCount={album.photos.length + 1} className="flex h-full w-full max-w-full flex-col">
-        <Carousel.ItemGroup className="w-full max-w-full flex-1 overflow-hidden">
-          <Carousel.Item index={0} className="w-full max-w-full">
-            <div className="flex h-[300px] w-full max-w-full flex-col justify-center overflow-y-auto p-6">
+    <GlassCard variant="light" className="h-full overflow-hidden !p-0 [contain:layout_paint]">
+      <Carousel.Root
+        defaultPage={0}
+        slideCount={album.photos.length + 1}
+        slidesPerPage={1}
+        spacing="0px"
+        className="flex h-full w-full max-w-full flex-col [contain:layout_paint]"
+      >
+        <Carousel.ItemGroup className="w-full max-w-full flex-1 overflow-hidden [contain:layout_paint]">
+          <Carousel.Item index={0} className="w-full min-w-0 max-w-full">
+            <div className="flex h-[300px] w-full min-w-0 max-w-full flex-col justify-center overflow-y-auto p-6">
               <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-600">{album.eyebrow}</span>
-              <h2 className="mt-1 font-display text-base font-bold leading-snug text-navy-800">{album.title}</h2>
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{album.description}</p>
+              <h2 className="mt-1 font-display text-base font-bold leading-snug text-navy-800 break-words">{album.title}</h2>
+              <p className="mt-3 text-xs leading-relaxed text-muted-foreground break-words">{album.description}</p>
             </div>
           </Carousel.Item>
           {album.photos.map((photo, i) => (
-            <Carousel.Item key={photo.src} index={i + 1} className="w-full max-w-full">
-              <figure className="flex h-[300px] w-full max-w-full flex-col bg-navy-900">
+            <Carousel.Item key={photo.src} index={i + 1} className="w-full min-w-0 max-w-full">
+              <figure className="flex h-[300px] w-full min-w-0 max-w-full flex-col bg-navy-900">
                 <div className="relative min-h-0 w-full flex-1">
                   <Image
                     src={photo.src}
@@ -36,7 +42,7 @@ export function AlbumCarousel({ album }: { album: GalleryAlbum }) {
                     className="object-contain"
                   />
                 </div>
-                <figcaption className="border-t border-white/10 px-4 py-2.5 text-center text-[11px] leading-snug text-white/70">
+                <figcaption className="border-t border-white/10 px-4 py-2.5 text-center text-[11px] leading-snug text-white/70 break-words">
                   {photo.caption}
                 </figcaption>
               </figure>
