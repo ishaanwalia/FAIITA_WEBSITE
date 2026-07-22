@@ -23,9 +23,9 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
           // soft ambient one, giving cards a sense of physically sitting
           // above the page rather than being flat.
           "shadow-[0_2px_8px_rgba(11,42,74,0.06),0_16px_40px_-12px_rgba(11,42,74,0.18)]",
-          "[@media(hover:hover)]:hover:-translate-y-1.5 [@media(hover:hover)]:hover:shadow-[0_4px_12px_rgba(11,42,74,0.08),0_28px_60px_-14px_rgba(11,42,74,0.28)]",
-          variant === "dark" && "[@media(hover:hover)]:hover:shadow-saffron-500/10",
-          "[@media(hover:hover)]:hover:border-saffron-400/40",
+          "hover:-translate-y-1.5 hover:shadow-[0_4px_12px_rgba(11,42,74,0.08),0_28px_60px_-14px_rgba(11,42,74,0.28)]",
+          variant === "dark" && "hover:shadow-saffron-500/10",
+          "hover:border-saffron-400/40",
           className
         )}
         {...props}

@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   darkMode: ["class"],
@@ -98,7 +99,18 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    // `hover:` should only apply on devices that actually have a hover
+    // state. Touch browsers otherwise "stick" the :hover styles after a
+    // tap until the next tap elsewhere, leaving cards/buttons visibly
+    // offset/enlarged site-wide (GlassCard lift, MagneticButton scale,
+    // etc.) until something else is touched.
+    plugin(({ addVariant }) => {
+      addVariant("hover", "@media (hover: hover) { &:hover }");
+      addVariant("group-hover", "@media (hover: hover) { :merge(.group):hover & }");
+    }),
+  ],
 };
 
 export default config;

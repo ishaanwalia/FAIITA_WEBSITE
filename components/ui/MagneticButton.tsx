@@ -44,7 +44,10 @@ export function MagneticButton({
   };
 
   const handleDown = () => quickScale.current?.(0.95);
-  const handleUp = () => quickScale.current?.(1.05);
+  // Reset to rest state, not the hover scale — touch devices fire this
+  // without a preceding/following mousemove or mouseleave, so resolving to
+  // the hover size here would leave tapped buttons stuck looking enlarged.
+  const handleUp = () => handleLeave();
 
   return (
     <Button
