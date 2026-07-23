@@ -7,6 +7,7 @@ import { Building2, Network, Users, Vote } from "lucide-react";
 export const metadata: Metadata = {
   title: "About FAIITA",
   description: "The history and organizational structure of the Federation of All India Information Technology Associations.",
+  alternates: { canonical: "/about/about-faiita" },
 };
 
 const structure = [
@@ -78,7 +79,7 @@ export default function AboutFaiitaPage() {
                     <tier.icon className="h-5 w-5" />
                   </div>
                   <div className="flex-1 rounded-2xl border border-border bg-card p-5">
-                    <p className="font-mono text-[10px] font-semibold uppercase tracking-wide text-saffron-600">
+                    <p className="font-mono text-[10px] font-semibold uppercase tracking-wide text-saffron-700">
                       {tier.subtitle}
                     </p>
                     <h3 className="mt-1 font-display text-base font-bold text-navy-800">{tier.title}</h3>
@@ -130,7 +131,7 @@ export default function AboutFaiitaPage() {
                     of all affiliated state associations.
                   </p>
                   <p>
-                    This rotation keeps FAIITA's leadership responsive to
+                    This rotation keeps FAIITA&apos;s leadership responsive to
                     changing regional priorities while preserving institutional
                     continuity through overlapping outgoing and incoming members.
                   </p>

@@ -10,7 +10,7 @@ import type { GalleryAlbum } from "@/lib/gallery-albums";
  * Compact album card sized for a 3-per-row grid. Slide 1 is the album's info
  * card (what the photos are about); the remaining slides are the photos,
  * letterboxed with object-contain so mixed aspect ratios are never cropped.
- * Built on @ark-ui/react/carousel (see components/ui/carousel-1.tsx).
+ * Built on @ark-ui/react/carousel.
  */
 export function AlbumCarousel({ album }: { album: GalleryAlbum }) {
   return (
@@ -25,7 +25,7 @@ export function AlbumCarousel({ album }: { album: GalleryAlbum }) {
         <Carousel.ItemGroup className="w-full max-w-full flex-1 overflow-hidden [contain:layout_paint]">
           <Carousel.Item index={0} className="w-full min-w-0 max-w-full">
             <div className="flex h-[300px] w-full min-w-0 max-w-full flex-col justify-center overflow-y-auto p-6">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-600">{album.eyebrow}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-700">{album.eyebrow}</span>
               <h2 className="mt-1 font-display text-base font-bold leading-snug text-navy-800 break-words">{album.title}</h2>
               <p className="mt-3 text-xs leading-relaxed text-muted-foreground break-words">{album.description}</p>
             </div>

@@ -16,9 +16,11 @@ export function MagneticButton({
   const quickX = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
   const quickY = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
   const quickScale = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
+  const reducedMotion = useRef(false);
 
   useEffect(() => {
-    if (!ref.current) return;
+    reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!ref.current || reducedMotion.current) return;
     // quickTo reuses a single tween setter instead of creating a new one on
     // every mousemove — much cheaper for high-frequency updates.
     quickX.current = gsap.quickTo(ref.current, "x", { duration: 0.4, ease: "power3.out" });
@@ -27,6 +29,7 @@ export function MagneticButton({
   }, []);
 
   const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (reducedMotion.current) return;
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();

@@ -81,7 +81,7 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialItem[]
                     <div>
                       <p className="text-sm font-semibold text-navy-800">{t.name}</p>
                       <p className="text-xs text-muted-foreground">{t.role}</p>
-                      <p className="text-xs text-saffron-600">{t.association}</p>
+                      <p className="text-xs text-saffron-700">{t.association}</p>
                     </div>
                   </figcaption>
                 </GlassCard>

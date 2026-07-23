@@ -336,12 +336,6 @@ const events = [
   { slug: "regional-meet-east-zone", title: "Regional Meet — East Zone", category: "Conference", description: "State associations from West Bengal, Odisha, Bihar and Jharkhand meet to align on regional trade concerns.", city: "Kolkata", state: "West Bengal", daysFromNow: 75 },
 ];
 
-const blogs = [
-  { slug: "future-of-it-retail-in-india", title: "The Future of IT Retail in India's Tier-2 Cities", excerpt: "How channel partners outside metro India are becoming the next growth frontier for the IT trade.", author: "FAIITA Editorial Desk", tags: "Retail,Growth,Tier-2" },
-  { slug: "navigating-gst-compliance-2026", title: "Navigating GST Compliance in 2026: A Dealer's Guide", excerpt: "A practical walkthrough of the latest GST changes affecting IT hardware and software resellers.", author: "FAIITA Policy Cell", tags: "GST,Compliance,Policy" },
-  { slug: "building-a-state-association", title: "Building a State IT Association From the Ground Up", excerpt: "Lessons from associations that grew from a handful of founding members to thousands strong.", author: "FAIITA Editorial Desk", tags: "Associations,Leadership" },
-];
-
 // Real gallery albums live in lib/gallery-albums.ts and render straight from
 // code — no demo gallery items are seeded anymore. The galleryItem table is
 // kept for future one-off photos (seeded empty; the page filters isDemo).
@@ -394,7 +388,6 @@ async function main() {
   await prisma.stat.deleteMany();
   await prisma.news.deleteMany();
   await prisma.event.deleteMany();
-  await prisma.blog.deleteMany();
   await prisma.galleryItem.deleteMany();
   await prisma.newsletter.deleteMany();
   await prisma.policy.deleteMany();
@@ -471,19 +464,6 @@ async function main() {
       state: e.state,
       startDate: new Date(now + e.daysFromNow * 86400000),
       isUpcoming: true,
-      isDemo: true,
-    })),
-  });
-
-  await prisma.blog.createMany({
-    data: blogs.map((b) => ({
-      slug: b.slug,
-      title: b.title,
-      excerpt: b.excerpt,
-      content: b.excerpt,
-      author: b.author,
-      authorRole: "FAIITA",
-      tags: b.tags,
       isDemo: true,
     })),
   });

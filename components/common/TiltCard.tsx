@@ -4,6 +4,10 @@ import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+function prefersReducedMotion() {
+  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function TiltCard({
   children,
   className,
@@ -29,6 +33,7 @@ export function TiltCard({
   );
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (prefersReducedMotion()) return;
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
     x.set((e.clientX - rect.left) / rect.width);

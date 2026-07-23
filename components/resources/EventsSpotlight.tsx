@@ -85,7 +85,7 @@ export function EventsSpotlight({ events }: { events: EventRow[] }) {
                       <span className="text-[9px] font-medium uppercase tracking-wide">{d.month}</span>
                     </div>
                     <span className="flex items-center gap-1.5">
-                      <span className="rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-600">
+                      <span className="rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-700">
                         {e.category}
                       </span>
                       {e.isDemo && <DemoBadge />}

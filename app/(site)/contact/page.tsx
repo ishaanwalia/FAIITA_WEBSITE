@@ -6,6 +6,7 @@ import { ContactForm } from "@/components/common/ContactForm";
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with FAIITA — office address, phone, and emails of the President and Secretary.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {
@@ -22,7 +23,7 @@ export default function ContactPage() {
           <div className="space-y-6">
             <div className="rounded-2xl border border-border bg-card p-7">
               <h2 className="font-display text-lg font-bold text-navy-800">President Office</h2>
-              <p className="mt-1 text-sm font-medium text-saffron-600">Navin Gupta — President</p>
+              <p className="mt-1 text-sm font-medium text-saffron-700">Navin Gupta — President</p>
               <ul className="mt-4 space-y-3 text-sm">
                 <li className="flex gap-3">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-navy-700" />
@@ -46,7 +47,7 @@ export default function ContactPage() {
 
             <div className="rounded-2xl border border-border bg-card p-7">
               <h2 className="font-display text-lg font-bold text-navy-800">Secretary Office</h2>
-              <p className="mt-1 text-sm font-medium text-saffron-600">Sanjeev Walia — Secretary</p>
+              <p className="mt-1 text-sm font-medium text-saffron-700">Sanjeev Walia — Secretary</p>
               <ul className="mt-4 space-y-3 text-sm">
                 <li className="flex gap-3">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-navy-700" />

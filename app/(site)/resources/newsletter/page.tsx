@@ -11,6 +11,7 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = {
   title: "FAIITA Patrika",
   description: "FAIITA Patrika — the federation's e-bulletin archive, readable online.",
+  alternates: { canonical: "/resources/newsletter" },
 };
 
 export const revalidate = 3600;
@@ -33,7 +34,7 @@ export default async function NewsletterPage() {
               <ScrollReveal key={n.id} direction="up" delay={i * 0.06}>
                 <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-6">
                   <div>
-                    <p className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wide text-saffron-600">
+                    <p className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wide text-saffron-700">
                       Issue #{n.issueNumber}
                       {n.isDemo && <DemoBadge />}
                     </p>

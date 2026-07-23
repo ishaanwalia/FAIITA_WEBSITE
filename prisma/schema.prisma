@@ -124,22 +124,6 @@ model Event {
   @@index([startDate])
 }
 
-model Blog {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  excerpt     String
-  content     String
-  author      String
-  authorRole  String?
-  coverImage  String?
-  tags        String // comma separated
-  isDemo      Boolean  @default(false)
-  publishedAt DateTime @default(now())
-
-  @@index([publishedAt])
-}
-
 model GalleryItem {
   id        String   @id @default(cuid())
   title     String

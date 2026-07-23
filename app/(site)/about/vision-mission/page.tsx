@@ -28,6 +28,7 @@ export const metadata: Metadata = {
   title: "Vision & Mission",
   description:
     "Team FAIITA '25–27 — Empowering IT dealers and strengthening the industry across 26 states.",
+  alternates: { canonical: "/about/vision-mission" },
 };
 
 export const revalidate = 3600;

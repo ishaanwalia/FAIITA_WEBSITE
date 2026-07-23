@@ -14,7 +14,7 @@ export function ReadyToConnect() {
         </h2>
         <p className="max-w-xl text-balance text-white/60">
           Whether you represent a state association or a channel partner
-          business, FAIITA's member associations are ready to collaborate on
+          business, FAIITA&apos;s member associations are ready to collaborate on
           policy, trade, and growth.
         </p>
         <div className="mt-2 flex flex-wrap items-center justify-center gap-4">

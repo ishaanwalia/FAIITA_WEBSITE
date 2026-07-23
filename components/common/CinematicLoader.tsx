@@ -15,6 +15,10 @@ export function CinematicLoader() {
     if (typeof window === "undefined") return;
     if (sessionStorage.getItem(SESSION_KEY)) return; // never replay after first load this session
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // skip entirely for reduced-motion users
+    // sessionStorage/matchMedia aren't available during SSR, so this can
+    // only be resolved post-mount — one of the few legitimate exceptions to
+    // the "no setState in effect" rule.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

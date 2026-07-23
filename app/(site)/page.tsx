@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { StateMarquee } from "@/components/home/StateMarquee";
 import { Stats } from "@/components/home/Stats";
@@ -10,6 +11,8 @@ import { ReadyToConnect } from "@/components/home/ReadyToConnect";
 import { prisma } from "@/lib/prisma";
 import { excludeRemovedStates } from "@/lib/state-overrides";
 import { mergeNews } from "@/lib/code-news";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export const revalidate = 3600; // ISR — refresh homepage content hourly
 

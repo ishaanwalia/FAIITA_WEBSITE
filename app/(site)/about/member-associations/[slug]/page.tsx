@@ -17,6 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: member.name,
     description: `${member.name} — FAIITA-affiliated IT association in ${member.city}, ${member.stateName}.`,
+    alternates: { canonical: `/about/member-associations/${slug}` },
+    openGraph: { images: [`/api/og?eyebrow=Member+Association&title=${encodeURIComponent(member.name)}`] },
   };
 }
 

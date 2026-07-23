@@ -14,6 +14,10 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isNarrow = window.matchMedia("(max-width: 768px)").matches;
+    // matchMedia isn't available during SSR, so this can only be resolved
+    // post-mount — one of the few legitimate exceptions to the "no setState
+    // in effect" rule.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEnableSweep(!prefersReduced && !isNarrow);
   }, []);
 

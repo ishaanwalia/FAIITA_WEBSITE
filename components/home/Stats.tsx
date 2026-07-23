@@ -55,7 +55,7 @@ export function Stats({ stats }: { stats: StatItem[] }) {
               <TiltCard key={stat.id} maxTilt={10} className="h-full">
                 <GlassCard
                   variant="dark"
-                  className="flex h-full flex-col items-center justify-center text-center shadow-[0_8px_30px_rgba(0,0,0,0.35)] ring-1 ring-white/5"
+                  className="flex h-full flex-col items-center justify-center text-center shadow-elevated ring-1 ring-white/5"
                 >
                   <Icon className="h-6 w-6 text-saffron-400" />
                   <div className="stat-figure mt-4 text-3xl font-bold text-white sm:text-4xl">

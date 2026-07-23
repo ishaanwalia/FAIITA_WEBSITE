@@ -32,3 +32,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# internal planning notes — not for the shared repo
+/docs/

@@ -13,6 +13,10 @@ type FormValues = {
   organization: string;
   subject: string;
   message: string;
+  // Honeypot: real users never see or fill this field. Any bot that fills
+  // every field it finds trips it, and the server silently drops the
+  // submission without letting the bot know it failed.
+  company_url: string;
 };
 
 export function ContactForm() {
@@ -61,48 +65,73 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+      <input
+        {...register("company_url")}
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+      />
+
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Full Name" error={errors.name?.message}>
+        <Field id="name" label="Full Name" error={errors.name?.message}>
           <input
+            id="name"
             {...register("name", { required: "Please enter your name" })}
             className="input-field"
             placeholder="Your name"
+            aria-invalid={!!errors.name}
+            aria-describedby={errors.name ? "name-error" : undefined}
           />
         </Field>
-        <Field label="Email Address" error={errors.email?.message}>
+        <Field id="email" label="Email Address" error={errors.email?.message}>
           <input
+            id="email"
             type="email"
             {...register("email", { required: "Please enter your email" })}
             className="input-field"
             placeholder="you@example.com"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "email-error" : undefined}
           />
         </Field>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Phone (optional)">
-          <input {...register("phone")} className="input-field" placeholder="+91 00000 00000" />
+        <Field id="phone" label="Phone (optional)">
+          <input id="phone" {...register("phone")} className="input-field" placeholder="+91 00000 00000" />
         </Field>
-        <Field label="Organization (optional)">
-          <input {...register("organization")} className="input-field" placeholder="Your association / company" />
+        <Field id="organization" label="Organization (optional)">
+          <input
+            id="organization"
+            {...register("organization")}
+            className="input-field"
+            placeholder="Your association / company"
+          />
         </Field>
       </div>
 
-      <Field label="Subject (optional)">
-        <input {...register("subject")} className="input-field" placeholder="What is this regarding?" />
+      <Field id="subject" label="Subject (optional)">
+        <input id="subject" {...register("subject")} className="input-field" placeholder="What is this regarding?" />
       </Field>
 
-      <Field label="Message" error={errors.message?.message}>
+      <Field id="message" label="Message" error={errors.message?.message}>
         <textarea
+          id="message"
           {...register("message", { required: "Please share a few details", minLength: { value: 10, message: "Please share a few more details" } })}
           rows={5}
           className="input-field resize-none"
           placeholder="Tell us how we can help..."
+          aria-invalid={!!errors.message}
+          aria-describedby={errors.message ? "message-error" : undefined}
         />
       </Field>
 
       {status === "error" && (
-        <p className="text-sm text-destructive">Something went wrong. Please try again in a moment.</p>
+        <p role="alert" aria-live="assertive" className="text-sm text-destructive">
+          Something went wrong. Please try again in a moment.
+        </p>
       )}
 
       <Button type="submit" variant="accent" size="lg" disabled={isSubmitting} className="w-full sm:w-auto">
@@ -117,7 +146,7 @@ export function ContactForm() {
           border: 1px solid hsl(var(--border));
           background: hsl(var(--card));
           padding: 0.7rem 1rem;
-          font-size: 0.875rem;
+          font-size: 1rem;
           color: hsl(var(--foreground));
           transition: border-color 0.2s ease;
         }
@@ -130,12 +159,26 @@ export function ContactForm() {
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({
+  id,
+  label,
+  error,
+  children,
+}: {
+  id: string;
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <label className="block">
+    <label className="block" htmlFor={id}>
       <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-navy-700/70">{label}</span>
       {children}
-      {error && <span className="mt-1 block text-xs text-destructive">{error}</span>}
+      {error && (
+        <span id={`${id}-error`} role="alert" className="mt-1 block text-xs text-destructive">
+          {error}
+        </span>
+      )}
     </label>
   );
 }

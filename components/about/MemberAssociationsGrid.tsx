@@ -83,7 +83,7 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
                       <LogoImage logoUrl={m.logoUrl} alt={m.name} size="sm" />
                       <div>
                         <h3 className="font-display text-sm font-bold leading-snug text-navy-800">{m.name}</h3>
-                        <p className="mt-1 text-xs font-medium text-saffron-600">{m.city}, {m.stateName}</p>
+                        <p className="mt-1 text-xs font-medium text-saffron-700">{m.city}, {m.stateName}</p>
                         {m.isDemo && <DemoBadge className="mt-2" />}
                       </div>
                     </div>

@@ -16,9 +16,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const item = await prisma.newsletter.findUnique({ where: { slug } });
-  return item
-    ? { title: item.title, description: item.description ?? "FAIITA Patrika — the federation's e-bulletin." }
-    : { title: "Newsletter" };
+  if (!item) return { title: "Newsletter" };
+  return {
+    title: item.title,
+    description: item.description ?? "FAIITA Patrika — the federation's e-bulletin.",
+    alternates: { canonical: `/resources/newsletter/${slug}` },
+    openGraph: { images: [`/api/og?eyebrow=FAIITA+Patrika&title=${encodeURIComponent(item.title)}`] },
+  };
 }
 
 export default async function NewsletterIssuePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -38,7 +42,7 @@ export default async function NewsletterIssuePage({ params }: { params: Promise<
 
         <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wide text-saffron-600">
+            <p className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wide text-saffron-700">
               Issue #{item.issueNumber}
               {item.isDemo && <DemoBadge />}
             </p>

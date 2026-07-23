@@ -65,8 +65,11 @@
   .text-balance {
     text-wrap: balance;
   }
+  /* Color is set per-usage (text-saffron-700 on light backgrounds,
+     text-saffron-400 on dark) — saffron-600 on white only reaches ~3:1
+     contrast, under the 4.5:1 WCAG AA threshold for this text size. */
   .section-eyebrow {
-    @apply inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-[0.2em] text-saffron-600;
+    @apply inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-[0.2em];
   }
   .stat-figure {
     @apply font-mono tabular-nums;

@@ -19,7 +19,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const item = (await prisma.news.findUnique({ where: { slug } })) ?? findCodeNews(slug);
-  return item ? { title: item.title, description: item.excerpt } : { title: "News" };
+  if (!item) return { title: "News" };
+  return {
+    title: item.title,
+    description: item.excerpt,
+    alternates: { canonical: `/resources/news/${slug}` },
+    openGraph: { images: [`/api/og?eyebrow=News&title=${encodeURIComponent(item.title)}`] },
+  };
 }
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -58,7 +64,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
           item.sourceUrl.startsWith("/") ? (
             <Link
               href={item.sourceUrl}
-              className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-saffron-600"
+              className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-saffron-700"
             >
               Read every issue in the Newsletter archive <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
@@ -67,7 +73,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
               href={item.sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-saffron-600"
+              className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-saffron-700"
             >
               Read the original coverage <ArrowUpRight className="h-3.5 w-3.5" />
             </a>

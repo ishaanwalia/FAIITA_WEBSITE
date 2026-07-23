@@ -119,7 +119,7 @@ export function EventCalendar({ events }: { events: CalendarEvent[] }) {
               href={`/resources/events/${e.slug}`}
               className="block rounded-xl border border-border bg-card p-4 transition-shadow hover:shadow-md"
             >
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-600">{e.category}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-700">{e.category}</span>
               <p className="mt-1 text-sm font-semibold text-navy-800">{e.title}</p>
               <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
                 <MapPin className="h-3 w-3" /> {e.city}, {e.state}

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "About FAIITA",
   description:
     "Learn about FAIITA's vision, structure, leadership, and the nationwide network of IT associations it federates.",
+  alternates: { canonical: "/about" },
 };
 
 export const revalidate = 3600;
@@ -57,14 +58,14 @@ export default async function AboutPage() {
         <GradientMesh />
         <div className="absolute inset-0 bg-network-grid opacity-10" />
         <div className="container-page relative">
-          <span className="section-eyebrow">About Us</span>
+          <span className="section-eyebrow text-saffron-400">About Us</span>
           <TextReveal
             text="One Federation, One National Voice"
             as="h1"
             className="mt-3 max-w-3xl text-balance font-display text-3xl font-bold tracking-tight text-white sm:text-4xl"
           />
           <p className="mt-4 max-w-2xl text-balance leading-relaxed text-white/65">
-            FAIITA brings together India's state-level IT associations into a
+            FAIITA brings together India&apos;s state-level IT associations into a
             single national voice — advocating for policy, enabling growth,
             and connecting 50,000+ channel partners.
           </p>

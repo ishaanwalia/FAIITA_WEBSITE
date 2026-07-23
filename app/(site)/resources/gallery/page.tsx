@@ -10,6 +10,7 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = {
   title: "Gallery",
   description: "Moments from FAIITA elections, summits, AGMs, and regional meets.",
+  alternates: { canonical: "/resources/gallery" },
 };
 
 export const revalidate = 3600;

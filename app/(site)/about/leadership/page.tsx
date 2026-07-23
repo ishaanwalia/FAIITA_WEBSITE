@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = {
   title: "Leadership",
   description: "Meet FAIITA's national Governing Body 2025–27.",
+  alternates: { canonical: "/about/leadership" },
 };
 
 export const revalidate = 3600;

@@ -9,6 +9,10 @@ const schema = z.object({
   organization: z.string().optional(),
   subject: z.string().optional(),
   message: z.string().min(10, "Please share a few more details"),
+  // Honeypot — real users never see this field. A non-empty value means a
+  // bot filled every input it found; report success without touching the
+  // database or sending an email, so the bot has no signal to react to.
+  company_url: z.string().optional(),
 });
 
 export async function POST(req: Request) {
@@ -23,7 +27,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const submission = await prisma.contactSubmission.create({ data: parsed.data });
+    if (parsed.data.company_url) {
+      return NextResponse.json({ id: "ok" }, { status: 201 });
+    }
+
+    const { name, email, phone, organization, subject, message } = parsed.data;
+    const submission = await prisma.contactSubmission.create({
+      data: { name, email, phone, organization, subject, message },
+    });
 
     // Form submissions are delivered to FAIITA's official inboxes. Set
     // CONTACT_TO_EMAIL (comma-separated) in the environment to override.
@@ -69,6 +80,13 @@ export async function POST(req: Request) {
         // Don't fail the request if email delivery fails — the submission is already saved.
         console.error("Contact email failed to send:", emailError);
       }
+    } else {
+      // No RESEND_API_KEY configured — the submission is saved, but nobody
+      // gets notified. Logged loudly (not just skipped silently) so this is
+      // visible in Vercel's function logs instead of a lead going unseen.
+      console.error(
+        `CRITICAL: contact submission ${submission.id} saved but RESEND_API_KEY is unset — no notification was sent. Check the environment configuration.`
+      );
     }
 
     return NextResponse.json({ id: submission.id }, { status: 201 });

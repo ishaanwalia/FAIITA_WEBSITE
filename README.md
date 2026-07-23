@@ -14,7 +14,10 @@ npm install
 
 # 2. Copy environment variables
 cp .env.example .env
-# .env already defaults to a local SQLite file — no external DB needed to start
+# The schema is hardcoded to Postgres (see prisma/schema.prisma) — fill in
+# DATABASE_URL/DIRECT_URL with a free Neon or Supabase connection string
+# before continuing (see "Database setup" below). A separate dev branch/
+# project keeps local work isolated from production data.
 
 # 3. Create the local database + tables
 npm run db:push
@@ -112,6 +115,7 @@ Either way, once your production database is live, add `DATABASE_URL` (and
    | `NEXT_PUBLIC_SITE_URL` | `https://www.faiita.co.in` |
    | `RESEND_API_KEY` | (optional) from https://resend.com for contact-form emails |
    | `CONTACT_TO_EMAIL` | secretary@faiita.co.in |
+   | `CONTACT_FROM_EMAIL` | e.g. `FAIITA Website <forms@faiita.co.in>` once the domain is verified in Resend |
 
 4. Deploy. The `build` script (`prisma generate && next build`) handles
    Prisma client generation automatically.
@@ -139,7 +143,7 @@ placeholder data so the site works out of the box. Before launch, replace:
 - State association president/secretary names, phone numbers (marked
   `REPLACE ME`), and exact member counts.
 - The national Leadership roster (`leaders` array).
-- News, events, blogs, gallery images, newsletters, and policy documents —
+- News, events, gallery images, newsletters, and policy documents —
   either edit `prisma/seed.ts` and re-run `npm run db:seed`, or connect a
   simple admin flow / edit rows directly via `npm run db:studio` (Prisma
   Studio — a visual database editor).
@@ -156,6 +160,7 @@ placeholder data so the site works out of the box. Before launch, replace:
 | `npm run db:migrate` | Create a tracked migration (use for Postgres/production) |
 | `npm run db:seed` | Load placeholder content |
 | `npm run db:studio` | Open Prisma Studio to browse/edit data visually |
+| `npm run lint` | ESLint (flat config, `eslint.config.mjs`) |
 
 ---
 
@@ -163,9 +168,14 @@ placeholder data so the site works out of the box. Before launch, replace:
 
 ```
 app/
-  (site)/            → all public pages (share Navbar + Footer + loader)
-  api/contact/        → contact form submission endpoint
-  sitemap.ts, robots.ts, not-found.tsx  → SEO + error handling
+  (site)/                 → all public pages (share Navbar + Footer + loader)
+  api/contact/            → contact form submission endpoint
+  api/newsletter/         → newsletter subscribe endpoint
+  api/og/                 → dynamic per-article/event Open Graph image generator
+  sitemap.ts, robots.ts   → SEO
+  error.tsx, not-found.tsx (root + (site)) → error/404 boundaries
+proxy.ts                  → security headers (CSP/HSTS/etc.) + basic rate
+                             limiting on the two POST routes above
 components/
   layout/            → Navbar, Footer
   home/              → homepage sections
@@ -175,4 +185,30 @@ components/
 lib/                 → prisma client, nav config, utils
 prisma/              → schema.prisma, seed.ts
 types/               → shared TypeScript types
+docs/                → internal planning notes (not part of the deployed site)
 ```
+
+## 8. Security
+
+`proxy.ts` (Next's "middleware" convention, renamed in v16) sets a
+nonce-based Content-Security-Policy plus HSTS/Permissions-Policy/etc. on
+every response, and applies a basic in-memory rate limit to `/api/contact`
+and `/api/newsletter`. The rate limit resets on cold start and isn't shared
+across serverless instances — treat it as a first line of defense against
+casual scripted spam, not a hardened limiter. If abuse becomes a real
+problem, swap the in-memory `Map` in `proxy.ts` for a shared store (e.g.
+Upstash Redis).
+
+## 9. CI & git hooks
+
+- `.github/workflows/ci.yml` runs lint, typecheck, and a full build on every
+  push/PR to `main`. The build step touches the database (several pages call
+  Prisma during static generation), so add `DATABASE_URL`/`DIRECT_URL` as
+  repo secrets (Settings → Secrets and variables → Actions) pointing at a
+  non-production Postgres instance — a separate free Neon branch works well.
+- A Husky pre-commit hook runs `npm run lint` locally before each commit.
+- `npm run format` / `npm run format:check` run Prettier (with
+  `prettier-plugin-tailwindcss` for class sorting). The existing codebase
+  hasn't been run through Prettier yet — expect a large diff the first time
+  `format` is run; do that as its own dedicated commit rather than mixed
+  into a feature change.

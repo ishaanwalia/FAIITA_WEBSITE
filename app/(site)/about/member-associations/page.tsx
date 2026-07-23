@@ -7,6 +7,7 @@ import { memberAssociations } from "@/lib/member-associations";
 export const metadata: Metadata = {
   title: "Member Associations",
   description: "City and district IT associations affiliated to FAIITA across India.",
+  alternates: { canonical: "/about/member-associations" },
 };
 
 export default function MemberAssociationsPage() {

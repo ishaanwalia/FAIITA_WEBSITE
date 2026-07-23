@@ -14,6 +14,7 @@ import { mergeNews } from "@/lib/code-news";
 export const metadata: Metadata = {
   title: "News",
   description: "The latest news and announcements from FAIITA.",
+  alternates: { canonical: "/resources/news" },
 };
 
 export const revalidate = 3600;

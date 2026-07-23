@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Terms of Use" };
+export const metadata: Metadata = { title: "Terms of Use", alternates: { canonical: "/terms" } };
 
 export default function TermsPage() {
   return (
@@ -18,10 +18,10 @@ export default function TermsPage() {
             Content on this site — including text, graphics, and data about
             member associations — is provided for general information and
             may be updated without notice. FAIITA is not liable for
-            decisions made solely on the basis of this website's content.
+            decisions made solely on the basis of this website&apos;s content.
           </p>
           <p className="text-xs text-muted-foreground/70">
-            This is placeholder legal text — replace with FAIITA's reviewed
+            This is placeholder legal text — replace with FAIITA&apos;s reviewed
             terms of use before launch.
           </p>
         </div>

@@ -89,7 +89,7 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
                         <div>
                           {/* Association leads the card — several states have more than one. */}
                           <h3 className="font-display text-sm font-bold leading-snug text-navy-800">{s.associationName}</h3>
-                          <p className="mt-1 text-xs font-medium text-saffron-600">{s.stateName}</p>
+                          <p className="mt-1 text-xs font-medium text-saffron-700">{s.stateName}</p>
                         </div>
                       </div>
                       <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">

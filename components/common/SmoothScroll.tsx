@@ -25,6 +25,10 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isNarrow = window.matchMedia("(max-width: 768px)").matches;
     // Skip smoothing on mobile / reduced-motion — native scroll performs better there.
+    // matchMedia isn't available during SSR, so this can only be resolved
+    // post-mount — one of the few legitimate exceptions to the "no setState
+    // in effect" rule.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSmooth(!prefersReduced && !isNarrow);
     gsap.ticker.lagSmoothing(0);
   }, []);

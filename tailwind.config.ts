@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
   darkMode: ["class"],
@@ -81,6 +82,14 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      // Shared elevation scale — cards/tiles reach for these instead of
+      // hand-rolling a one-off shadow value each, so depth reads
+      // consistently across the site.
+      boxShadow: {
+        card: "0 2px 8px rgba(11,42,74,0.06), 0 16px 40px -12px rgba(11,42,74,0.18)",
+        "card-hover": "0 4px 12px rgba(11,42,74,0.08), 0 28px 60px -14px rgba(11,42,74,0.28)",
+        elevated: "0 8px 30px rgba(0,0,0,0.35)",
+      },
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
         "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },
@@ -100,7 +109,7 @@ const config: Config = {
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
+    tailwindcssAnimate,
     // `hover:` should only apply on devices that actually have a hover
     // state. Touch browsers otherwise "stick" the :hover styles after a
     // tap until the next tap elsewhere, leaving cards/buttons visibly

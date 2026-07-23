@@ -9,6 +9,7 @@ import { normalizeZone } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "State Associations",
   description: "Browse FAIITA's state-level IT associations spanning 26 states across India.",
+  alternates: { canonical: "/about/state-associations" },
 };
 
 export const revalidate = 3600;

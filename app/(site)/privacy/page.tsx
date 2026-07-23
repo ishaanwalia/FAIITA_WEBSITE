@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Privacy Policy" };
+export const metadata: Metadata = { title: "Privacy Policy", alternates: { canonical: "/privacy" } };
 
 export default function PrivacyPage() {
   return (
@@ -12,7 +12,7 @@ export default function PrivacyPage() {
             FAIITA collects only the information you choose to share through
             our contact and newsletter forms — name, email, phone, and
             message content — solely to respond to your enquiry and send
-            federation updates you've opted into.
+            federation updates you&apos;ve opted into.
           </p>
           <p>
             We do not sell or share your personal data with third parties.
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
             contacting <a href="mailto:secretary@faiita.co.in" className="text-navy-700 underline">secretary@faiita.co.in</a>.
           </p>
           <p className="text-xs text-muted-foreground/70">
-            This is placeholder policy text — replace with FAIITA's reviewed
+            This is placeholder policy text — replace with FAIITA&apos;s reviewed
             privacy policy before launch.
           </p>
         </div>

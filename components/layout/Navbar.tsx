@@ -33,6 +33,8 @@ export function Navbar() {
   const [spotlit, setSpotlit] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
+  const mobilePanelRef = useRef<HTMLDivElement>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 100);
@@ -42,9 +44,61 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
+    // Reset transient interaction state (open menus) on navigation — these
+    // aren't derived from pathname, they're just closed by it, so there's no
+    // cleaner alternative to resetting them here.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false);
     setOpenDropdown(null);
   }, [pathname]);
+
+  // Escape closes whichever nav surface is open; on the mobile panel it also
+  // returns focus to the toggle button so keyboard users aren't left stranded.
+  useEffect(() => {
+    if (!mobileOpen && !openDropdown) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (mobileOpen) {
+        setMobileOpen(false);
+        mobileToggleRef.current?.focus();
+      } else if (openDropdown) {
+        setOpenDropdown(null);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen, openDropdown]);
+
+  // Focus trap for the mobile menu: move focus in on open, cycle Tab/Shift+Tab
+  // within the panel while it's open so keyboard focus can't leave the
+  // visible overlay onto content hidden behind it.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const panel = mobilePanelRef.current;
+    if (!panel) return;
+
+    const getFocusable = () =>
+      Array.from(panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'));
+
+    getFocusable()[0]?.focus();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const focusable = getFocusable();
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    panel.addEventListener("keydown", onKeyDown);
+    return () => panel.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen]);
 
   const openMenu = (label: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -143,10 +197,12 @@ export function Navbar() {
         </div>
 
         <button
-          className="flex h-10 w-10 items-center justify-center rounded-full text-white lg:hidden"
+          ref={mobileToggleRef}
+          className="flex h-11 w-11 items-center justify-center rounded-full text-white lg:hidden"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
+          aria-controls="mobile-nav-panel"
         >
           {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -156,6 +212,11 @@ export function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            ref={mobilePanelRef}
+            id="mobile-nav-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

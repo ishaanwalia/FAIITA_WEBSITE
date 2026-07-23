@@ -17,7 +17,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const item = await prisma.event.findUnique({ where: { slug } });
-  return item ? { title: item.title, description: item.description } : { title: "Event" };
+  if (!item) return { title: "Event" };
+  return {
+    title: item.title,
+    description: item.description,
+    alternates: { canonical: `/resources/events/${slug}` },
+    openGraph: { images: [`/api/og?eyebrow=Event&title=${encodeURIComponent(item.title)}`] },
+  };
 }
 
 export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -32,7 +38,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
           <ArrowLeft className="h-3.5 w-3.5" /> All events
         </Link>
         <div className="mt-6 flex flex-wrap items-center gap-2">
-          <span className="inline-block w-fit rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-600">
+          <span className="inline-block w-fit rounded-full bg-saffron-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-700">
             {item.category}
           </span>
           {item.isDemo && <DemoBadge />}

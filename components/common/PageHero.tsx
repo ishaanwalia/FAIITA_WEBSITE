@@ -50,7 +50,7 @@ export function PageHero({
         <div aria-hidden className="grain absolute inset-0" />
       </motion.div>
       <div className="container-page relative">
-        <SectionHeading eyebrow={eyebrow} title={title} description={description} light />
+        <SectionHeading eyebrow={eyebrow} title={title} description={description} light as="h1" />
         {children}
       </div>
     </section>

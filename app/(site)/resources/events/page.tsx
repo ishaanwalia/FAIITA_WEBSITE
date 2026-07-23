@@ -11,6 +11,7 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = {
   title: "Events",
   description: "FAIITA's summits, AGMs, workshops and regional meets.",
+  alternates: { canonical: "/resources/events" },
 };
 
 export const revalidate = 3600;
