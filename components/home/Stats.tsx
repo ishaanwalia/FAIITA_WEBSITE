@@ -33,6 +33,8 @@ function KineticCount({ value }: { value: number }) {
 }
 
 export function Stats({ stats }: { stats: StatItem[] }) {
+  if (stats.length === 0) return null;
+
   return (
     <section className="relative overflow-hidden bg-navy-800 py-20">
       <div aria-hidden className="animated-gradient absolute inset-0" />

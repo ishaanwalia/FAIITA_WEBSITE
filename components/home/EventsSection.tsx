@@ -17,6 +17,8 @@ const EVENT_IMAGES = [
 ];
 
 export function EventsSection({ events }: { events: EventItem[] }) {
+  if (events.length === 0) return null;
+
   return (
     <section className="bg-secondary/60 py-24">
       <div className="container-page">
