@@ -119,6 +119,48 @@ export const codeNews: CodeNewsItem[] = [
       "With its successful execution, IT India Expo 2025 has established itself as one of the most prominent IT trade events in North India, reinforcing Ludhiana's position as a rapidly growing technology and business hub.",
     ].join("\n\n"),
   },
+  {
+    id: "code-news-faiita-agm-2020-ahmedabad",
+    slug: "faiita-agm-2020-ahmedabad",
+    title: "FAIITA Holds Annual General Meeting 2020 in Ahmedabad, Hosted by FITAG",
+    excerpt:
+      "FAIITA's Annual General Meeting was held on 10th January 2020 at Ahmedabad, hosted by FITAG, bringing together delegates of member state associations from across India.",
+    category: "Events",
+    featured: false,
+    isDemo: false,
+    publishedAt: new Date("2020-01-10T11:00:00+05:30"),
+    coverImage: "/images/gallery/faiita-agm-2020-ahmedabad-01.jpg",
+    heroImage: "/images/gallery/faiita-agm-2020-ahmedabad-05.jpg",
+    sourceUrl: null,
+    content: [
+      "The Federation of All India Information Technology Associations (FAIITA) held its Annual General Meeting on 10th January 2020 at the Marriott Courtyard's Shaan Convention Hall in Ahmedabad, hosted by FITAG (Federation of IT Associations of Gujarat).",
+      "Delegates and office bearers of FAIITA's member state associations travelled from across the country to attend the AGM, with proceedings opened by a traditional lamp-lighting ceremony followed by welcome addresses from the host association.",
+      "The meeting featured presentations from member associations and partners, including an update on COMPUTEX Taipei 2020, as well as sessions from exhibitors showcasing CCTV surveillance and VR/AR-based training technology on the sidelines of the event.",
+      "Platinum sponsor Enjay, along with Silver Sponsors including ASUS and eMedical, and media partner National Computer News (NCN), supported the AGM, underlining the continued backing of the IT trade and technology ecosystem for FAIITA's federating mission.",
+    ].join("\n\n"),
+  },
+  {
+    id: "code-news-cmda-pune-it-expo-2020",
+    slug: "cmda-pune-it-expo-2020",
+    title: "FAIITA Represented at CMDA Pune IT Expo 2020 B2B",
+    excerpt:
+      "FAIITA President Kaushik Pandya and National Convenor Sanjeev Walia represented the federation at the CMDA IT-Expo 2020 B2B in Pune, engaging district IT associations from across Maharashtra.",
+    category: "Events",
+    featured: false,
+    isDemo: false,
+    publishedAt: new Date("2020-02-11T10:00:00+05:30"),
+    coverImage: "/images/gallery/cmda-pune-it-expo-2020-02.jpg",
+    heroImage: "/images/gallery/cmda-pune-it-expo-2020-01.jpg",
+    sourceUrl: null,
+    content: [
+      "CMDA Pune organized \"CMDA IT-Expo 2020 B2B\" at Hotel Conrad, Pune, Maharashtra, on 11th and 12th February 2020. A two-member delegation from FAIITA — President Kaushik Pandya and National Convenor Sanjeev Walia — travelled from Ahmedabad and Chandigarh respectively to represent the federation.",
+      "At the inaugural ceremony, CMDA Pune President Mr. Kausar Dabhia invited FAIITA President Kaushik Pandya to deliver the inaugural address, in which Mr. Pandya presented the vision of FAIITA and of the IT industry more broadly. The ceremony's Chief Guest was Mr. Sanjay Saha, National Sales Head (Hyderabad) of Redington India Ltd, with Mr. Jayant Goradia as Guest of Honour.",
+      "The FAIITA delegation toured the exhibitors' stalls at the expo and interacted with participants, amid a significant presence of dignitaries from district IT associations across Maharashtra — including Mumbai, Pune, Dhule, Satara, Latur, Jalgaon, Sangli and Bhusawal.",
+      "FAIITA subsequently organized a meeting with the office bearers of these district associations, convened by National Convenor Sanjeev Walia. President Kaushik Pandya presented FAIITA's vision, the benefits of district and state associations joining the federation directly, and the functioning of FAIITA's task committees — a meeting CMDA President Kausar Dabhia welcomed with gratitude.",
+      "Alongside the expo, National Computer News (NCN) held its Channel Partners Summit 2020, featuring a group discussion in which FAIITA's Founder President and Chief Mentor, Mr. Champak Raj Gurjar, presented the federation's achievements and roadmap. NCN also invited the FAIITA delegation to present awards to winners at the summit.",
+      "On 12th February, National Convenor Sanjeev Walia travelled to Mumbai to meet TAIT President Mr. Samir Parekh and State Co-ordinator Mr. Praveen Dhoka, discussing plans for an exhibition committee and a membership drive to enroll all 23 district IT associations of Maharashtra under the FAIITA banner.",
+    ].join("\n\n"),
+  },
 ];
 
 /** Merge code-side news into DB rows: dedupe by slug (DB wins), newest first. */

@@ -27,7 +27,7 @@ export function Hero() {
     <section ref={sectionRef} className="relative flex min-h-[92vh] items-center overflow-hidden bg-navy-800">
       <motion.div style={{ y: bgY }} className="absolute inset-0 scale-110">
         <Image
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80"
+          src="/hero.jpg"
           alt=""
           fill
           priority
