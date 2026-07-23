@@ -31,16 +31,19 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Nonce-based script-src: Next.js reads the nonce back out of this CSP
-  // header and applies it to its own internal hydration scripts automatically,
-  // so no per-script wiring is needed elsewhere for first-party code. Inline
-  // style attributes are left alone (style-src 'unsafe-inline') because
-  // framer-motion/GSAP set `style="..."` directly on elements site-wide —
-  // CSS injection is a much narrower attack surface than script injection.
-  const nonce = btoa(crypto.randomUUID());
+  // NOT nonce-based: verified in production that Next's own inline
+  // hydration/RSC-payload scripts do not automatically pick up a nonce from
+  // this header the way the docs suggest — they shipped with no nonce
+  // attribute at all, so the browser blocked every one of them and the site
+  // rendered a blank white screen (everything Framer Motion sets to
+  // opacity:0 for its initial animation state never got animated back in,
+  // because the JS that would do that never ran). 'unsafe-inline' for
+  // script-src is a real, deliberate tradeoff for a site that ships this
+  // much first-party inline script — reliability over a stricter policy
+  // this setup can't currently support without deeper surgery.
   const csp = [
     `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}'`,
+    `script-src 'self' 'unsafe-inline'`,
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: https://images.unsplash.com https://*.public.blob.vercel-storage.com`,
     `font-src 'self'`,
@@ -55,10 +58,7 @@ export function proxy(request: NextRequest) {
     `frame-ancestors 'self'`,
   ].join("; ");
 
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-nonce", nonce);
-
-  const response = NextResponse.next({ request: { headers: requestHeaders } });
+  const response = NextResponse.next();
   response.headers.set("Content-Security-Policy", csp);
   return response;
 }
