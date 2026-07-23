@@ -14,7 +14,10 @@ import { mergeNews } from "@/lib/code-news";
 export const metadata: Metadata = {
   title: "News",
   description: "The latest news and announcements from FAIITA.",
-  alternates: { canonical: "/resources/news" },
+  alternates: {
+    canonical: "/resources/news",
+    types: { "application/rss+xml": "/resources/news/rss.xml" },
+  },
 };
 
 export const revalidate = 3600;

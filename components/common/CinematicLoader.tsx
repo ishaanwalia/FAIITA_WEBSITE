@@ -103,8 +103,8 @@ export function CinematicLoader() {
         sessionStorage.setItem(SESSION_KEY, "1");
         gsap.to(container, {
           opacity: 0,
-          duration: 0.8,
-          delay: 0.3,
+          duration: 0.5,
+          delay: 0.15,
           ease: "power2.inOut",
           onComplete: () => {
             setMounted(false);
@@ -117,7 +117,7 @@ export function CinematicLoader() {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     tl.to(nodes, {
-      duration: 1.2,
+      duration: 0.9,
       onUpdate: () => {
         nodes.forEach((node) => {
           const progress = tl.progress();
@@ -154,7 +154,7 @@ export function CinematicLoader() {
     }
 
     // Phase 4: Hold
-    tl.to({}, { duration: 0.8 });
+    tl.to({}, { duration: 0.4 });
 
     // Phase 5: Logo scales down
     tl.to(logo, {

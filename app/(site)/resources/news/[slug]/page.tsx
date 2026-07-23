@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
+import { CopyLinkButton } from "@/components/common/CopyLinkButton";
 import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 import { codeNews, findCodeNews } from "@/lib/code-news";
@@ -36,7 +38,8 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
   return (
     <article className="bg-background py-20">
       <div className="container-page max-w-3xl">
-        <Link href="/resources/news" className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">
+        <Breadcrumbs items={[{ label: "News", href: "/resources/news" }, { label: item.title }]} />
+        <Link href="/resources/news" className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">
           <ArrowLeft className="h-3.5 w-3.5" /> All news
         </Link>
         <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -44,7 +47,10 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
           {item.isDemo && <DemoBadge />}
         </div>
         <h1 className="mt-4 text-balance font-display text-3xl font-bold text-navy-800 sm:text-4xl">{item.title}</h1>
-        <p className="mt-3 text-sm text-muted-foreground">{formatDate(item.publishedAt)}</p>
+        <div className="mt-3 flex items-center gap-4">
+          <p className="text-sm text-muted-foreground">{formatDate(item.publishedAt)}</p>
+          <CopyLinkButton />
+        </div>
         {(item.heroImage ?? item.coverImage) && (
           <Image
             src={(item.heroImage ?? item.coverImage)!}

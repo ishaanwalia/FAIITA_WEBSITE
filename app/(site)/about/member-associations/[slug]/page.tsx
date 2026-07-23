@@ -5,6 +5,7 @@ import { ArrowLeft, Building2, Calendar, Globe, Mail, Phone, Users } from "lucid
 import { memberAssociations } from "@/lib/member-associations";
 import { LogoImage } from "@/components/common/LogoImage";
 import { DemoBadge } from "@/components/ui/DemoBadge";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 
 export function generateStaticParams() {
   return memberAssociations.map((m) => ({ slug: m.slug }));
@@ -31,7 +32,11 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ s
     <>
       <section className="bg-navy-800 py-20">
         <div className="container-page">
-          <Link href="/about/member-associations" className="flex items-center gap-1.5 text-sm text-white/60 hover:text-white">
+          <Breadcrumbs
+            light
+            items={[{ label: "Member Associations", href: "/about/member-associations" }, { label: member.name }]}
+          />
+          <Link href="/about/member-associations" className="mt-4 flex items-center gap-1.5 text-sm text-white/60 hover:text-white">
             <ArrowLeft className="h-3.5 w-3.5" /> All member associations
           </Link>
           <div className="mt-6 flex items-center gap-2">

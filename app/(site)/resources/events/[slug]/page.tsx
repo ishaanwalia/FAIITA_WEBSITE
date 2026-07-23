@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DemoBadge } from "@/components/ui/DemoBadge";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
+import { CopyLinkButton } from "@/components/common/CopyLinkButton";
 import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
@@ -34,7 +36,8 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
   return (
     <article className="bg-background py-20">
       <div className="container-page max-w-3xl">
-        <Link href="/resources/events" className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">
+        <Breadcrumbs items={[{ label: "Events", href: "/resources/events" }, { label: item.title }]} />
+        <Link href="/resources/events" className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">
           <ArrowLeft className="h-3.5 w-3.5" /> All events
         </Link>
         <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -44,9 +47,10 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
           {item.isDemo && <DemoBadge />}
         </div>
         <h1 className="mt-4 text-balance font-display text-3xl font-bold text-navy-800 sm:text-4xl">{item.title}</h1>
-        <div className="mt-4 flex flex-wrap gap-5 text-sm text-muted-foreground">
+        <div className="mt-4 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
           <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4" /> {formatDate(item.startDate)}</span>
           <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" /> {item.city}, {item.state}</span>
+          <CopyLinkButton />
         </div>
         <p className="mt-8 text-base leading-relaxed text-navy-800/80">{item.description}</p>
         {item.registrationLink && (

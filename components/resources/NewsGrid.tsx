@@ -42,7 +42,7 @@ export function NewsGrid({ news }: { news: NewsRow[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search news..."
-            className="w-full rounded-full border border-border bg-card py-2 pl-9 pr-4 text-sm focus:border-navy-700 focus:outline-none"
+            className="w-full rounded-full border border-border bg-card py-2 pl-9 pr-4 text-sm focus:border-navy-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
           />
         </div>
         <div className="flex flex-wrap gap-2">

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Download, Maximize2 } from "lucide-react";
 import { DemoBadge } from "@/components/ui/DemoBadge";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { formatDate } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
@@ -36,7 +37,8 @@ export default async function NewsletterIssuePage({ params }: { params: Promise<
   return (
     <article className="bg-background pb-20 pt-28">
       <div className="container-page">
-        <Link href="/resources/newsletter" className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">
+        <Breadcrumbs items={[{ label: "Newsletter", href: "/resources/newsletter" }, { label: item.title }]} />
+        <Link href="/resources/newsletter" className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">
           <ArrowLeft className="h-3.5 w-3.5" /> All issues
         </Link>
 

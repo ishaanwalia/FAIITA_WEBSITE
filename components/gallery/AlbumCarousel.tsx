@@ -53,7 +53,7 @@ export function AlbumCarousel({ album }: { album: GalleryAlbum }) {
         <Carousel.Control className="flex items-center justify-between gap-3 border-t border-border px-4 py-3">
           <Carousel.PrevTrigger
             aria-label="Previous"
-            className="rounded-full border border-border p-1.5 text-navy-700 transition-colors hover:bg-navy-700/5 disabled:opacity-30"
+            className="rounded-full border border-border p-1.5 text-navy-700 transition-colors hover:bg-navy-700/5 disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
           >
             <ChevronLeft className="h-4 w-4" />
           </Carousel.PrevTrigger>
@@ -64,14 +64,14 @@ export function AlbumCarousel({ album }: { album: GalleryAlbum }) {
                 key={i}
                 index={i}
                 aria-label={i === 0 ? "About this album" : `Photo ${i}`}
-                className="h-1.5 w-1.5 cursor-pointer rounded-full bg-navy-700/20 transition-all data-[current]:w-4 data-[current]:bg-saffron-500"
+                className="h-1.5 w-1.5 cursor-pointer rounded-full bg-navy-700/20 transition-all data-[current]:w-4 data-[current]:bg-saffron-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
               />
             ))}
           </Carousel.IndicatorGroup>
 
           <Carousel.NextTrigger
             aria-label="Next"
-            className="rounded-full border border-border p-1.5 text-navy-700 transition-colors hover:bg-navy-700/5 disabled:opacity-30"
+            className="rounded-full border border-border p-1.5 text-navy-700 transition-colors hover:bg-navy-700/5 disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
           >
             <ChevronRight className="h-4 w-4" />
           </Carousel.NextTrigger>

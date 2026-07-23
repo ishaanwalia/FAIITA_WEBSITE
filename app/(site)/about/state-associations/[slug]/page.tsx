@@ -7,6 +7,7 @@ import { findExtraState, withExtraStates } from "@/lib/extra-states";
 import { applyStateOverrides, excludeRemovedStates, isRemovedStateSlug } from "@/lib/state-overrides";
 import { normalizeZone } from "@/lib/utils";
 import { LogoImage } from "@/components/common/LogoImage";
+import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 
 export const revalidate = 3600;
 
@@ -42,7 +43,11 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
     <>
       <section className="bg-navy-800 py-20">
         <div className="container-page">
-          <Link href="/about/state-associations" className="flex items-center gap-1.5 text-sm text-white/60 hover:text-white">
+          <Breadcrumbs
+            light
+            items={[{ label: "State Associations", href: "/about/state-associations" }, { label: state.stateName }]}
+          />
+          <Link href="/about/state-associations" className="mt-4 flex items-center gap-1.5 text-sm text-white/60 hover:text-white">
             <ArrowLeft className="h-3.5 w-3.5" /> All state associations
           </Link>
           <span className="mt-6 inline-block rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
