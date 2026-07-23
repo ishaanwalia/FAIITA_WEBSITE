@@ -146,7 +146,10 @@
       radial-gradient(70% 90% at 50% 110%, rgba(0, 245, 255, 0.09), transparent 55%),
       radial-gradient(40% 60% at 82% 78%, rgba(242, 146, 29, 0.08), transparent 60%);
     background-size: 170% 170%;
+    /* transform, not background-position — keeps this full-bleed layer on
+       the compositor instead of repainting the whole hero every frame */
     animation: gradient-breathe 24s ease-in-out infinite alternate;
+    will-change: transform;
   }
 
   /* Fine film grain — premium texture over flat navy fills */
@@ -202,8 +205,8 @@
 }
 
 @keyframes gradient-breathe {
-  0% { background-position: 0% 0%; }
-  100% { background-position: 100% 100%; }
+  0% { transform: translate(-3%, -3%) scale(1.08); }
+  100% { transform: translate(3%, 3%) scale(1.08); }
 }
 
 @keyframes gradient-pan {

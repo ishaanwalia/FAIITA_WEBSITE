@@ -66,8 +66,9 @@ export function EventsSection({ events }: { events: EventItem[] }) {
                         <MapPin className="h-3.5 w-3.5" /> {e.city}, {e.state}
                       </p>
                       <Button asChild variant="link" className="mt-4 h-auto justify-start px-0 text-navy-700">
-                        <Link href="/resources/events">
-                          Learn More <ArrowRight className="h-3.5 w-3.5" />
+                        <Link href={`/resources/events/${e.slug}`}>
+                          Learn More <span className="sr-only"> about {e.title}</span>
+                          <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                       </Button>
                     </div>

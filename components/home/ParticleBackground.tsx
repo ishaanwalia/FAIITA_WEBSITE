@@ -26,6 +26,11 @@ export function ParticleBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Skip entirely on phones: it's a subtle backdrop layer buried under the
+    // gradient/overlay stack, but the RAF loop still costs real main-thread
+    // time on throttled mobile CPUs during the page's critical load window.
+    if (window.innerWidth < 768) return;
+
     let animId: number;
     let nodes: Node[] = [];
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -34,8 +39,7 @@ export function ParticleBackground() {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
 
-      const count = window.innerWidth < 640 ? 30 : 60;
-      nodes = Array.from({ length: count }, () => ({
+      nodes = Array.from({ length: 60 }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         vx: (Math.random() - 0.5) * 0.4,
