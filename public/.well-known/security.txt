@@ -1,0 +1,3 @@
+Contact: mailto:secretary@faiita.co.in
+Preferred-Languages: en
+Canonical: https://www.faiita.co.in/.well-known/security.txt

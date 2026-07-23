@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+// No edge runtime here — this image is identical on every request, so the
+// default (Node) runtime lets it be generated once at build time instead of
+// disabling static generation for the route.
 export const alt = "FAIITA — Federation of All India Information Technology Associations";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
