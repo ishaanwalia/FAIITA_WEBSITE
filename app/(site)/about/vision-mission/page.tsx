@@ -13,16 +13,13 @@ import {
   ShieldCheck,
   Globe2,
 } from "lucide-react";
+import Link from "next/link";
 import { PageHero } from "@/components/common/PageHero";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { IndiaMap } from "@/components/about/IndiaMap";
-import { prisma } from "@/lib/prisma";
-import { withExtraStates } from "@/lib/extra-states";
-import { applyStateOverrides, excludeRemovedStates } from "@/lib/state-overrides";
-import { normalizeZone } from "@/lib/utils";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 export const metadata: Metadata = {
   title: "Vision & Mission",
@@ -127,25 +124,7 @@ const initiatives = [
   },
 ];
 
-export default async function VisionMissionPage() {
-  const states = withExtraStates(
-    excludeRemovedStates(await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } }))
-  ).map(applyStateOverrides);
-  const mapPoints = states.map((s) => ({
-    id: s.id,
-    slug: s.slug,
-    stateName: s.stateName,
-    stateCode: s.stateCode,
-    region: normalizeZone(s.region),
-    associationName: s.associationName,
-    memberCount: s.memberCount,
-    foundedYear: s.foundedYear,
-    contactEmail: s.contactEmail,
-    logoUrl: s.logoUrl,
-    mapX: s.mapX,
-    mapY: s.mapY,
-  }));
-
+export default function VisionMissionPage() {
   return (
     <>
       <PageHero
@@ -220,16 +199,19 @@ export default async function VisionMissionPage() {
             </div>
           </ScrollReveal>
 
-          <div className="mt-24">
-            <SectionHeading
-              eyebrow="Our Reach"
-              title="A Vision Realized Across 26 States"
-              description="Explore where FAIITA's member associations operate today."
-            />
-            <div className="mt-10">
-              <IndiaMap states={mapPoints} />
+          <ScrollReveal direction="up">
+            <div className="mt-24 flex flex-col items-center gap-5 rounded-3xl border border-border bg-card p-10 text-center sm:p-14">
+              <SectionHeading
+                eyebrow="Our Reach"
+                title="A Vision Realized Across 26 States"
+                description="Explore the full interactive map of FAIITA's member associations on our About page."
+                align="center"
+              />
+              <MagneticButton asChild variant="accent" size="lg">
+                <Link href="/about#map">View the State Map</Link>
+              </MagneticButton>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
     </>

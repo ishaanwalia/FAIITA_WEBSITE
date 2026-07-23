@@ -93,7 +93,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-background py-24">
+      <section id="map" className="scroll-mt-24 bg-background py-24">
         <div className="container-page">
           <SectionHeading
             eyebrow="Interactive Map"
