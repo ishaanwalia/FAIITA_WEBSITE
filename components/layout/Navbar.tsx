@@ -111,7 +111,7 @@ export function Navbar() {
   const isActive = (href?: string) => !!href && (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header className="fixed inset-x-0 top-0 z-50 isolate">
       <div
         className={cn(
           "[transform:translateZ(0)] will-change-transform transition-all duration-500",
