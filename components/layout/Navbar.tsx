@@ -111,10 +111,11 @@ export function Navbar() {
   const isActive = (href?: string) => !!href && (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 isolate">
+    <>
+    <header className="fixed inset-x-0 top-0 z-50 isolate [transform:translateZ(0)] will-change-transform">
       <div
         className={cn(
-          "[transform:translateZ(0)] will-change-transform transition-all duration-500",
+          "transition-all duration-500",
           scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
         )}
       >
@@ -208,41 +209,47 @@ export function Navbar() {
         </button>
       </div>
       </div>
+    </header>
 
-      <AnimatePresence>
-        {mobileOpen && (
+    {/* Sibling of <header>, not a descendant — <header> carries a transform
+        for GPU-layer promotion (fixes iOS momentum-scroll detachment), and
+        transform on an ancestor creates a containing block for this panel's
+        own position:fixed, which previously shrank it to the header's ~80px
+        box (see git history on this file before changing this split again). */}
+    <AnimatePresence>
+      {mobileOpen && (
+        <motion.div
+          ref={mobilePanelRef}
+          id="mobile-nav-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 top-20 z-40 bg-navy-900 lg:hidden"
+        >
           <motion.div
-            ref={mobilePanelRef}
-            id="mobile-nav-panel"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 top-20 z-40 bg-navy-900 lg:hidden"
+            className="container-page flex flex-col gap-2 py-10"
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+            variants={{ show: { transition: { staggerChildren: 0.06 } } }}
           >
-            <motion.div
-              className="container-page flex flex-col gap-2 py-10"
-              initial="hidden"
-              animate="show"
-              exit="hidden"
-              variants={{ show: { transition: { staggerChildren: 0.06 } } }}
-            >
-              {navItems.map((item) => (
-                <MobileNavGroup key={item.label} item={item} />
-              ))}
-              <motion.div variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}>
-                <MagneticButton asChild variant="accent" className="mt-4 w-full">
-                  <Link href="/contact">Join FAIITA</Link>
-                </MagneticButton>
-              </motion.div>
+            {navItems.map((item) => (
+              <MobileNavGroup key={item.label} item={item} />
+            ))}
+            <motion.div variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}>
+              <MagneticButton asChild variant="accent" className="mt-4 w-full">
+                <Link href="/contact">Join FAIITA</Link>
+              </MagneticButton>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    </>
   );
 }
 
