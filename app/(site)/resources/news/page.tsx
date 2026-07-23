@@ -47,6 +47,7 @@ export default async function NewsPage() {
                           src={featured.coverImage}
                           alt=""
                           fill
+                          sizes="100vw"
                           className="object-cover opacity-40"
                           priority
                         />

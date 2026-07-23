@@ -31,6 +31,7 @@ export function Hero() {
           alt=""
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-900/90 via-navy-800/80 to-navy-800/95" />
@@ -57,6 +58,7 @@ export function Hero() {
                 alt="FAIITA Logo"
                 fill
                 priority
+                sizes="320px"
                 className="object-contain brightness-[1.35] contrast-[1.1]"
               />
             </div>

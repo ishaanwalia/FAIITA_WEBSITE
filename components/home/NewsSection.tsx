@@ -45,6 +45,7 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                   src={lead.coverImage ?? NEWS_IMAGES[0]}
                   alt=""
                   fill
+                  sizes="(min-width: 1024px) 66vw, 100vw"
                   className="object-cover opacity-40 transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/50 to-navy-900/20" />
@@ -77,6 +78,7 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                           src={n.coverImage ?? NEWS_IMAGES[(i + 1) % NEWS_IMAGES.length]}
                           alt=""
                           fill
+                          sizes="(min-width: 1024px) 33vw, 100vw"
                           className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>

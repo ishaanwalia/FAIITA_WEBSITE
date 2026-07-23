@@ -46,6 +46,7 @@ export function PhotoAvatar({
           src={imageUrl as string}
           alt=""
           fill
+          sizes="176px"
           className="bg-white object-contain"
           onError={() => setFailed(true)}
         />

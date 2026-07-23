@@ -28,13 +28,33 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faiita.co.in";
+
 export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const item = await prisma.event.findUnique({ where: { slug } });
   if (!item) notFound();
 
+  const eventSchema = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: item.title,
+    description: item.description,
+    startDate: item.startDate.toISOString(),
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: {
+      "@type": "Place",
+      name: `${item.city}, ${item.state}`,
+      address: { "@type": "PostalAddress", addressLocality: item.city, addressRegion: item.state, addressCountry: "IN" },
+    },
+    organizer: { "@type": "Organization", name: "FAIITA", url: siteUrl },
+    url: `${siteUrl}/resources/events/${slug}`,
+  };
+
   return (
     <article className="bg-background py-20">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }} />
       <div className="container-page max-w-3xl">
         <Breadcrumbs items={[{ label: "Events", href: "/resources/events" }, { label: item.title }]} />
         <Link href="/resources/events" className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">

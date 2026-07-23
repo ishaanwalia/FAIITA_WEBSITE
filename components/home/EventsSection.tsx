@@ -42,6 +42,7 @@ export function EventsSection({ events }: { events: EventItem[] }) {
                         src={e.coverImage ?? EVENT_IMAGES[i % EVENT_IMAGES.length]}
                         alt=""
                         fill
+                        sizes="(min-width: 768px) 33vw, 100vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute left-3 top-3 flex h-12 w-12 flex-col items-center justify-center rounded-xl bg-navy-800/90 text-white backdrop-blur-sm">

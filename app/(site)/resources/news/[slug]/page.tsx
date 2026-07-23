@@ -30,13 +30,29 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faiita.co.in";
+
 export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const item = (await prisma.news.findUnique({ where: { slug } })) ?? findCodeNews(slug);
   if (!item) notFound();
 
+  const image = item.heroImage ?? item.coverImage;
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: item.title,
+    description: item.excerpt,
+    datePublished: item.publishedAt.toISOString(),
+    ...(image && { image: [image.startsWith("http") ? image : `${siteUrl}${image}`] }),
+    author: { "@type": "Organization", name: "FAIITA", url: siteUrl },
+    publisher: { "@type": "Organization", name: "FAIITA", logo: { "@type": "ImageObject", url: `${siteUrl}/logo.png` } },
+    mainEntityOfPage: `${siteUrl}/resources/news/${slug}`,
+  };
+
   return (
     <article className="bg-background py-20">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <div className="container-page max-w-3xl">
         <Breadcrumbs items={[{ label: "News", href: "/resources/news" }, { label: item.title }]} />
         <Link href="/resources/news" className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">

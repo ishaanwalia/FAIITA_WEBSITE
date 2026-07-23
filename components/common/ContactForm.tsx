@@ -27,6 +27,7 @@ export function ContactForm() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmit = async (values: FormValues) => {
     setStatus("idle");
@@ -36,7 +37,11 @@ export function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-      if (!res.ok) throw new Error("Failed");
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        setErrorMessage(body?.error ?? null);
+        throw new Error("Failed");
+      }
       setStatus("success");
       reset();
     } catch {
@@ -89,7 +94,10 @@ export function ContactForm() {
           <input
             id="email"
             type="email"
-            {...register("email", { required: "Please enter your email" })}
+            {...register("email", {
+              required: "Please enter your email",
+              pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Please enter a valid email address" },
+            })}
             className="input-field"
             placeholder="you@example.com"
             aria-invalid={!!errors.email}
@@ -130,7 +138,7 @@ export function ContactForm() {
 
       {status === "error" && (
         <p role="alert" aria-live="assertive" className="text-sm text-destructive">
-          Something went wrong. Please try again in a moment.
+          {errorMessage ?? "Something went wrong. Please try again in a moment."}
         </p>
       )}
 

@@ -43,6 +43,7 @@ export function LogoImage({
           src={logoUrl as string}
           alt={alt}
           fill
+          sizes="80px"
           className="object-contain p-1"
           onError={() => setFailed(true)}
         />
