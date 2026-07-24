@@ -37,7 +37,7 @@ export function Footer() {
             federated since 2014.
           </p>
           <div className="mt-6">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/40">Get our newsletter</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/60">Get our newsletter</p>
             <NewsletterForm />
           </div>
           <div className="mt-6 flex gap-3">
@@ -100,7 +100,7 @@ export function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-page flex flex-col items-center justify-between gap-3 py-6 text-xs text-white/35 sm:flex-row">
+        <div className="container-page flex flex-col items-center justify-between gap-3 py-6 text-xs text-white/60 sm:flex-row">
           <p>© {new Date().getFullYear()} FAIITA. All rights reserved.</p>
           <div className="flex gap-5">
             <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>

@@ -92,20 +92,23 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialItem[]
           <button
             onClick={() => go(-1)}
             aria-label="Previous testimonial"
-            className="absolute -left-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card shadow-sm hover:bg-secondary sm:-left-12"
+            className="absolute -left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card shadow-sm hover:bg-secondary sm:-left-12"
           >
             <ChevronLeft className="h-4 w-4 text-navy-700" />
           </button>
           <button
             onClick={() => go(1)}
             aria-label="Next testimonial"
-            className="absolute -right-4 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card shadow-sm hover:bg-secondary sm:-right-12"
+            className="absolute -right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card shadow-sm hover:bg-secondary sm:-right-12"
           >
             <ChevronRight className="h-4 w-4 text-navy-700" />
           </button>
 
-          <div className="mt-6 flex justify-center gap-2">
+          <div className="mt-6 flex justify-center">
             {testimonials.map((_, i) => (
+              // Visual dot stays tiny by design — the button itself is the
+              // real (44px) tap target, so touch accuracy doesn't depend on
+              // hitting a 6px mark.
               <button
                 key={i}
                 onClick={() => {
@@ -113,11 +116,16 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialItem[]
                   setIndex(i);
                 }}
                 aria-label={`Go to testimonial ${i + 1}`}
-                className={cn(
-                  "h-1.5 rounded-full transition-all",
-                  i === index ? "w-6 bg-saffron-500" : "w-1.5 bg-navy-700/20"
-                )}
-              />
+                className="flex h-11 w-8 items-center justify-center"
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    "h-1.5 rounded-full transition-all",
+                    i === index ? "w-6 bg-saffron-500" : "w-1.5 bg-navy-700/20"
+                  )}
+                />
+              </button>
             ))}
           </div>
         </div>

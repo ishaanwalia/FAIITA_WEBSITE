@@ -193,7 +193,7 @@ export function Navbar() {
 
         <div className="hidden lg:block">
           <MagneticButton asChild variant="accent" size="default">
-            <Link href="/contact">Join FAIITA</Link>
+            <Link href="/contact?intent=membership">Join FAIITA</Link>
           </MagneticButton>
         </div>
 
@@ -242,7 +242,7 @@ export function Navbar() {
             ))}
             <motion.div variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}>
               <MagneticButton asChild variant="accent" className="mt-4 w-full">
-                <Link href="/contact">Join FAIITA</Link>
+                <Link href="/contact?intent=membership">Join FAIITA</Link>
               </MagneticButton>
             </motion.div>
           </motion.div>

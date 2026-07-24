@@ -17,6 +17,8 @@ export type CodeNewsItem = {
   featured: boolean;
   isDemo: boolean;
   publishedAt: Date;
+  /** Optional deep link to the state association page this story is most about. */
+  relatedState?: { slug: string; label: string };
 };
 
 export const codeNews: CodeNewsItem[] = [
@@ -33,6 +35,7 @@ export const codeNews: CodeNewsItem[] = [
     coverImage: "/images/news/faiita-election-2025-lucknow.jpg",
     heroImage: "/images/news/faiita-election-2025-lucknow-2.jpg",
     sourceUrl: null,
+    relatedState: { slug: "uttar-pradesh", label: "Uttar Pradesh" },
     content: [
       "The Federation of All India Information Technology Associations (FAIITA) held its election for President and the national team at Lucknow in 2025, with delegates of member state associations from across the country participating in the proceedings.",
       "Mr. Navin Gupta was elected President of FAIITA for the 2025–27 tenure, succeeding Mr. Devesh Rastogi, who now serves the federation as Chairman.",
@@ -110,6 +113,7 @@ export const codeNews: CodeNewsItem[] = [
     coverImage: "/images/gallery/it-india-expo-2025-ludhiana-02.jpg",
     heroImage: "/images/gallery/it-india-expo-2025-ludhiana-03.jpg",
     sourceUrl: null,
+    relatedState: { slug: "punjab", label: "Punjab" },
     content: [
       "Ludhiana, August 2025 — The much-awaited IT India Expo 2025 was successfully held in Ludhiana from 22nd to 24th August at Hotel Regenta Classik. The mega IT showcase was inaugurated by the Chief Guest, Honourable Finance Minister of Punjab, S. Harpal Singh Cheema, in the presence of eminent leaders and industry stakeholders.",
       "The event was jointly hosted by the Association of Computer Entrepreneurs (ACE) – Ludhiana, in collaboration with PACT (Punjab Association of Computer Traders) and FAIITA (Federation of All India IT Associations). The inaugural ceremony witnessed the participation of prominent dignitaries, including Kulwant Singh Sidhu (Local MLA), Navin Gupta (All India FAIITA President), Sanjeev Walia (Secretary, FAIITA), Gurpreet Singh Sunny (Chairman, PACT), Prem Saini (President, PACT), Gurpreet Singh (President, ACE) and Devesh Rastogi (Past President FAIITA) among others.",
@@ -132,6 +136,7 @@ export const codeNews: CodeNewsItem[] = [
     coverImage: "/images/gallery/faiita-agm-2020-ahmedabad-01.jpg",
     heroImage: "/images/gallery/faiita-agm-2020-ahmedabad-05.jpg",
     sourceUrl: null,
+    relatedState: { slug: "gujarat", label: "Gujarat" },
     content: [
       "The Federation of All India Information Technology Associations (FAIITA) held its Annual General Meeting on 10th January 2020 at the Marriott Courtyard's Shaan Convention Hall in Ahmedabad, hosted by FITAG (Federation of IT Associations of Gujarat).",
       "Delegates and office bearers of FAIITA's member state associations travelled from across the country to attend the AGM, with proceedings opened by a traditional lamp-lighting ceremony followed by welcome addresses from the host association.",
@@ -152,6 +157,7 @@ export const codeNews: CodeNewsItem[] = [
     coverImage: "/images/gallery/cmda-pune-it-expo-2020-02.jpg",
     heroImage: "/images/gallery/cmda-pune-it-expo-2020-01.jpg",
     sourceUrl: null,
+    relatedState: { slug: "maharashtra-cmda-pune", label: "Maharashtra — CMDA Pune" },
     content: [
       "CMDA Pune organized \"CMDA IT-Expo 2020 B2B\" at Hotel Conrad, Pune, Maharashtra, on 11th and 12th February 2020. A two-member delegation from FAIITA — President Kaushik Pandya and National Convenor Sanjeev Walia — travelled from Ahmedabad and Chandigarh respectively to represent the federation.",
       "At the inaugural ceremony, CMDA Pune President Mr. Kausar Dabhia invited FAIITA President Kaushik Pandya to deliver the inaugural address, in which Mr. Pandya presented the vision of FAIITA and of the IT industry more broadly. The ceremony's Chief Guest was Mr. Sanjay Saha, National Sales Head (Hyderabad) of Redington India Ltd, with Mr. Jayant Goradia as Guest of Honour.",

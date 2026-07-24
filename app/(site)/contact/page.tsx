@@ -9,13 +9,43 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-export default function ContactPage() {
+const INTENT_COPY: Record<string, { eyebrow: string; description: string; subject: string }> = {
+  membership: {
+    eyebrow: "State Association Membership",
+    description:
+      "Tell us about your state association and the office-bearer we should be talking to — we'll walk you through affiliation, member benefits, and next steps.",
+    subject: "State Association Membership Inquiry",
+  },
+  sponsorship: {
+    eyebrow: "Partner With FAIITA",
+    description:
+      "Reach 50,000+ IT channel partners across 26 states. Tell us about your brand and what kind of partnership you have in mind — event sponsorship, a channel program, or something else.",
+    subject: "Sponsorship / Brand Partnership Inquiry",
+  },
+  press: {
+    eyebrow: "Press & Media",
+    description: "Working on a story about FAIITA or the IT channel trade? Tell us what you need and our team will get back to you.",
+    subject: "Press Inquiry",
+  },
+};
+
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ intent?: string }>;
+}) {
+  const { intent } = await searchParams;
+  const copy = intent ? INTENT_COPY[intent] : undefined;
+
   return (
     <>
       <PageHero
-        eyebrow="Get in Touch"
+        eyebrow={copy?.eyebrow ?? "Get in Touch"}
         title="Contact FAIITA"
-        description="Whether you're a state association looking to affiliate, a channel partner with a query, or a member of the press — we'd love to hear from you."
+        description={
+          copy?.description ??
+          "Whether you're a state association looking to affiliate, a channel partner with a query, or a member of the press — we'd love to hear from you."
+        }
       />
 
       <section className="bg-background py-20">
@@ -73,7 +103,7 @@ export default function ContactPage() {
               Fill out the form and our team will respond within 2 business days.
             </p>
             <div className="mt-6">
-              <ContactForm />
+              <ContactForm defaultSubject={copy?.subject} />
             </div>
           </div>
         </div>

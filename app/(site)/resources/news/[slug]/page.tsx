@@ -36,6 +36,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
   const { slug } = await params;
   const item = (await prisma.news.findUnique({ where: { slug } })) ?? findCodeNews(slug);
   if (!item) notFound();
+  const relatedState = findCodeNews(slug)?.relatedState;
 
   const image = item.heroImage ?? item.coverImage;
   const articleSchema = {
@@ -82,6 +83,14 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
             <p key={i}>{paragraph}</p>
           ))}
         </div>
+        {relatedState && (
+          <Link
+            href={`/about/state-associations/${relatedState.slug}`}
+            className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 hover:text-saffron-700"
+          >
+            More on FAIITA in {relatedState.label} <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        )}
         {item.sourceUrl && (
           item.sourceUrl.startsWith("/") ? (
             <Link

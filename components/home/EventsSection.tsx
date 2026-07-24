@@ -7,7 +7,7 @@ import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { DemoBadge } from "@/components/ui/DemoBadge";
-import { formatDateShort } from "@/lib/utils";
+import { formatDateShort, cn } from "@/lib/utils";
 import type { EventItem } from "@/types";
 
 const EVENT_IMAGES = [
@@ -38,12 +38,19 @@ export function EventsSection({ events }: { events: EventItem[] }) {
             return (
               <ScrollReveal key={e.id} direction="up" delay={i * 0.08}>
                 <TiltCard maxTilt={6} className="h-full">
-                  <GlassCard variant="light" className="flex h-full flex-col overflow-hidden !p-0">
+                  <GlassCard
+                    variant="light"
+                    className={cn(
+                      "flex h-full flex-col overflow-hidden !p-0",
+                      e.isDemo && "border-2 border-dashed border-amber-400/50"
+                    )}
+                  >
                     <div className="relative h-32 w-full shrink-0 overflow-hidden">
                       <Image
                         src={e.coverImage ?? EVENT_IMAGES[i % EVENT_IMAGES.length]}
                         alt=""
                         fill
+                        quality={68}
                         sizes="(min-width: 768px) 33vw, 100vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />

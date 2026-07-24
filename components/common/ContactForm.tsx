@@ -19,7 +19,7 @@ type FormValues = {
   company_url: string;
 };
 
-export function ContactForm() {
+export function ContactForm({ defaultSubject }: { defaultSubject?: string }) {
   const {
     register,
     handleSubmit,
@@ -121,7 +121,13 @@ export function ContactForm() {
       </div>
 
       <Field id="subject" label="Subject (optional)">
-        <input id="subject" {...register("subject")} className="input-field" placeholder="What is this regarding?" />
+        <input
+          id="subject"
+          {...register("subject")}
+          defaultValue={defaultSubject}
+          className="input-field"
+          placeholder="What is this regarding?"
+        />
       </Field>
 
       <Field id="message" label="Message" error={errors.message?.message}>

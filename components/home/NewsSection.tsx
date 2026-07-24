@@ -7,7 +7,7 @@ import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
-import { formatDate } from "@/lib/utils";
+import { formatDate, cn } from "@/lib/utils";
 import type { NewsItem } from "@/types";
 
 // Placeholder editorial imagery until real cover photos are added per article.
@@ -39,12 +39,16 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
             <TiltCard maxTilt={4} className="h-full min-h-[340px]">
               <Link
                 href={`/resources/news/${lead.slug}`}
-                className="group relative flex h-full min-h-[340px] flex-col justify-end overflow-hidden rounded-2xl bg-navy-800 p-8"
+                className={cn(
+                  "group relative flex h-full min-h-[340px] flex-col justify-end overflow-hidden rounded-2xl bg-navy-800 p-8",
+                  lead.isDemo && "border-2 border-dashed border-amber-400/50"
+                )}
               >
                 <Image
                   src={lead.coverImage ?? NEWS_IMAGES[0]}
                   alt=""
                   fill
+                  quality={68}
                   sizes="(min-width: 1024px) 66vw, 100vw"
                   className="object-cover opacity-40 transition-transform duration-500 group-hover:scale-105"
                 />
@@ -58,7 +62,7 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                     {lead.title}
                   </h3>
                   <p className="mt-3 max-w-lg text-sm text-white/60">{lead.excerpt}</p>
-                  <div className="mt-5 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-white/40">
+                  <div className="mt-5 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-white/60">
                     {formatDate(lead.publishedAt)}
                     <ArrowUpRight className="h-3.5 w-3.5 text-saffron-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </div>
@@ -72,12 +76,19 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
               <ScrollReveal key={n.id} direction="right" delay={i * 0.1} className="flex-1">
                 <TiltCard maxTilt={5} className="h-full">
                   <Link href={`/resources/news/${n.slug}`} className="group block h-full">
-                    <GlassCard variant="light" className="flex h-full flex-col overflow-hidden !p-0">
+                    <GlassCard
+                      variant="light"
+                      className={cn(
+                        "flex h-full flex-col overflow-hidden !p-0",
+                        n.isDemo && "border-2 border-dashed border-amber-400/50"
+                      )}
+                    >
                       <div className="relative aspect-[5/2] w-full shrink-0 overflow-hidden">
                         <Image
                           src={n.coverImage ?? NEWS_IMAGES[(i + 1) % NEWS_IMAGES.length]}
                           alt=""
                           fill
+                          quality={68}
                           sizes="(min-width: 1024px) 33vw, 100vw"
                           className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                         />

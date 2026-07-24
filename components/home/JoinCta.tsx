@@ -18,7 +18,7 @@ export function JoinCta() {
           national advocacy, training, and a federation of 100+ associations.
         </p>
         <Button asChild size="lg" className="mt-2 bg-navy-800 text-white hover:bg-navy-700">
-          <Link href="/contact">
+          <Link href="/contact?intent=membership">
             Start Your Membership Journey <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>

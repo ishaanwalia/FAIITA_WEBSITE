@@ -19,12 +19,12 @@ export function ReadyToConnect() {
         </p>
         <div className="mt-2 flex flex-wrap items-center justify-center gap-4">
           <Button asChild variant="accent" size="lg">
-            <Link href="/contact">
-              Get in Touch <ArrowRight className="h-4 w-4" />
+            <Link href="/contact?intent=membership">
+              Apply for Membership <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <Link href="/about/member-associations">View Member Associations</Link>
+            <Link href="/contact?intent=sponsorship">Partner With Us</Link>
           </Button>
         </div>
       </div>
