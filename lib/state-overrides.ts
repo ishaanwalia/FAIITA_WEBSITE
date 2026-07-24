@@ -364,6 +364,17 @@ const overrides: Record<string, StateOverride> = {
       "Our Motto: INNOVATE | COLLABORATE | ELEVATE",
     ].join("\n\n"),
   },
+  // ITAO Odisha — verified details supplied July 2026 (matches seed.ts).
+  odisha: {
+    foundedYear: 1998,
+    memberCount: 400,
+    secretaryEmail: "secretary@itaoodisha.org",
+    websiteUrl: "https://www.itaoodisha.org",
+    description: [
+      "IT Association of Orissa (ITAO) – is a non-profitable and a registered organisation vide no.: 21400/204 of 2001-2002 under IGR, (Govt. of Odisha, India) committed for the growth of IT Industry in Odisha. ITAO was born in 1998 with a view of uniting IT related people of the state, covering both professionals and business sector. The cardinal objective is to provide a common platform for mobilising the IT resources of the State and utilise the same for generating awareness and employment in the State.",
+      "ITAO has over 300 members from all over the state of Odisha which constitute more than 75% market share of Odisha's IT business. Since 1998 ITAO has organised eight IT-Expos with the help of Govt. of Odisha and IT corporate houses. The first IT-Expo was held at Rabindra Mandap, Bhubaneswar from 23th to 25th October 1998. The last IT-Expo was held at Exhibition Ground, Bhubaneswar from 26th to 30th of December 2008.",
+    ].join("\n\n"),
+  },
 };
 
 export function applyStateOverrides<T extends { slug: string }>(state: T): T {
