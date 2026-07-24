@@ -260,6 +260,110 @@ const overrides: Record<string, StateOverride> = {
       "We are also involved in Social Activities like Plantation (Go Green Earth), Orphanage Visits, IT Seminars, Health Check-up Camps, Medical Emergency Equipment Help, Insurance Schemes for Office Workers, Offline Business Promotion via Coupon Schemes, etc.",
     ].join("\n\n"),
   },
+  // RCTA Rajasthan — verified details supplied July 2026 (matches seed.ts).
+  rajasthan: {
+    foundedYear: 2001,
+    memberCount: 360,
+    contactEmail: "rctajaipur2025@gmail.com",
+    secretaryEmail: "frontlinejaipur@gmail.com",
+    websiteUrl: "https://www.rctaonline.in",
+    logoUrl: "/logos/state/rcta.jpg",
+    description: [
+      "The Rajasthan Computer Traders Association (RCTA) is a leading non-profit organization representing the IT trade community of Rajasthan. Established with the objective of uniting computer dealers, distributors, system integrators, and service providers across the state, RCTA serves as a strong platform for collaboration, growth, and industry advancement.",
+      "With a growing membership across multiple districts, RCTA acts as a bridge between vendors, dealers, and customers, ensuring fair trade practices and supporting business development through training programs, exhibitions, and networking opportunities.",
+      "Beyond business, RCTA is also actively involved in social and community welfare activities, reflecting our commitment to contribute positively to society.",
+    ].join("\n\n"),
+  },
+  // NECTA North East — verified details supplied July 2026 (matches seed.ts).
+  "north-east": {
+    foundedYear: 2001,
+    memberCount: 210,
+    contactEmail: "president@necta.co.in",
+    secretaryEmail: "secretary@necta.co.in",
+    websiteUrl: "https://www.necta.co.in",
+    description: [
+      "NECTA : A Catalyst for IT Transformation in the Northeast",
+      "Established in 2001, the North East Computer Traders' Association (NECTA) serves as a premier organisation for IT dealers across the Northeast region of India. Comprising a distinguished assembly of professionals, NECTA fosters synergy within the diverse layers of the IT channel, ensuring collaborative growth and stability for all stakeholders.",
+      "Beyond mere commercial interests, NECTA operates as a charitable, non-political, and non-profit entity. Its unwavering commitment lies in facilitating the widespread adoption and development of information technology throughout Northeast India. By actively bridging the gap between the IT trading community and the government, NECTA provides valuable insights and recommendations, paving the way for policies that effectively address the region's unique technological needs.",
+      "NECTA's dedication extends beyond mere market expansion. Recognising the transformative potential of technology, the association strives to bring the latest advancements to every doorstep, empowering individuals and communities across the Northeast. By diligently advocating for improved access and infrastructure, NECTA envisions a future where technology serves as a catalyst for progress and improved living standards for all.",
+    ].join("\n\n"),
+  },
+  // CDAN Nellore, Andhra Pradesh — verified details supplied July 2026 (matches seed.ts).
+  "andhra-pradesh": {
+    associationName: "Computer Dealers Association of Nellore District (CDAN)",
+    foundedYear: 2011,
+    memberCount: 55,
+    contactEmail: "president@cdan.com",
+    secretaryEmail: "secretary@cdan.com",
+    description: [
+      "The Computer Dealers Association of Nellore District (CDAN) is a professional, non-profit association that represents the interests of IT dealers, computer retailers, distributors, system integrators, service providers, and technology businesses across Nellore District, Andhra Pradesh. CDAN serves as a common platform for members to collaborate, address industry challenges, promote ethical business practices, and strengthen the local IT ecosystem.",
+      "Vision\nTo build a strong, united, and progressive IT business community that promotes sustainable growth, innovation, and customer trust.",
+      "Mission\n• Unite IT dealers and technology businesses in Nellore District.\n• Protect and promote the interests of authorized offline retailers.\n• Enhance business opportunities through networking and collaboration.\n• Encourage ethical trade practices and professional standards.\n• Support skill development, knowledge sharing, and technology awareness.\n• Act as a bridge between members, technology brands, distributors, and government authorities.",
+      "Key Objectives\n• Represent members on industry-related issues.\n• Organize business meetings, seminars, exhibitions, and networking events.\n• Promote genuine products and authorized sales channels.\n• Support members with market intelligence and policy updates.\n• Encourage digital transformation and business modernization.\n• Foster strong relationships with national and state IT associations.",
+    ].join("\n\n"),
+  },
+  // CAN Nashik, Maharashtra — verified details supplied July 2026 (matches seed.ts).
+  "maharashtra-can": {
+    associationName: "Computer Association Nashik (CAN)",
+    foundedYear: 1998,
+    memberCount: 180,
+    websiteUrl: "https://www.canit.co.in",
+    description:
+      "Computer Association Nashik (CAN) is a professional organization formed to support and promote the IT industry in Nashik. It brings together developers, entrepreneurs, and IT companies on a common platform.\n\nWe aim to encourage collaboration, knowledge sharing, and business growth within the technology sector. CAN plays a vital role in building a strong IT ecosystem in the region.\n\nOur association continuously works towards empowering professionals through events, training, and networking opportunities.",
+  },
+  // UCTA Udaipur, Rajasthan — verified details supplied July 2026 (matches seed.ts).
+  "rajasthan-ucta": {
+    associationName: "Udaipur Computer Traders Association (Regd.) (UCTA)",
+    foundedYear: 2006,
+    memberCount: 180,
+    contactEmail: "President@ucta.org.in",
+    secretaryEmail: "info@ucta.org.in",
+    websiteUrl: "https://www.ucta.org.in",
+    description:
+      "Udaipur Computer Traders Association (Regd.), popularly known as UCTA, was founded in the year 2006. UCTA is a Computer Trade Association whose members are committed to setting and maintaining the highest technical and ethical standards in the independent provision of specialist computer-related services. By independent we mean \"free to trade within the law without being obliged to acknowledge the authority, control or influence of any third party\".",
+  },
+  // CMDA Pune — verified details supplied July 2026 (matches seed.ts).
+  "maharashtra-cmda-pune": {
+    associationName: "Computers & Media Dealers Association, Pune (CMDA)",
+    foundedYear: 1992,
+    memberCount: 377,
+    websiteUrl: "https://cmdapune.org/",
+    description: [
+      "The Computers & Media Dealers Association, Pune (CMDA) is a prominent organization representing over 377 IT entrepreneurs in Pune. Its members include computer dealers, distributors, system integrators, and service providers, collectively accounting for nearly 90% of the computer hardware and consumables business in Pune.",
+      "Key Objectives & Activities\nCMDA serves as a vital platform for its members, focusing on:",
+      "Addressing Common Issues: Facilitating resolution of shared problems, disputes, and government representations.",
+      "Arbitration of IT Dealers: IT dealers disputes related to payments, delivery issues, warranty claims, and service delays are brought before the CMDA Committee. The committee hears both parties, examines documents, and facilitates an amicable solution. This process helps avoid legal proceedings, saves time and cost, and maintains healthy business relationships within the IT community.",
+      "Information Exchange: Sharing technical and commercial information among members.",
+      "Promoting IT Awareness: Organizing IT trade exhibitions and technical seminars on new technologies and developments.",
+      "Ethical Business Practices: Actively working to support and promote ethical business and trade practices within the IT industry.",
+    ].join("\n\n"),
+  },
+  // CMDA Delhi — verified details supplied July 2026 (matches seed.ts).
+  "delhi-cmda": {
+    associationName: "Computer Media Dealers Association, Delhi (CMDA-Delhi)",
+    foundedYear: 2002,
+    memberCount: 150,
+    description:
+      "The Computer Media Dealers Association, Delhi (CMDA-Delhi) is a premier information and communications technology (ICT) trade association representing IT channel partners, retailers, manufacturers, and distributors across Delhi. Founded and registered in 2002, the association acts as a unified voice to promote ethical business practices, protect dealer interests, and drive growth in the regional IT hardware and consumables sector.",
+  },
+  // CONFED-ITA Tamil Nadu — verified details supplied July 2026 (matches seed.ts).
+  "tamil-nadu": {
+    associationName: "Confederation of Information Technology Associations (CONFED-ITA)",
+    foundedYear: 2007,
+    memberCount: 1900,
+    contactEmail: "president@confedita.co.in",
+    secretaryEmail: "secretary@confedita.co.in",
+    websiteUrl: "https://www.confedita.co.in",
+    logoUrl: "/logos/state/confed.jpeg",
+    description: [
+      "CONFED-ITA – Confederation of Information Technology Associations is the apex body representing the IT dealer and channel community across Tamil Nadu and Puducherry. It brings together 28 district-level IT associations and a network of 1,900+ IT dealers, creating a unified platform for collaboration, industry representation, knowledge sharing, business development, and collective growth.",
+      "Founded with the vision of uniting IT associations under one strong umbrella, CONFED-ITA has grown into an influential platform connecting IT dealers, distributors, vendors, technology brands, industry leaders, and policymakers. The organisation promotes stronger relationships within the IT ecosystem while addressing the common challenges and business interests of its member associations.",
+      "Through initiatives such as technology summits, district events, industry interactions, vendor engagement, knowledge-sharing sessions, sports activities, digital platforms, and networking programmes, CONFED-ITA creates opportunities for its members to connect, collaborate, innovate, and grow together.",
+      "CONFED-ITA stands committed to strengthening the IT channel community, encouraging innovation, creating new business opportunities, and building a more connected and sustainable technology ecosystem across Tamil Nadu and Puducherry.",
+      "Our Vision: To empower the IT channel community through unity, innovation, collaboration, and collective progress.",
+      "Our Motto: INNOVATE | COLLABORATE | ELEVATE",
+    ].join("\n\n"),
+  },
 };
 
 export function applyStateOverrides<T extends { slug: string }>(state: T): T {
