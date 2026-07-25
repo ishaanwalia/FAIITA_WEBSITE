@@ -402,6 +402,20 @@ const overrides: Record<string, StateOverride> = {
       "In addition to FONOCOM, MPCTA is renowned for hosting a variety of events throughout the year, including motivational seminars, cultural events, and our annual recreational trip, Manthan. These activities not only foster a sense of community but also provide valuable learning and networking opportunities for our members.",
     ].join("\n\n"),
   },
+  // PCAIT Delhi — verified details supplied July 2026 (matches seed.ts).
+  "delhi-pcait": {
+    foundedYear: 2005,
+    memberCount: 200,
+    contactEmail: "president@pcait.in",
+    secretaryEmail: "secretary@pcait.in",
+    websiteUrl: "https://www.pcait.in/",
+    description: [
+      "PCAIT (Progressive Channels Association of Information Technology) is an association with a legacy of more than two decades, dedicated to the growth and success of its members' businesses while promoting the highest standards of ethical business practices.",
+      "Today, PCAIT has nearly 200 members who collectively generate an annual business turnover of more than ₹1.5 lakh crore. Our membership primarily comprises channel partners, including distributors, system integrators, and retailers, along with leading OEMs and ISVs, creating a strong and collaborative IT ecosystem.",
+      "As the premier IT trade association of the National Capital Region, PCAIT works closely with government bodies and policymakers to advocate for industry-friendly policies and initiatives that support the growth of the IT sector.",
+      "Our guiding philosophy is best reflected in our slogan: \"Judo, Jodo, Aage Badho\"—Join, Connect, and Grow Together.",
+    ].join("\n\n"),
+  },
 };
 
 export function applyStateOverrides<T extends { slug: string }>(state: T): T {
