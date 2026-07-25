@@ -375,6 +375,33 @@ const overrides: Record<string, StateOverride> = {
       "ITAO has over 300 members from all over the state of Odisha which constitute more than 75% market share of Odisha's IT business. Since 1998 ITAO has organised eight IT-Expos with the help of Govt. of Odisha and IT corporate houses. The first IT-Expo was held at Rabindra Mandap, Bhubaneswar from 23th to 25th October 1998. The last IT-Expo was held at Exhibition Ground, Bhubaneswar from 26th to 30th of December 2008.",
     ].join("\n\n"),
   },
+  // TECSPA Chandigarh — verified details supplied July 2026 (matches seed.ts).
+  chandigarh: {
+    associationName: "Technology Solution Providers Association (TECSPA)",
+    foundedYear: 2014,
+    memberCount: 22,
+    secretaryEmail: "gensecy@tecspa.in",
+    websiteUrl: "https://tecspa.in/",
+    description: [
+      "Technology Solution Providers Association (TECSPA) is a non-profit, non-political association representing IT/ICT/ITeS/IoT infrastructure, technology solution providers, software developers, system integrators, distributors, manufacturers, and allied businesses across the Chandigarh tricity & adjoining regions. Established to strengthen collaboration within the IT ecosystem, TECSPA serves as a common platform for networking, knowledge sharing, industry representation, and business growth.",
+      "Through advocacy, expert sessions, training programs, seminars, trade events, and strategic partnerships, TECSPA works to promote ethical business practices, technological advancement, and the collective interests of its members. The association also engages with government bodies, industry stakeholders, and social organizations to foster innovation, address industry challenges, and contribute to the development of a vibrant and responsible IT community.",
+    ].join("\n\n"),
+  },
+  // MPCTA Indore, Madhya Pradesh — verified details supplied July 2026 (matches seed.ts).
+  "madhya-pradesh-mpctas": {
+    associationName: "Malwa Personal Computer Telecom Association (MPCTA)",
+    foundedYear: 2011,
+    memberCount: 205,
+    contactEmail: "rakeshdaga1@gmail.com",
+    secretaryEmail: "neeraj@mittalinfotech.com",
+    websiteUrl: "https://mpcta.in",
+    description: [
+      "We are proud to introduce ourselves as the leading trade association of IT and Telecom Suppliers of Central India, operating under the banner of the Malwa Personal Computer Telecom Association (MPCTA). With a growing membership base of over 200 individual & corporate members, MPCTA is dedicated to fostering collaboration, innovation, and excellence within the IT and Telecom industries.",
+      "Over the years, MPCTA has effectively addressed numerous challenges and threats related to the Info-tech industry in Central India. Our association provides an active platform for members, IT companies, vendors, and service providers to interact and collaborate for the industry's benefit. We have played a pivotal role in promoting honest trade practices, combating piracy, and providing training on new technologies to our members.",
+      "One of our most notable achievements is organizing FONOCOM, one of the most successful trade events in Central India. This eagerly anticipated IT exhibition showcases the latest technologies and attracts over 200,000 visitors annually, including end customers, corporate clients, and dealers from various regions.",
+      "In addition to FONOCOM, MPCTA is renowned for hosting a variety of events throughout the year, including motivational seminars, cultural events, and our annual recreational trip, Manthan. These activities not only foster a sense of community but also provide valuable learning and networking opportunities for our members.",
+    ].join("\n\n"),
+  },
 };
 
 export function applyStateOverrides<T extends { slug: string }>(state: T): T {
