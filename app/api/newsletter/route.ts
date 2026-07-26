@@ -28,10 +28,12 @@ export async function POST(req: Request) {
       if (process.env.RESEND_API_KEY) {
         try {
           const { Resend } = await import("resend");
+          const { default: NewsletterSignupEmail } = await import("@/emails/NewsletterSignupEmail");
           const resend = new Resend(process.env.RESEND_API_KEY);
           const email = {
             from: process.env.CONTACT_FROM_EMAIL ?? "FAIITA Website <onboarding@resend.dev>",
             subject: "New newsletter subscriber",
+            react: NewsletterSignupEmail({ email: parsed.data.email }),
             text: `A new visitor subscribed to the FAIITA newsletter: ${parsed.data.email}`,
           };
 

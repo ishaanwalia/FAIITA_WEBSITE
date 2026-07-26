@@ -45,6 +45,7 @@ export async function POST(req: Request) {
     if (process.env.RESEND_API_KEY) {
       try {
         const { Resend } = await import("resend");
+        const { default: ContactFormEmail } = await import("@/emails/ContactFormEmail");
         const resend = new Resend(process.env.RESEND_API_KEY);
         const email = {
           // Until faiita.co.in is verified in Resend, only the resend.dev
@@ -54,6 +55,15 @@ export async function POST(req: Request) {
           from: process.env.CONTACT_FROM_EMAIL ?? "FAIITA Website <onboarding@resend.dev>",
           replyTo: parsed.data.email,
           subject: `New contact form submission: ${parsed.data.subject || "General enquiry"}`,
+          react: ContactFormEmail({
+            name: parsed.data.name,
+            email: parsed.data.email,
+            phone: parsed.data.phone,
+            organization: parsed.data.organization,
+            subject: parsed.data.subject,
+            message: parsed.data.message,
+          }),
+          // Plain-text fallback for clients that don't render HTML.
           text: [
             `Name: ${parsed.data.name}`,
             `Email: ${parsed.data.email}`,
