@@ -387,6 +387,11 @@ const events = [
 
 // FAIITA Patrika — the federation's real e-bulletin. Vol 2 & 3 are hosted
 // Heyzine flip-books; Vol 1 is a PDF served from /public/newsletters.
+//
+// REMINDER: adding a new edition here only publishes it on the site — it does
+// NOT email the newsletter subscriber list (see NewsletterSubscriber table /
+// app/api/newsletter/route.ts, which only notifies secretary/president when
+// someone new signs up). Circulate the new Patrika to subscribers manually.
 const newsletters = [
   {
     slug: "faiita-patrika-vol-3-april-2026",
