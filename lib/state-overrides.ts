@@ -25,7 +25,7 @@ const overrides: Record<string, StateOverride> = {
     foundedYear: 2010,
     memberCount: 90,
     presidentName: "Mehar Sharma",
-    contactEmail: "info@sitda.in",
+    contactEmail: "mehar_xyz@yahoo.co.in",
     secretaryEmail: "kuldeep@globalestore.in",
     contactPhone: null,
     description: [
@@ -33,7 +33,6 @@ const overrides: Record<string, StateOverride> = {
       "Key Milestones\n• 2021 – SITDA formally associated with FAIITA (Federation of All India IT Associations), ensuring that the collective voice of Himachal dealers is represented at the national level.\n• 2023 – Organized a major state-level event in Shimla, bringing together IT & Electronics dealers from across Himachal Pradesh to foster collaboration, networking, and knowledge-sharing.\n• Ground-Level Engagement – SITDA consistently works with small to large dealers, raising their general issues and challenges in partnership with FAIITA, ensuring that every member's concerns are heard and addressed.",
       "Activities\n• Technical Training Sessions – Conducted regularly in collaboration with company vendors and OEMs to enhance dealer knowledge and skills.\n• Product Awareness Programs – Organized to keep dealers updated on the latest technologies, innovations, and market trends.\n• Dealers' Meets – Time-to-time gatherings that strengthen unity, encourage networking, and provide a platform to discuss common challenges and solutions.\n• Social Initiatives – Active participation in community welfare and social responsibility projects.",
       "Mission\n• Unite IT & Electronics dealers across Himachal Pradesh.\n• Represent members' interests at both state and national forums.\n• Collaborate with FAIITA to resolve industry-wide challenges.\n• Promote ethical practices, transparency, and professional excellence.\n• Encourage social responsibility and community engagement.",
-      "Governing Body\n• President: Mr. Mehar Sharma — mehar_xyz@yahoo.co.in\n• General Secretary: Mr. Kuldeep Singh — kuldeep@globalestore.in\n• Association Email: info@sitda.in",
     ].join("\n\n"),
   },
   // CMDA Mumbai — verified details supplied July 2026 (matches seed.ts).
