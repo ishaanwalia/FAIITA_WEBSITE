@@ -273,11 +273,13 @@ const states: StateSeed[] = [
 // member-associations page renders straight from that file, and the seed
 // mirrors it into the DB so state detail pages list them as member chapters.
 
+// "Rajeev Chitkara" (VP) and "Amit Kumar" (Secretary) were removed 2026-07-31 —
+// neither name matches any real office bearer anywhere else in this codebase
+// (the real 2025-27 VP is Praful Desai, the real Secretary is Sanjeev Walia).
+// Leftover fabricated placeholder rows from an early scaffold, not real people.
 const testimonials = [
-  { name: "Navin Gupta", role: "President, FAIITA", association: "Bihar IT Association", quote: "FAIITA has been instrumental in uniting IT dealers across India. Through sustained advocacy, our members have seen real policy change.", order: 1 },
-  { name: "Liju P. Raju", role: "Sr. Vice President, FAIITA", association: "All Kerala IT Dealers Association (AKITDA)", quote: "Being part of FAIITA gives our state association a voice at the national level. The networking opportunities are invaluable.", order: 2 },
-  { name: "Rajeev Chitkara", role: "Vice President, FAIITA", association: "Punjab Computer Dealers Association", quote: "FAIITA's training programs and industry insights help our members stay competitive in a fast-changing market.", order: 3 },
-  { name: "Amit Kumar", role: "Secretary, FAIITA", association: "Delhi IT Traders Association", quote: "The federation's work on GST simplification and digital-transformation advocacy has directly benefited our 5,000+ members.", order: 4 },
+  { name: "Navin Gupta", role: "President, FAIITA", association: "Bihar IT Association", quote: "FAIITA has been instrumental in uniting IT dealers across India. Through sustained advocacy, our members have seen real policy change.", order: 1, imageUrl: "/leadership/navin-gupta.jpg" },
+  { name: "Liju P Raju", role: "Senior Vice President, FAIITA", association: "AKITDA (All Kerala IT Dealers Association)", quote: "Being part of FAIITA gives our state association a voice at the national level. The networking opportunities are invaluable.", order: 2, imageUrl: "/leadership/liju-p-raju.jpg" },
 ];
 
 // Current Governing Body — FAIITA TEAM 25-27 (DAIRY 25 27.pptx).

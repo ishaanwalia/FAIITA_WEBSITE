@@ -23,6 +23,13 @@ const associationFixes: Record<string, string> = {
   "Kerala IT Dealers Association": "All Kerala IT Dealers Association (AKITDA)",
 };
 
+// The live Navin Gupta testimonial row predates imageUrl being wired up —
+// prisma/seed.ts already carries the photo path; this keeps production
+// right until the next reseed (only applied when the DB row has none).
+const testimonialImageFixes: Record<string, string> = {
+  "Navin Gupta": "/leadership/navin-gupta.jpg",
+};
+
 // Display fixes for stat rows the live DB still carries with old figures —
 // FAIITA prefers the states figure (31 associations span 26 states).
 // prisma/seed.ts is already corrected; this keeps production right until
@@ -89,6 +96,7 @@ export default async function HomePage() {
         testimonials={mergeTestimonials(testimonials).map((t) => ({
           ...t,
           association: associationFixes[t.association] ?? t.association,
+          imageUrl: t.imageUrl ?? testimonialImageFixes[t.name] ?? null,
         }))}
       />
       <NewsSection news={mergeNews(news).slice(0, 3)} />
