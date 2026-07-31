@@ -11,6 +11,7 @@ import { ReadyToConnect } from "@/components/home/ReadyToConnect";
 import { prisma } from "@/lib/prisma";
 import { excludeRemovedStates } from "@/lib/state-overrides";
 import { mergeNews } from "@/lib/code-news";
+import { mergeTestimonials } from "@/lib/code-testimonials";
 import type { StatItem } from "@/types";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -85,7 +86,7 @@ export default async function HomePage() {
       <MembershipBenefits />
       <JoinCta />
       <Testimonials
-        testimonials={testimonials.map((t) => ({
+        testimonials={mergeTestimonials(testimonials).map((t) => ({
           ...t,
           association: associationFixes[t.association] ?? t.association,
         }))}

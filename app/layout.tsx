@@ -68,10 +68,9 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// No sameAs (social profile) links yet — the Footer's social icons are
-// still placeholders pointing nowhere, so asserting them here as FAIITA's
-// official profiles would be worse than omitting the field. Add sameAs
-// once real profile URLs exist.
+// No sameAs (social profile) links yet — FAIITA has no live social
+// profiles to point to, so asserting any here would be worse than omitting
+// the field. Add sameAs once real profile URLs exist.
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",

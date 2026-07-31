@@ -2,34 +2,45 @@
 
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
-import gsap from "gsap";
+import { animate, useReducedMotion } from "framer-motion";
 import * as Icons from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import type { StatItem } from "@/types";
 
+// Renders the real value immediately (SSR baseline for no-JS visitors and
+// screen readers), then — only once scrolled into view, and only if the
+// visitor hasn't asked for reduced motion — dips to 0 and counts back up as
+// a decorative flourish. Reduced-motion visitors just keep seeing the real
+// number the whole time.
 function KineticCount({ value }: { value: number }) {
   const spanRef = useRef<HTMLSpanElement>(null);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.4 });
   const started = useRef(false);
+  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
-    if (!inView || started.current || !spanRef.current) return;
+    if (!inView || started.current || !spanRef.current || prefersReduced) return;
     started.current = true;
 
-    const counter = { val: 0 };
-    gsap.to(counter, {
-      val: value,
+    const node = spanRef.current;
+    const controls = animate(0, value, {
       duration: 1.8,
-      ease: "elastic.out(1, 0.55)", // kinetic overshoot-then-settle
-      onUpdate: () => {
-        if (spanRef.current) spanRef.current.textContent = Math.round(counter.val).toString();
+      type: "spring",
+      bounce: 0.35, // kinetic overshoot-then-settle
+      onUpdate: (v) => {
+        node.textContent = Math.round(v).toString();
       },
     });
-  }, [inView, value]);
+    return () => controls.stop();
+  }, [inView, value, prefersReduced]);
 
-  return <span ref={(el) => { spanRef.current = el; ref(el); }}>0</span>;
+  return (
+    <span ref={(el) => { spanRef.current = el; ref(el); }}>
+      {value}
+    </span>
+  );
 }
 
 export function Stats({ stats }: { stats: StatItem[] }) {

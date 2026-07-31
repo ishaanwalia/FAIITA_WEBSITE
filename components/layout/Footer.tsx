@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Twitter } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
 import { NewsletterForm } from "@/components/common/NewsletterForm";
 
@@ -18,13 +18,6 @@ const resourceLinks = [
   { label: "Newsletter", href: "/resources/newsletter" },
 ];
 
-const socials = [
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter / X" },
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-];
-
 export function Footer() {
   return (
     <footer className="bg-navy-900 text-white">
@@ -39,19 +32,6 @@ export function Footer() {
           <div className="mt-6">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/60">Get our newsletter</p>
             <NewsletterForm />
-          </div>
-          <div className="mt-6 flex gap-3">
-            {socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                aria-label={s.label}
-                data-cursor="hover"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all duration-300 hover:scale-110 hover:border-saffron-400/50 hover:text-saffron-400 hover:shadow-[0_0_16px_rgba(242,146,29,0.4)]"
-              >
-                <s.icon className="h-4 w-4" />
-              </a>
-            ))}
           </div>
         </div>
 

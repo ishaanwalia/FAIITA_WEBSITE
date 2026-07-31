@@ -77,7 +77,7 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialItem[]
                     &ldquo;{t.quote}&rdquo;
                   </blockquote>
                   <figcaption className="flex items-center gap-3 border-t border-navy-700/10 pt-4">
-                    <PhotoAvatar initials={initials(t.name)} size="sm" />
+                    <PhotoAvatar initials={initials(t.name)} imageUrl={t.imageUrl} size="sm" />
                     <div>
                       <p className="text-sm font-semibold text-navy-800">{t.name}</p>
                       <p className="text-xs text-muted-foreground">{t.role}</p>

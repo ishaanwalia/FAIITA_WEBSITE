@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { useRef } from "react";
+import { animate, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "@/components/ui/button";
+
+const SPRING = { type: "spring" as const, stiffness: 300, damping: 25, mass: 0.5 };
+const SCALE_SPRING = { type: "spring" as const, stiffness: 260, damping: 20 };
 
 export function MagneticButton({
   children,
@@ -13,40 +16,34 @@ export function MagneticButton({
   ...props
 }: ButtonProps & { strength?: number; clipped?: boolean }) {
   const ref = useRef<HTMLButtonElement>(null);
-  const quickX = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
-  const quickY = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
-  const quickScale = useRef<ReturnType<typeof gsap.quickTo> | null>(null);
-  const reducedMotion = useRef(false);
+  const reducedMotion = useReducedMotion();
 
-  useEffect(() => {
-    reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!ref.current || reducedMotion.current) return;
-    // quickTo reuses a single tween setter instead of creating a new one on
-    // every mousemove — much cheaper for high-frequency updates.
-    quickX.current = gsap.quickTo(ref.current, "x", { duration: 0.4, ease: "power3.out" });
-    quickY.current = gsap.quickTo(ref.current, "y", { duration: 0.4, ease: "power3.out" });
-    quickScale.current = gsap.quickTo(ref.current, "scale", { duration: 0.3, ease: "power3.out" });
-  }, []);
+  // Independent per-property animate() calls — like the old gsap.quickTo —
+  // so a mousedown scale doesn't stomp whatever x/y tween is mid-flight.
+  const setX = (v: number) => ref.current && animate(ref.current, { x: v }, SPRING);
+  const setY = (v: number) => ref.current && animate(ref.current, { y: v }, SPRING);
+  const setScale = (v: number) => ref.current && animate(ref.current, { scale: v }, SCALE_SPRING);
 
   const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (reducedMotion.current) return;
+    if (reducedMotion) return;
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
     const relX = e.clientX - (rect.left + rect.width / 2);
     const relY = e.clientY - (rect.top + rect.height / 2);
-    quickX.current?.(relX * strength);
-    quickY.current?.(relY * strength);
-    quickScale.current?.(1.05);
+    setX(relX * strength);
+    setY(relY * strength);
+    setScale(1.05);
   };
 
   const handleLeave = () => {
-    quickX.current?.(0);
-    quickY.current?.(0);
-    quickScale.current?.(1);
+    if (reducedMotion) return;
+    setX(0);
+    setY(0);
+    setScale(1);
   };
 
-  const handleDown = () => quickScale.current?.(0.95);
+  const handleDown = () => !reducedMotion && setScale(0.95);
   // Reset to rest state, not the hover scale — touch devices fire this
   // without a preceding/following mousemove or mouseleave, so resolving to
   // the hover size here would leave tapped buttons stuck looking enlarged.

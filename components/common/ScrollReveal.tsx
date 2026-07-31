@@ -1,21 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { motion, useReducedMotion } from "framer-motion";
 
 type Direction = "up" | "down" | "left" | "right" | "scale";
 
-const FROM_VARS: Record<Direction, gsap.TweenVars> = {
-  up: { y: 40, opacity: 0 },
-  down: { y: -40, opacity: 0 },
-  left: { x: 40, opacity: 0 },
-  right: { x: -40, opacity: 0 },
-  scale: { scale: 0.92, opacity: 0 },
+const FROM_VARS: Record<Direction, { x?: number; y?: number; scale?: number }> = {
+  up: { y: 40 },
+  down: { y: -40 },
+  left: { x: 40 },
+  right: { x: -40 },
+  scale: { scale: 0.92 },
 };
 
 export function ScrollReveal({
@@ -33,42 +27,17 @@ export function ScrollReveal({
   once?: boolean;
   className?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) {
-      gsap.set(el, { opacity: 1, x: 0, y: 0, scale: 1 });
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(el, FROM_VARS[direction], {
-        y: 0,
-        x: 0,
-        scale: 1,
-        opacity: 1,
-        duration,
-        delay,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 85%",
-          once,
-        },
-      });
-    });
-
-    return () => ctx.revert();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const prefersReduced = useReducedMotion();
 
   return (
-    <div ref={ref} className={className}>
+    <motion.div
+      className={className}
+      initial={prefersReduced ? false : { opacity: 0, x: 0, y: 0, scale: 1, ...FROM_VARS[direction] }}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+      viewport={{ once, amount: 0.15 }}
+      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
+    >
       {children}
-    </div>
+    </motion.div>
   );
 }

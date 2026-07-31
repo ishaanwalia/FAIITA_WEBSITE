@@ -1,74 +1,89 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { motion, useReducedMotion } from "framer-motion";
 
 const SESSION_KEY = "faiita-intro-played";
+type Phase = "converge" | "logo" | "hold" | "exit";
+
+// Beat durations (ms) — mirrors the original GSAP timeline's five phases,
+// including the -0.4s / -0.3s overlaps between converge→logo and logo→hold.
+const CONVERGE = 900;
+const LOGO = 800;
+const HOLD = 400;
+const EXIT = 600;
+const OVERLAP = 400;
 
 export function CinematicLoader() {
   const [mounted, setMounted] = useState(false);
+  const [phase, setPhase] = useState<Phase>("converge");
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
+  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (sessionStorage.getItem(SESSION_KEY)) return; // never replay after first load this session
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // skip entirely for reduced-motion users
-    // sessionStorage/matchMedia aren't available during SSR, so this can
-    // only be resolved post-mount — one of the few legitimate exceptions to
-    // the "no setState in effect" rule.
+    if (prefersReduced) return; // skip entirely for reduced-motion users
+    // sessionStorage isn't available during SSR, so this can only be
+    // resolved post-mount — one of the few legitimate exceptions to the
+    // "no setState in effect" rule.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-  }, []);
+  }, [prefersReduced]);
 
   useEffect(() => {
     if (!mounted) return;
+    const timers = [
+      setTimeout(() => setPhase("logo"), CONVERGE - OVERLAP),
+      setTimeout(() => setPhase("hold"), CONVERGE + LOGO - OVERLAP),
+      setTimeout(() => setPhase("exit"), CONVERGE + LOGO + HOLD - OVERLAP),
+      setTimeout(() => {
+        sessionStorage.setItem(SESSION_KEY, "1");
+        setMounted(false);
+      }, CONVERGE + LOGO + HOLD + EXIT),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [mounted]);
 
-    const container = containerRef.current;
+  // Particle field — plain canvas + requestAnimationFrame. Only the
+  // converge easing needs a progress ramp, which a three-line cubic
+  // ease-out covers without pulling in a tween engine.
+  useEffect(() => {
+    if (!mounted) return;
     const canvas = canvasRef.current;
-    const logo = logoRef.current;
-    if (!container || !canvas || !logo) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
 
-    // ─── Network Nodes (Particles) ──────────────────
-    const nodes: { x: number; y: number; vx: number; vy: number }[] = [];
     const nodeCount = 80;
-
-    for (let i = 0; i < nodeCount; i++) {
-      nodes.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2,
-      });
-    }
-
-    // ─── Connections ───────────────────────────────
-    const connections: number[][] = [];
+    const nodes = Array.from({ length: nodeCount }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
+    }));
+    const connections: [number, number][] = [];
     for (let i = 0; i < nodeCount; i++) {
       for (let j = i + 1; j < nodeCount; j++) {
-        const dx = nodes[i].x - nodes[j].x;
-        const dy = nodes[i].y - nodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200) {
+        if (Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y) < 200) {
           connections.push([i, j]);
         }
       }
     }
 
+    const start = performance.now();
     let animationId: number;
 
-    // ─── Animate Particles ─────────────────────────
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / CONVERGE);
+      const eased = 1 - Math.pow(1 - t, 3);
 
-      // Draw connections
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = "rgba(255, 153, 51, 0.15)";
       ctx.lineWidth = 1;
       connections.forEach(([i, j]) => {
@@ -78,10 +93,9 @@ export function CinematicLoader() {
         ctx.stroke();
       });
 
-      // Update and draw nodes
       nodes.forEach((node) => {
-        node.x += node.vx;
-        node.y += node.vy;
+        node.x += node.vx * (1 - eased) + (centerX - node.x) * 0.02 * eased;
+        node.y += node.vy * (1 - eased) + (centerY - node.y) * 0.02 * eased;
         if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
         if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
 
@@ -91,95 +105,38 @@ export function CinematicLoader() {
         ctx.fill();
       });
 
-      animationId = requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(tick);
     };
-
-    animate();
-
-    // ─── GSAP Timeline ─────────────────────────────
-    const tl = gsap.timeline({
-      defaults: { ease: "power3.inOut" },
-      onComplete: () => {
-        sessionStorage.setItem(SESSION_KEY, "1");
-        gsap.to(container, {
-          opacity: 0,
-          duration: 0.5,
-          delay: 0.15,
-          ease: "power2.inOut",
-          onComplete: () => {
-            setMounted(false);
-          },
-        });
-      },
-    });
-
-    // Phase 1: Nodes converge toward center
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    tl.to(nodes, {
-      duration: 0.9,
-      onUpdate: () => {
-        nodes.forEach((node) => {
-          const progress = tl.progress();
-          node.x += (centerX + (Math.random() - 0.5) * 100 - node.x) * 0.02 * progress;
-          node.y += (centerY + (Math.random() - 0.5) * 100 - node.y) * 0.02 * progress;
-        });
-      },
-    });
-
-    // Phase 2: Logo fades in
-    tl.to(
-      logo,
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 0.8,
-        ease: "back.out(1.7)",
-      },
-      "-=0.4"
-    );
-
-    // Phase 3: Tagline appears
-    const tagline = logo.querySelector(".loader-tagline") as HTMLElement | null;
-    if (tagline) {
-      tl.to(
-        tagline,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-        },
-        "-=0.3"
-      );
-    }
-
-    // Phase 4: Hold
-    tl.to({}, { duration: 0.4 });
-
-    // Phase 5: Logo scales down
-    tl.to(logo, {
-      scale: 0.8,
-      opacity: 0,
-      duration: 0.6,
-      ease: "power2.in",
-    });
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      tl.kill();
-    };
+    animationId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animationId);
   }, [mounted]);
 
   if (!mounted) return null;
 
+  const logoVisible = phase === "logo" || phase === "hold";
+
   return (
-    <div
+    <motion.div
       ref={containerRef}
       className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#0A2540]"
+      animate={{ opacity: phase === "exit" ? 0 : 1 }}
+      transition={{ duration: 0.5, delay: phase === "exit" ? 0.15 : 0, ease: "easeInOut" }}
     >
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-      <div ref={logoRef} className="relative flex flex-col items-center opacity-0 scale-90">
-        {/* FAIITA Logo */}
+      <motion.div
+        className="relative flex flex-col items-center"
+        animate={
+          logoVisible
+            ? { opacity: 1, scale: 1 }
+            : phase === "exit"
+              ? { opacity: 0, scale: 0.8 }
+              : { opacity: 0, scale: 0.9 }
+        }
+        transition={{
+          duration: phase === "exit" ? 0.6 : 0.8,
+          ease: phase === "exit" ? "easeIn" : [0.34, 1.56, 0.64, 1],
+        }}
+      >
         <div className="text-center">
           <div className="text-5xl font-bold tracking-tight text-white md:text-7xl">
             <span className="text-[#FF9933]">FAIITA</span>
@@ -191,11 +148,14 @@ export function CinematicLoader() {
             Information Technology Associations
           </div>
         </div>
-        {/* Tagline */}
-        <p className="loader-tagline mt-6 translate-y-4 text-sm tracking-wider text-white/30 opacity-0">
+        <motion.p
+          className="mt-6 text-sm tracking-wider text-white/30"
+          animate={logoVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.5 }}
+        >
           Uniting India&apos;s IT Fraternity
-        </p>
-      </div>
-    </div>
+        </motion.p>
+      </motion.div>
+    </motion.div>
   );
 }

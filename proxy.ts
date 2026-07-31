@@ -31,16 +31,36 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // NOT nonce-based: verified in production that Next's own inline
-  // hydration/RSC-payload scripts do not automatically pick up a nonce from
-  // this header the way the docs suggest — they shipped with no nonce
-  // attribute at all, so the browser blocked every one of them and the site
-  // rendered a blank white screen (everything Framer Motion sets to
-  // opacity:0 for its initial animation state never got animated back in,
-  // because the JS that would do that never ran). 'unsafe-inline' for
-  // script-src is a real, deliberate tradeoff for a site that ships this
-  // much first-party inline script — reliability over a stricter policy
-  // this setup can't currently support without deeper surgery.
+  // --- Accepted risk: 'unsafe-inline' on script-src and style-src ---------
+  // Formally re-evaluated 2026-07-30 against Next's own documented nonce
+  // pattern (headers()/connection() + <Script nonce>) — still not adopting
+  // it, for two independent reasons:
+  //
+  // 1. It doesn't actually work here. Verified in production: Next's own
+  //    inline hydration/RSC-payload scripts do not pick up a nonce from this
+  //    header the way the docs imply — they ship with no nonce attribute at
+  //    all, so a strict-dynamic policy blocks them outright and the site
+  //    renders a blank white screen (everything Framer Motion sets to
+  //    opacity:0 for its initial animation state never animates back in,
+  //    because the JS that would do that never runs). The <Script nonce>
+  //    prop only covers scripts *we* render via next/script — not Next's own
+  //    framework-injected ones — so this isn't fixable from application code.
+  // 2. Even ignoring (1), a nonce is per-request by construction — Next
+  //    requires forcing every page to dynamic rendering to generate one.
+  //    That's the exact static/ISR caching this site deliberately protects
+  //    (see the JSON-LD comment in app/layout.tsx) traded away site-wide, for
+  //    a page that renders no user-generated or unescaped third-party
+  //    content — there's no realistic injection point for the stricter
+  //    policy to actually stop.
+  //
+  // style-src has the same shape of problem for a smaller reason: 16
+  // `style={{...}}` usages across 10 components render as literal inline
+  // style attributes, which style-src 'unsafe-inline' is what permits.
+  //
+  // Revisit if either changes: (a) Next ships first-class nonce support for
+  // its own inline scripts, or (b) this site starts rendering any
+  // user-submitted or third-party HTML/markdown without server-side escaping
+  // — that's the scenario where 'unsafe-inline' actually matters.
   const csp = [
     `default-src 'self'`,
     `script-src 'self' 'unsafe-inline'`,
