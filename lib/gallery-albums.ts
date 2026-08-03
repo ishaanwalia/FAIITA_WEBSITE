@@ -12,6 +12,21 @@ export type GalleryAlbum = {
 
 export const galleryAlbums: GalleryAlbum[] = [
   {
+    slug: "fitag-presidents-leadership-conclave-2026",
+    title: "FITAG Presidents' Leadership Conclave 2026 — Mount Abu",
+    eyebrow: "1 Aug 2026 · Mount Abu, Rajasthan",
+    description:
+      "FITAG (Federation of Information Technology Associations of Gujarat) held its Presidents' Leadership Conclave 2026 at Mount Abu, Rajasthan, under the theme 'One Vision — One Gujarat'. FITAG unites 47 IT associations across Gujarat under a single umbrella, representing a network of 10,000+ IT trade partners and members, and the conclave brought their presidents together to strengthen the state's IT industry, foster collaboration, and drive the growth of the technology business ecosystem.",
+    photos: [
+      { src: "/images/gallery/fitag-presidents-leadership-conclave-2026-01.jpg", caption: "The stage at the FITAG Presidents' Leadership Conclave 2026 — 'One Vision, One Gujarat' — honouring past presidents and sponsors" },
+      { src: "/images/gallery/fitag-presidents-leadership-conclave-2026-02.jpg", caption: "Presidents of FITAG's member associations fill the hall as the conclave proceedings get underway" },
+      { src: "/images/gallery/fitag-presidents-leadership-conclave-2026-03.jpg", caption: "Association leaders seated at the conclave, with zone banners recognising FITAG's regional IT communities" },
+      { src: "/images/gallery/fitag-presidents-leadership-conclave-2026-04.jpg", caption: "A wide view of the conclave hall as delegates from across Gujarat's 47 IT associations listen in" },
+      { src: "/images/gallery/fitag-presidents-leadership-conclave-2026-05.jpg", caption: "Addressing delegates from the FITAG podium during the Presidents' Leadership Conclave 2026" },
+      { src: "/images/gallery/fitag-presidents-leadership-conclave-2026-06.jpg", caption: "FITAG past presidents Kaushik Pandya, Gaurang Vyas and Praful Desai with fellow leaders at the conclave" },
+    ],
+  },
+  {
     slug: "faiita-election-2025-lucknow",
     title: "FAIITA Election 2025 — Lucknow",
     eyebrow: "2025 · Lucknow",
