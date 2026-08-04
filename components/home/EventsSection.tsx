@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { DemoBadge } from "@/components/ui/DemoBadge";
@@ -37,7 +36,7 @@ export function EventsSection({ events }: { events: EventItem[] }) {
             const d = formatDateShort(e.startDate);
             return (
               <ScrollReveal key={e.id} direction="up" delay={i * 0.08}>
-                <TiltCard maxTilt={6} className="h-full">
+                <div className="group relative h-full">
                   <GlassCard
                     variant="light"
                     className={cn(
@@ -80,7 +79,7 @@ export function EventsSection({ events }: { events: EventItem[] }) {
                       </Button>
                     </div>
                   </GlassCard>
-                </TiltCard>
+                </div>
               </ScrollReveal>
             );
           })}

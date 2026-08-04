@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { TiltCard } from "@/components/common/TiltCard";
 import { AlbumCarousel } from "@/components/gallery/AlbumCarousel";
 import { galleryAlbums } from "@/lib/gallery-albums";
 import { prisma } from "@/lib/prisma";
@@ -46,7 +45,7 @@ export default async function GalleryPage() {
           <div className="container-page columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:mb-6">
             {items.map((item, i) => (
               <ScrollReveal key={item.id} direction="scale" delay={(i % 3) * 0.06} className="break-inside-avoid">
-                <TiltCard maxTilt={8}>
+                <div className="group relative">
                   <figure className="group relative overflow-hidden rounded-2xl">
                     <Image
                       src={item.imageUrl}
@@ -61,7 +60,7 @@ export default async function GalleryPage() {
                       <p className="text-sm font-medium text-white">{item.title}</p>
                     </figcaption>
                   </figure>
-                </TiltCard>
+                </div>
               </ScrollReveal>
             ))}
           </div>

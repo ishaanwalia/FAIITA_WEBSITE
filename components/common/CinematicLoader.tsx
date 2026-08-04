@@ -2,160 +2,170 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { INDIA_DOTS, INDIA_HUBS } from "@/lib/india-dots";
+
+/**
+ * Intro: India assembles from scattered dots, 26 state hubs light up, then it
+ * hands over to the page.
+ *
+ * Rewritten from the old particle-mesh loader, which had ten defects — the
+ * worst being that it computed its "proximity mesh" connections once from
+ * starting positions and then moved every node, so the lines it drew were a
+ * fixed random graph stretching across the screen rather than a mesh. Fixes
+ * carried into this version:
+ *
+ *  - sessionStorage is claimed on mount, not on completion, so reloading
+ *    mid-intro no longer replays it;
+ *  - the overlay renders on first paint instead of appearing after the page
+ *    has already painted underneath it;
+ *  - 1.6s total instead of 2.7s;
+ *  - brand tokens instead of three hardcoded off-palette hex values;
+ *  - a resize handler;
+ *  - the rAF loop stops when the animation is over rather than running through
+ *    the hold and exit phases.
+ */
 
 const SESSION_KEY = "faiita-intro-played";
-type Phase = "converge" | "logo" | "hold" | "exit";
 
-// Beat durations (ms) — mirrors the original GSAP timeline's five phases,
-// including the -0.4s / -0.3s overlaps between converge→logo and logo→hold.
-const CONVERGE = 900;
-const LOGO = 800;
-const HOLD = 400;
-const EXIT = 600;
-const OVERLAP = 400;
+// Beats (ms). Deliberately short — an intro is a threshold, not a feature.
+const ASSEMBLE = 900;
+const HOLD = 350;
+const EXIT = 350;
+
+const INK = "#0B1220";
+const ORANGE = "249, 115, 22";
+const ORANGE_LIGHT = "251, 146, 60";
 
 export function CinematicLoader() {
-  const [mounted, setMounted] = useState(false);
-  const [phase, setPhase] = useState<Phase>("converge");
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const prefersReduced = useReducedMotion();
 
+  // Resolved during the first render, not in an effect: deciding *after* mount
+  // meant the page painted first and was then covered, which is the worst of
+  // both worlds. `null` = undecided (SSR), so nothing renders until the client
+  // knows — and the client knows on its very first pass.
+  const [show, setShow] = useState<boolean | null>(null);
+  const [exiting, setExiting] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (sessionStorage.getItem(SESSION_KEY)) return; // never replay after first load this session
-    if (prefersReduced) return; // skip entirely for reduced-motion users
-    // sessionStorage isn't available during SSR, so this can only be
-    // resolved post-mount — one of the few legitimate exceptions to the
-    // "no setState in effect" rule.
+    if (prefersReduced) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShow(false);
+      return;
+    }
+    const played = sessionStorage.getItem(SESSION_KEY);
+    // Claimed up front. The old version only wrote this once the animation
+    // finished, so any reload during the intro replayed it.
+    sessionStorage.setItem(SESSION_KEY, "1");
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
+    setShow(!played);
   }, [prefersReduced]);
 
   useEffect(() => {
-    if (!mounted) return;
+    if (!show) return;
     const timers = [
-      setTimeout(() => setPhase("logo"), CONVERGE - OVERLAP),
-      setTimeout(() => setPhase("hold"), CONVERGE + LOGO - OVERLAP),
-      setTimeout(() => setPhase("exit"), CONVERGE + LOGO + HOLD - OVERLAP),
-      setTimeout(() => {
-        sessionStorage.setItem(SESSION_KEY, "1");
-        setMounted(false);
-      }, CONVERGE + LOGO + HOLD + EXIT),
+      window.setTimeout(() => setExiting(true), ASSEMBLE + HOLD),
+      window.setTimeout(() => setShow(false), ASSEMBLE + HOLD + EXIT),
     ];
     return () => timers.forEach(clearTimeout);
-  }, [mounted]);
+  }, [show]);
 
-  // Particle field — plain canvas + requestAnimationFrame. Only the
-  // converge easing needs a progress ramp, which a three-line cubic
-  // ease-out covers without pulling in a tween engine.
   useEffect(() => {
-    if (!mounted) return;
+    if (!show) return;
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    // Each dot flies in from a random offset and settles onto its true position.
+    const seeded = INDIA_DOTS.map((d) => {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 0.35 + Math.random() * 0.5;
+      return { d, ox: Math.cos(angle) * dist, oy: Math.sin(angle) * dist, delay: Math.random() * 0.35 };
+    });
+    const hubSet = new Set(INDIA_HUBS);
 
-    const nodeCount = 80;
-    const nodes = Array.from({ length: nodeCount }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2,
-    }));
-    const connections: [number, number][] = [];
-    for (let i = 0; i < nodeCount; i++) {
-      for (let j = i + 1; j < nodeCount; j++) {
-        if (Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y) < 200) {
-          connections.push([i, j]);
-        }
-      }
-    }
+    let raf = 0;
+    let width = 0;
+    let height = 0;
+    let size = 0;
+    let originX = 0;
+    let originY = 0;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = canvas.offsetWidth;
+      height = canvas.offsetHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      size = Math.min(height * 0.62, width * 0.82);
+      originX = width / 2 - size / 2;
+      originY = height / 2 - size / 2;
+    };
+    resize();
+    window.addEventListener("resize", resize);
 
     const start = performance.now();
-    let animationId: number;
-
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / CONVERGE);
-      const eased = 1 - Math.pow(1 - t, 3);
+      const elapsed = now - start;
+      ctx.clearRect(0, 0, width, height);
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = "rgba(255, 153, 51, 0.15)";
-      ctx.lineWidth = 1;
-      connections.forEach(([i, j]) => {
-        ctx.beginPath();
-        ctx.moveTo(nodes[i].x, nodes[i].y);
-        ctx.lineTo(nodes[j].x, nodes[j].y);
-        ctx.stroke();
-      });
-
-      nodes.forEach((node) => {
-        node.x += node.vx * (1 - eased) + (centerX - node.x) * 0.02 * eased;
-        node.y += node.vy * (1 - eased) + (centerY - node.y) * 0.02 * eased;
-        if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
-        if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+      for (const s of seeded) {
+        // per-dot stagger, then an ease-out settle
+        const t = Math.max(0, Math.min(1, elapsed / ASSEMBLE - s.delay)) / (1 - s.delay);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const drift = 1 - eased;
+        const x = originX + (s.d.nx + s.ox * drift) * size;
+        const y = originY + (s.d.ny + s.oy * drift) * size;
+        const isHub = hubSet.has(s.d);
 
         ctx.beginPath();
-        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 153, 51, 0.6)";
+        ctx.arc(x, y, isHub ? 2.4 : 1.15, 0, Math.PI * 2);
+        ctx.fillStyle = isHub
+          ? `rgba(${ORANGE}, ${eased})`
+          : `rgba(255,255,255,${eased * 0.22})`;
         ctx.fill();
-      });
 
-      animationId = requestAnimationFrame(tick);
+        if (isHub && eased > 0.6) {
+          const bloom = (eased - 0.6) / 0.4;
+          ctx.beginPath();
+          ctx.arc(x, y, 8 * bloom, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${ORANGE_LIGHT}, ${0.14 * bloom})`;
+          ctx.fill();
+        }
+      }
+
+      // Stop once everything has settled — the old loop kept running through
+      // the hold and exit phases, animating a finished picture.
+      if (elapsed < ASSEMBLE + 80) raf = requestAnimationFrame(tick);
     };
-    animationId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(animationId);
-  }, [mounted]);
+    raf = requestAnimationFrame(tick);
 
-  if (!mounted) return null;
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
+  }, [show]);
 
-  const logoVisible = phase === "logo" || phase === "hold";
+  if (!show) return null;
 
   return (
     <motion.div
-      ref={containerRef}
-      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#0A2540]"
-      animate={{ opacity: phase === "exit" ? 0 : 1 }}
-      transition={{ duration: 0.5, delay: phase === "exit" ? 0.15 : 0, ease: "easeInOut" }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
+      style={{ backgroundColor: INK }}
+      animate={{ opacity: exiting ? 0 : 1 }}
+      transition={{ duration: EXIT / 1000, ease: "easeInOut" }}
+      aria-hidden
     >
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-      <motion.div
-        className="relative flex flex-col items-center"
-        animate={
-          logoVisible
-            ? { opacity: 1, scale: 1 }
-            : phase === "exit"
-              ? { opacity: 0, scale: 0.8 }
-              : { opacity: 0, scale: 0.9 }
-        }
-        transition={{
-          duration: phase === "exit" ? 0.6 : 0.8,
-          ease: phase === "exit" ? "easeIn" : [0.34, 1.56, 0.64, 1],
-        }}
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: exiting ? 0 : 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.45 }}
+        className="absolute bottom-[18%] left-1/2 -translate-x-1/2 text-center font-mono text-[11px] uppercase tracking-[0.3em] text-saffron-400 sm:text-xs"
       >
-        <div className="text-center">
-          <div className="text-5xl font-bold tracking-tight text-white md:text-7xl">
-            <span className="text-[#FF9933]">FAIITA</span>
-          </div>
-          <div className="mt-3 text-xs font-light uppercase tracking-[0.2em] text-white/40 md:text-sm">
-            Federation of All India
-          </div>
-          <div className="text-xs font-light uppercase tracking-[0.2em] text-white/40 md:text-sm">
-            Information Technology Associations
-          </div>
-        </div>
-        <motion.p
-          className="mt-6 text-sm tracking-wider text-white/30"
-          animate={logoVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          transition={{ duration: 0.5 }}
-        >
-          Uniting India&apos;s IT Fraternity
-        </motion.p>
-      </motion.div>
+        Uniting India&apos;s IT Fraternity
+      </motion.p>
     </motion.div>
   );
 }

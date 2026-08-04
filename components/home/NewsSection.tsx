@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
@@ -36,7 +35,7 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
 
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
           <ScrollReveal direction="left" className="lg:col-span-2">
-            <TiltCard maxTilt={4} className="h-full min-h-[340px]">
+            <div className="group relative h-full min-h-[340px]">
               <Link
                 href={`/resources/news/${lead.slug}`}
                 className={cn(
@@ -68,13 +67,13 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                   </div>
                 </div>
               </Link>
-            </TiltCard>
+            </div>
           </ScrollReveal>
 
           <div className="flex flex-col gap-6">
             {rest.slice(0, 2).map((n, i) => (
               <ScrollReveal key={n.id} direction="right" delay={i * 0.1} className="flex-1">
-                <TiltCard maxTilt={5} className="h-full">
+                <div className="group relative h-full">
                   <Link href={`/resources/news/${n.slug}`} className="group block h-full">
                     <GlassCard
                       variant="light"
@@ -110,7 +109,7 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
                       </div>
                     </GlassCard>
                   </Link>
-                </TiltCard>
+                </div>
               </ScrollReveal>
             ))}
           </div>

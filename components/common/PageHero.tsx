@@ -10,10 +10,10 @@ import { GradientMesh, MESH_VARIANTS, type MeshVariant } from "@/components/comm
 const ACCENT_ORB: Record<MeshVariant, string> = {
   aurora: "right-[8%] top-[10%] h-64 w-64 bg-saffron-500/10",
   dawn: "right-[30%] top-[15%] h-48 w-48 bg-saffron-400/10",
-  tide: "left-[12%] bottom-[10%] h-56 w-56 bg-electric/[0.07]",
-  ember: "left-[6%] bottom-[18%] h-52 w-52 bg-teal-400/10",
+  tide: "left-[12%] bottom-[10%] h-56 w-56 bg-navy-400/[0.12]",
+  ember: "left-[6%] bottom-[18%] h-52 w-52 bg-federal-green/10",
   meadow: "left-[35%] top-[12%] h-48 w-48 bg-saffron-400/10",
-  zenith: "right-[18%] top-[35%] h-56 w-56 bg-electric/[0.07]",
+  zenith: "right-[18%] top-[35%] h-56 w-56 bg-navy-400/[0.12]",
 };
 
 // Deterministic pick: the page title seeds which gradient spread it gets,

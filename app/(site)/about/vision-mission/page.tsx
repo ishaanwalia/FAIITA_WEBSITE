@@ -17,7 +17,6 @@ import Link from "next/link";
 import { PageHero } from "@/components/common/PageHero";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
@@ -138,15 +137,15 @@ export default function VisionMissionPage() {
           <div className="grid gap-6 md:grid-cols-3">
             {pillars.map((p, i) => (
               <ScrollReveal key={p.title} direction="up" delay={i * 0.08}>
-                <TiltCard maxTilt={6} className="h-full">
-                  <GlassCard variant="light" className="h-full">
+                <div className="group relative h-full">
+                  <GlassCard variant="light" glow="green" className="h-full">
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-navy-700/5 text-navy-700">
                       <p.icon className="h-6 w-6" />
                     </div>
                     <h2 className="mt-5 font-display text-xl font-bold text-navy-800">{p.title}</h2>
                     <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
                   </GlassCard>
-                </TiltCard>
+                </div>
               </ScrollReveal>
             ))}
           </div>
@@ -189,7 +188,7 @@ export default function VisionMissionPage() {
               <div aria-hidden className="aurora-orb -right-10 bottom-0 h-56 w-56 bg-federal-green/15 [animation-delay:-6s]" />
               <div className="relative">
                 <h2 className="text-balance font-display text-3xl font-bold text-white sm:text-4xl">
-                  Together, We <span className="gradient-text">Grow Stronger!</span>
+                  Together, We <span className="gradient-text-kinetic">Grow Stronger!</span>
                 </h2>
                 <p className="mx-auto mt-4 max-w-2xl text-balance text-white/65">
                   Join us in shaping the future of IT retail and distribution.

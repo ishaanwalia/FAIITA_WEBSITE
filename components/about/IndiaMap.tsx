@@ -7,10 +7,10 @@ import { ArrowRight, Building2, Mail, MapPin, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { StateMapPoint } from "@/types";
 
-const COVERED_FILL = "#F2921D";
-const COVERED_HOVER = "#D97A0E";
-const UNCOVERED_FILL = "#F1F5F9";
-const BORDER_COLOR = "#0B2A4A";
+const COVERED_FILL = "#F97316";
+const COVERED_HOVER = "#EA580C";
+const UNCOVERED_FILL = "#E2E8F0";
+const BORDER_COLOR = "#0B1220";
 
 // Public-domain SVG maps often carry dated or variant state names — fold
 // them into the names used in the database before comparing.

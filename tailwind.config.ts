@@ -45,32 +45,44 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // "Tricolour Ink" palette.
+        //
+        // The scale names stay `navy` / `saffron` deliberately: they're used in
+        // several hundred places across the app, and re-theming at the token
+        // level re-skins the whole site from this one file. The values are what
+        // changed, not the vocabulary.
+        //
+        // navy is now a near-black ink rather than a mid-blue. The old #081E36
+        // was bright enough to compete with the accent for attention, which is
+        // exactly why the orange read as flat — a neutral ground lets one accent
+        // carry the page.
         navy: {
-          50: "#EEF3F8",
-          100: "#D6E2EE",
-          200: "#A9C4DC",
-          300: "#7BA5CA",
-          400: "#3F6C97",
-          500: "#123A61",
-          600: "#0E2E4E",
-          700: "#0B2A4A",
-          800: "#081E36",
-          900: "#051220",
+          50: "#F8FAFC",
+          100: "#F1F5F9",
+          200: "#E2E8F0",
+          300: "#CBD5E1",
+          400: "#94A3B8",
+          500: "#475569",
+          600: "#334155",
+          700: "#1E293B",
+          800: "#131C2E",
+          900: "#0B1220",
         },
+        // saffron is now BHL's orange. 700 is the on-light text stop (#C2410C
+        // clears 4.5:1 on white); 400 is the on-dark stop.
         saffron: {
-          50: "#FEF6EC",
-          100: "#FDE8CB",
-          300: "#F7BE73",
-          400: "#F4A83D",
-          500: "#F2921D",
-          600: "#D97A0E",
-          700: "#B4620B",
+          50: "#FFF7ED",
+          100: "#FFEDD5",
+          300: "#FDBA74",
+          400: "#FB923C",
+          500: "#F97316",
+          600: "#EA580C",
+          700: "#C2410C",
         },
         federal: {
           green: "#0F8B5F",
           "green-dark": "#0B6A48",
         },
-        electric: "#00F5FF",
       },
       fontFamily: {
         display: ["var(--font-display)"],
@@ -85,10 +97,16 @@ const config: Config = {
       // Shared elevation scale — cards/tiles reach for these instead of
       // hand-rolling a one-off shadow value each, so depth reads
       // consistently across the site.
+      // Tinted with the ink (#0B1220 → 11,18,32), not pure black — a shadow
+      // that shares the ground's hue reads as depth; a grey one reads as dirt.
       boxShadow: {
-        card: "0 2px 8px rgba(11,42,74,0.06), 0 16px 40px -12px rgba(11,42,74,0.18)",
-        "card-hover": "0 4px 12px rgba(11,42,74,0.08), 0 28px 60px -14px rgba(11,42,74,0.28)",
-        elevated: "0 8px 30px rgba(0,0,0,0.35)",
+        card: "0 2px 8px rgba(11,18,32,0.06), 0 16px 40px -12px rgba(11,18,32,0.18)",
+        "card-hover": "0 4px 12px rgba(11,18,32,0.08), 0 28px 60px -14px rgba(11,18,32,0.28)",
+        elevated: "0 8px 30px rgba(11,18,32,0.35)",
+        // Accent glow for cards that need to lead (1.11). Kept in the scale so
+        // nobody hand-rolls a one-off orange shadow per component.
+        glow: "0 0 0 1px rgba(249,115,22,0.35), 0 12px 34px -12px rgba(249,115,22,0.45)",
+        "glow-green": "0 0 0 1px rgba(15,139,95,0.30), 0 12px 34px -12px rgba(15,139,95,0.40)",
       },
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
@@ -97,6 +115,11 @@ const config: Config = {
         "float-slow": { "0%,100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-10px)" } },
         "pulse-ring": { "0%": { transform: "scale(0.9)", opacity: "0.8" }, "100%": { transform: "scale(1.9)", opacity: "0" } },
         marquee: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
+        // Slow drift behind the hero photography. Alternating in/out per frame
+        // stops consecutive photos all moving the same way, which reads as a
+        // mechanical slideshow rather than a considered cross-fade.
+        "kenburns-in": { "0%": { transform: "scale(1.04)" }, "100%": { transform: "scale(1.13)" } },
+        "kenburns-out": { "0%": { transform: "scale(1.13)" }, "100%": { transform: "scale(1.04)" } },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -105,6 +128,10 @@ const config: Config = {
         "float-slow": "float-slow 6s ease-in-out infinite",
         "pulse-ring": "pulse-ring 2.5s cubic-bezier(0.4,0,0.6,1) infinite",
         marquee: "marquee 30s linear infinite",
+        // 12s against a 3s hold: the drift never completes, so it always reads
+        // as slow movement rather than a loop resetting.
+        "kenburns-in": "kenburns-in 12s ease-out both",
+        "kenburns-out": "kenburns-out 12s ease-out both",
       },
     },
   },

@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Uniting India's IT trade fraternity — 50,000+ IT channel partners across 26 states under one national federation.",
     start_url: "/",
     display: "standalone",
-    background_color: "#0B2A4A",
-    theme_color: "#0B2A4A",
+    background_color: "#0B1220",
+    theme_color: "#0B1220",
     icons: [
       { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { src: "/icon-512.png", sizes: "512x512", type: "image/png" },

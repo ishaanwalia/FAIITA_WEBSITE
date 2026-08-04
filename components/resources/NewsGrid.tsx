@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search } from "lucide-react";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
@@ -67,7 +66,7 @@ export function NewsGrid({ news }: { news: NewsRow[] }) {
         <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((n, i) => (
             <ScrollReveal key={n.id} direction="up" delay={(i % 3) * 0.08}>
-              <TiltCard maxTilt={6} className="h-full">
+              <div className="group relative h-full">
                 <Link href={`/resources/news/${n.slug}`} className="group block h-full">
                   <GlassCard variant="light" className="flex h-full flex-col">
                     <div className="flex flex-wrap items-center gap-2">
@@ -82,7 +81,7 @@ export function NewsGrid({ news }: { news: NewsRow[] }) {
                     </div>
                   </GlassCard>
                 </Link>
-              </TiltCard>
+              </div>
             </ScrollReveal>
           ))}
         </div>

@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Search, Users } from "lucide-react";
-import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { LogoImage } from "@/components/common/LogoImage";
 import { DemoBadge } from "@/components/ui/DemoBadge";
@@ -76,9 +75,9 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
         {filtered.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((m) => (
-              <TiltCard key={m.slug} maxTilt={6} className="h-full">
+              <div key={m.slug} className="group relative h-full">
                 <Link href={`/about/member-associations/${m.slug}`} className="group block h-full">
-                  <GlassCard variant="light" className="flex h-full flex-col">
+                  <GlassCard variant="light" glow="cool" bloom={false} className="flex h-full flex-col">
                     <div className="flex items-start gap-3">
                       <LogoImage logoUrl={m.logoUrl} alt={m.name} size="sm" />
                       <div>
@@ -99,7 +98,7 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
                     </div>
                   </GlassCard>
                 </Link>
-              </TiltCard>
+              </div>
             ))}
           </div>
         ) : (

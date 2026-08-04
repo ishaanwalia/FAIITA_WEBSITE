@@ -25,7 +25,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
             padding: "2rem",
             fontFamily: "system-ui, sans-serif",
             background: "#F5F6F8",
-            color: "#0B2A4A",
+            color: "#0B1220",
           }}
         >
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700 }}>Something went wrong</h1>
@@ -39,8 +39,8 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
               padding: "0.75rem 1.5rem",
               borderRadius: "999px",
               border: "none",
-              background: "#F2921D",
-              color: "#0B2A4A",
+              background: "#F97316",
+              color: "#0B1220",
               fontWeight: 600,
               cursor: "pointer",
             }}

@@ -170,7 +170,7 @@ export function Navbar() {
                     >
                       <ul className="p-2">
                         {item.children.map((child) => (
-                          <li key={child.href}>
+                          <li key={child.href + child.label}>
                             <Link
                               href={child.href}
                               className="group/item flex flex-col gap-0.5 rounded-xl px-4 py-3 transition-colors hover:bg-white/10"

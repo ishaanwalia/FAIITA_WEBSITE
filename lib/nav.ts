@@ -10,6 +10,7 @@ export const navItems: NavItem[] = [
       { label: "About FAIITA", href: "/about/about-faiita", description: "Our structure, history and how the federation works" },
       { label: "State Associations", href: "/about/state-associations", description: "26 states, one federated network" },
       { label: "Member Associations", href: "/about/member-associations", description: "Associations affiliated under FAIITA" },
+      { label: "State Map", href: "/about/state-associations", description: "26 states, one federated network" },
     ],
   },
   { label: "Leadership", href: "/about/leadership" },

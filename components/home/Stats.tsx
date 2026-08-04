@@ -5,7 +5,6 @@ import { useInView } from "react-intersection-observer";
 import { animate, useReducedMotion } from "framer-motion";
 import * as Icons from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
-import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import type { StatItem } from "@/types";
 
@@ -65,9 +64,10 @@ export function Stats({ stats }: { stats: StatItem[] }) {
             const Icon = (Icons as unknown as Record<string, Icons.LucideIcon>)[stat.icon ?? "Sparkles"] ?? Icons.Sparkles;
             const numeric = parseInt(stat.value.replace(/[^0-9]/g, ""), 10) || 0;
             return (
-              <TiltCard key={stat.id} maxTilt={10} className="h-full">
+              <div key={stat.id} className="group relative h-full">
                 <GlassCard
                   variant="dark"
+                  glow="green"
                   className="flex h-full flex-col items-center justify-center text-center shadow-elevated ring-1 ring-white/5"
                 >
                   <Icon className="h-6 w-6 text-saffron-400" />
@@ -77,7 +77,7 @@ export function Stats({ stats }: { stats: StatItem[] }) {
                   </div>
                   <p className="mt-2 text-xs font-medium uppercase tracking-wide text-white/50">{stat.label}</p>
                 </GlassCard>
-              </TiltCard>
+              </div>
             );
           })}
         </div>

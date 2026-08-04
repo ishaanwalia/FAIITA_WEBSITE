@@ -23,7 +23,7 @@ export async function GET(req: Request) {
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          backgroundColor: "#081E36",
+          backgroundColor: "#0B1220",
           backgroundImage:
             "radial-gradient(55% 75% at 10% 15%, rgba(109,91,208,0.30), transparent 60%), radial-gradient(50% 70% at 90% 10%, rgba(20,184,166,0.22), transparent 60%), radial-gradient(65% 85% at 50% 115%, rgba(0,245,255,0.14), transparent 55%), radial-gradient(40% 60% at 85% 80%, rgba(242,146,29,0.18), transparent 60%)",
           fontFamily: "sans-serif",
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
             display: "flex",
             alignItems: "center",
             gap: "16px",
-            color: "#F2921D",
+            color: "#F97316",
             fontSize: "24px",
             fontWeight: 700,
             letterSpacing: "5px",
@@ -64,7 +64,7 @@ export async function GET(req: Request) {
             gap: "14px",
           }}
         >
-          <div style={{ width: "64px", height: "6px", backgroundColor: "#F2921D", borderRadius: "3px" }} />
+          <div style={{ width: "64px", height: "6px", backgroundColor: "#F97316", borderRadius: "3px" }} />
           <div style={{ width: "24px", height: "6px", backgroundColor: "#00F5FF", borderRadius: "3px" }} />
           <div style={{ width: "12px", height: "6px", backgroundColor: "#0F8B5F", borderRadius: "3px" }} />
           <div style={{ marginLeft: "20px", color: "rgba(255,255,255,0.5)", fontSize: "22px", fontWeight: 600 }}>

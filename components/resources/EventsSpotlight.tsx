@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, MapPin } from "lucide-react";
-import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { DemoBadge } from "@/components/ui/DemoBadge";
 import { formatDate, formatDateShort } from "@/lib/utils";
@@ -73,7 +72,7 @@ export function EventsSpotlight({ events }: { events: EventRow[] }) {
           const d = formatDateShort(e.startDate);
           const isFeatured = e.id === featured.id;
           return (
-            <TiltCard key={e.id} maxTilt={6} className="h-full">
+            <div key={e.id} className="group relative h-full">
               <button onClick={() => setFeaturedId(e.id)} className="block h-full w-full text-left">
                 <GlassCard
                   variant="light"
@@ -97,7 +96,7 @@ export function EventsSpotlight({ events }: { events: EventRow[] }) {
                   </p>
                 </GlassCard>
               </button>
-            </TiltCard>
+            </div>
           );
         })}
       </div>

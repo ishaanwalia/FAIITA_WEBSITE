@@ -1,54 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
+/**
+ * A 160ms fade-and-lift on route change. That's the whole thing.
+ *
+ * What this replaced: a full-viewport opaque panel that swept down over the
+ * old page (500ms) plus a content fade held back by a 150ms delay — so nothing
+ * was readable for roughly half a second after every click. On a site with 40+
+ * pages that is the single most-felt animation on it, and it was costing more
+ * than it returned.
+ *
+ * There's deliberately no exit animation and no AnimatePresence: `mode="wait"`
+ * makes the incoming page queue behind the outgoing one's exit, which doubles
+ * the delay. Keying on pathname remounts and replays `initial`, so the new page
+ * paints immediately and fades up under its own steam.
+ */
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  // Skip the heavy full-viewport sweep on mobile/reduced-motion — it's a
-  // known source of a "frozen for a moment" feel on mid/low-end Android
-  // hardware. Same reasoning as disabling Lenis smoothing there.
-  const [enableSweep, setEnableSweep] = useState(false);
+  const reduced = useReducedMotion();
 
-  useEffect(() => {
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isNarrow = window.matchMedia("(max-width: 768px)").matches;
-    // matchMedia isn't available during SSR, so this can only be resolved
-    // post-mount — one of the few legitimate exceptions to the "no setState
-    // in effect" rule.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setEnableSweep(!prefersReduced && !isNarrow);
-  }, []);
+  if (reduced) return <>{children}</>;
 
   return (
-    <>
-      {/* Reveal panel — sweeps in to cover the old page, then shrinks away to reveal the new one */}
-      {enableSweep && (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={pathname}
-            initial={{ scaleY: 1 }}
-            animate={{ scaleY: 0 }}
-            exit={{ scaleY: 0 }}
-            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] as const }}
-            style={{ transformOrigin: "top" }}
-            className="pointer-events-none fixed inset-0 z-[150] bg-navy-800"
-          />
-        </AnimatePresence>
-      )}
-
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={pathname}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: enableSweep ? 0.35 : 0.2, delay: enableSweep ? 0.15 : 0, ease: [0.65, 0, 0.35, 1] as const }}
-        >
-          {children}
-        </motion.div>
-      </AnimatePresence>
-    </>
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.div>
   );
 }

@@ -62,10 +62,31 @@ export const codeTestimonials: TestimonialItem[] = [
   },
 ];
 
-/** Merge code-side testimonials into DB rows: dedupe by name (DB wins), DB rows first. */
-export function mergeTestimonials<T extends { name: string }>(
+/**
+ * Names are matched loosely on purpose. An exact-string dedupe shipped the same
+ * person twice — the DB row spells him "Liju P. Raju" and the code entry
+ * "Liju P Raju", so the set lookup missed and both rendered, the DB one
+ * without a photo. Punctuation and casing are not identity.
+ */
+const normalizeName = (name: string) =>
+  name.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
+
+/**
+ * Merge code-side testimonials into DB rows. DB rows win on content and keep
+ * their order, but a matching code entry backfills anything the DB row is
+ * missing (currently the photo) — otherwise fixing a portrait would mean
+ * waiting on a reseed.
+ */
+export function mergeTestimonials<T extends { name: string; imageUrl?: string | null }>(
   dbTestimonials: T[],
 ): (T | TestimonialItem)[] {
-  const seen = new Set(dbTestimonials.map((t) => t.name));
-  return [...dbTestimonials, ...codeTestimonials.filter((t) => !seen.has(t.name))];
+  const unused = new Map(codeTestimonials.map((t) => [normalizeName(t.name), t]));
+  const merged = dbTestimonials.map((row) => {
+    const key = normalizeName(row.name);
+    const code = unused.get(key);
+    if (!code) return row;
+    unused.delete(key); // consumed — must not also be appended below
+    return row.imageUrl ? row : { ...row, imageUrl: code.imageUrl };
+  });
+  return [...merged, ...unused.values()];
 }

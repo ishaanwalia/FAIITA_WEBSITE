@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { TiltCard } from "@/components/common/TiltCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 
 const benefits = [
@@ -64,8 +63,8 @@ export function MembershipBenefits({ eyebrow = "Why FAIITA" }: { eyebrow?: strin
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((b, i) => (
             <ScrollReveal key={b.title} direction="up" delay={i * 0.06} className="h-full">
-              <TiltCard maxTilt={6} className="h-full">
-                <GlassCard variant="light" className="flex h-full flex-col overflow-hidden !p-0">
+              <div className="group relative h-full">
+                <GlassCard variant="light" glow="saffron" className="flex h-full flex-col overflow-hidden !p-0">
                   <div className="relative h-40 w-full shrink-0 overflow-hidden">
                     <Image
                       src={b.image}
@@ -85,7 +84,7 @@ export function MembershipBenefits({ eyebrow = "Why FAIITA" }: { eyebrow?: strin
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.description}</p>
                   </div>
                 </GlassCard>
-              </TiltCard>
+              </div>
             </ScrollReveal>
           ))}
         </div>

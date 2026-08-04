@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { TiltCard } from "@/components/common/TiltCard";
 import { NewsGrid } from "@/components/resources/NewsGrid";
 import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
@@ -39,7 +38,7 @@ export default async function NewsPage() {
           {featured && (
             <ScrollReveal direction="scale" className="mb-14">
               <Link href={`/resources/news/${featured.slug}`} className="group block">
-                <TiltCard maxTilt={3}>
+                <div className="group relative">
                   <div className="relative overflow-hidden rounded-3xl bg-navy-800 p-10 sm:p-14">
                     {featured.coverImage ? (
                       <>
@@ -71,7 +70,7 @@ export default async function NewsPage() {
                       </span>
                     </div>
                   </div>
-                </TiltCard>
+                </div>
               </Link>
             </ScrollReveal>
           )}

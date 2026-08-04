@@ -3,10 +3,8 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Award, Briefcase, Building2, Globe, History, Linkedin, Mail, MapPin, Phone } from "lucide-react";
-import { TiltCard } from "@/components/common/TiltCard";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { PhotoAvatar } from "@/components/common/PhotoAvatar";
-import { FlipCard } from "@/components/common/FlipCard";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { cn } from "@/lib/utils";
 
@@ -108,7 +106,7 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
                 )}
                 {featured.journey?.map((step) => (
                   <p key={step.text} className="mt-2 flex items-start gap-1.5 text-sm text-white/55">
-                    <History className="mt-0.5 h-3.5 w-3.5 shrink-0 text-electric/70" />
+                    <History className="mt-0.5 h-3.5 w-3.5 shrink-0 text-saffron-400/70" />
                     {step.url ? (
                       <a
                         href={step.url}
@@ -211,7 +209,6 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
           // photos scale up too; GB Members keep the compact tile.
           const isOfficer = !isPresident && l.role !== "GB Member";
           const isFeatured = featured?.id === l.id;
-          const hasContact = Boolean(l.email || l.phone || l.website);
 
           const frontFace = (
             <GlassCard
@@ -237,51 +234,13 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
             </GlassCard>
           );
 
-          const backFace = (
-            <GlassCard variant="dark" className="flex h-full flex-col items-center justify-center gap-2 text-center">
-              <p className="text-xs font-semibold uppercase tracking-wide text-saffron-400">Contact</p>
-              {l.email && (
-                <a href={`mailto:${l.email}`} className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white">
-                  <Mail className="h-3.5 w-3.5" /> {l.email}
-                </a>
-              )}
-              {l.phone && (
-                <a href={`tel:${l.phone}`} className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white">
-                  <Phone className="h-3.5 w-3.5" /> {l.phone}
-                </a>
-              )}
-              {l.website && (
-                <a
-                  href={l.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white"
-                >
-                  <Globe className="h-3.5 w-3.5" /> {prettyUrl(l.website)}
-                </a>
-              )}
-            </GlassCard>
-          );
-
           return (
             <ScrollReveal key={l.id} direction="up" delay={i * 0.05} className={gridSpan(l.role)}>
-              <TiltCard maxTilt={8} className="h-full">
-                {hasContact ? (
-                  <FlipCard
-                    className="h-full"
-                    front={
-                      <button onClick={() => featureLeader(l.id)} className="block h-full w-full text-left">
-                        {frontFace}
-                      </button>
-                    }
-                    back={backFace}
-                  />
-                ) : (
-                  <button onClick={() => featureLeader(l.id)} className="block h-full w-full text-left">
-                    {frontFace}
-                  </button>
-                )}
-              </TiltCard>
+              <div className="group relative h-full">
+                <button onClick={() => featureLeader(l.id)} className="block h-full w-full text-left">
+                  {frontFace}
+                </button>
+              </div>
             </ScrollReveal>
           );
         })}

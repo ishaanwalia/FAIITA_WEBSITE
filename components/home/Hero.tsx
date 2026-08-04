@@ -1,12 +1,24 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { ParticleBackground } from "@/components/home/ParticleBackground";
+import { HeroFrames, type HeroFrame } from "@/components/home/HeroFrames";
+
+// Real FAIITA event photography. The federation's own rooms are better
+// evidence than any stock image or abstract particle field — these rotate
+// every 3s behind the copy.
+const FRAMES: HeroFrame[] = [
+  { src: "/hero-frames/faiita-agm-2020-ahmedabad-02.jpg", alt: "FAIITA AGM 2020, Ahmedabad" },
+  { src: "/hero-frames/faiita-election-2022-chandigarh-01.jpeg", alt: "FAIITA Election 2022, Chandigarh" },
+  { src: "/hero-frames/faiita-agm-2020-ahmedabad-05.jpg", alt: "FAIITA AGM 2020, Ahmedabad" },
+  { src: "/hero-frames/faiita-computex-taipei-2023-01.jpg", alt: "FAIITA delegation at Computex Taipei 2023" },
+  { src: "/hero-frames/faiita-agm-2020-ahmedabad-03.jpg", alt: "FAIITA AGM 2020, Ahmedabad" },
+  { src: "/hero-frames/faiita-election-2022-chandigarh-02.jpeg", alt: "FAIITA Election 2022, Chandigarh" },
+  { src: "/hero-frames/faiita-agm-2020-ahmedabad-06.jpg", alt: "FAIITA AGM 2020, Ahmedabad" },
+];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -19,51 +31,21 @@ export function Hero() {
 
   // Background drifts slower than the foreground content as you scroll —
   // a classic depth-of-field parallax cue, done with GPU-only transforms.
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "60%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={sectionRef} className="relative flex min-h-[92vh] items-center overflow-hidden bg-navy-800">
-      <motion.div style={{ y: bgY }} className="absolute inset-0 scale-110">
-        <Image
-          src="/hero.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/90 via-navy-800/80 to-navy-800/95" />
-        <div aria-hidden className="animated-gradient absolute inset-0" />
+    <section ref={sectionRef} className="relative flex min-h-[92vh] items-center overflow-hidden bg-navy-900">
+      {/* One background layer, not six. The animated mesh, particle canvas,
+          aurora orbs and grain that used to stack here are gone — the
+          photography is the background now. */}
+      <motion.div style={{ y: bgY }} className="absolute inset-0">
+        <HeroFrames frames={FRAMES} />
       </motion.div>
 
-      <ParticleBackground />
-
-      {/* Slow-drifting glow blobs — subtle depth behind the content layer.
-          (No saffron orb top-left: it crowded the logo.) */}
-      <div aria-hidden className="absolute inset-0 z-[1] overflow-hidden">
-        <div className="aurora-orb right-[4%] bottom-[12%] h-96 w-96 bg-violet-500/10 [animation-delay:-8s]" />
-        <div className="aurora-orb left-[45%] bottom-[-6rem] h-80 w-80 bg-teal-400/10 [animation-delay:-4s]" />
-      </div>
-      <div aria-hidden className="grain absolute inset-0 z-[1]" />
-
-      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="container-page relative z-10 py-32 text-center">
-        <div className="mx-auto max-w-4xl">
-          <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0} className="mx-auto mb-8 flex justify-center">
-            <div className="relative h-20 w-64 sm:h-28 sm:w-80">
-              {/* Brightness/contrast lift only — no panels, glows or backgrounds. */}
-              <Image
-                src="/logo.png"
-                alt="FAIITA Logo"
-                fill
-                priority
-                sizes="320px"
-                className="object-contain brightness-[1.35] contrast-[1.1]"
-              />
-            </div>
-          </motion.div>
-
+      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="container-page relative z-10 py-32">
+        <div className="max-w-3xl">
           <motion.p
             variants={fadeUp}
             initial="hidden"
@@ -79,9 +61,10 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={0.3}
-            className="mb-6 text-balance font-display text-4xl font-bold leading-[1.1] text-white sm:text-5xl lg:text-6xl"
+            className="mb-6 text-balance font-display text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl"
           >
-            Federation of All India <span className="gradient-text-kinetic">Information Technology</span> Associations
+            Federation of All India{" "}
+            <span className="gradient-text-kinetic">Information Technology</span> Associations
           </motion.h1>
 
           <motion.p
@@ -89,10 +72,10 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={0.45}
-            className="mx-auto mb-10 max-w-2xl text-balance text-lg leading-relaxed text-white/70"
+            className="mb-10 max-w-2xl text-balance text-lg leading-relaxed text-white/70"
           >
             Uniting 50,000+ IT entrepreneurs across 26 states — one federated
-            voice driving growth in Retail, Distribution, Services & Solutions.
+            voice driving growth in Retail, Distribution, Services &amp; Solutions.
           </motion.p>
 
           <motion.div
@@ -100,7 +83,7 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={0.6}
-            className="flex flex-wrap items-center justify-center gap-4"
+            className="flex flex-wrap items-center gap-4"
           >
             <MagneticButton asChild variant="accent" size="lg">
               <Link href="/about">
