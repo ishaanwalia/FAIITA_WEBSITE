@@ -57,7 +57,6 @@ export function CinematicLoader() {
     // Claimed up front. The old version only wrote this once the animation
     // finished, so any reload during the intro replayed it.
     sessionStorage.setItem(SESSION_KEY, "1");
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setShow(!played);
   }, [prefersReduced]);
 
