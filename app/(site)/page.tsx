@@ -8,6 +8,7 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { NewsSection } from "@/components/home/NewsSection";
 import { EventsSection } from "@/components/home/EventsSection";
 import { ReadyToConnect } from "@/components/home/ReadyToConnect";
+import { ElasticStrings } from "@/components/effects/ElasticStrings";
 import { prisma } from "@/lib/prisma";
 import { excludeRemovedStates } from "@/lib/state-overrides";
 import { mergeNews } from "@/lib/code-news";
@@ -91,6 +92,9 @@ export default async function HomePage() {
       <StateMarquee states={[...new Set(excludeRemovedStates(states).map((s) => s.stateName))]} />
       <Stats stats={stats.map((s) => (statFixes[s.label] ? { ...s, ...statFixes[s.label] } : s))} />
       <MembershipBenefits />
+      {/* Pluckable divider — it does the same structural job a 1px rule would,
+          so nothing is lost if the physics never runs. */}
+      <ElasticStrings strings={3} tone="light" className="h-20 w-full" />
       <JoinCta />
       <Testimonials
         testimonials={mergeTestimonials(testimonials).map((t) => ({

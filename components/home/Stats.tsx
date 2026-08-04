@@ -6,6 +6,7 @@ import { animate, useReducedMotion } from "framer-motion";
 import * as Icons from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { ParticleTrail } from "@/components/effects/ParticleTrail";
 import type { StatItem } from "@/types";
 
 // Renders the real value immediately (SSR baseline for no-JS visitors and
@@ -49,6 +50,10 @@ export function Stats({ stats }: { stats: StatItem[] }) {
     <section className="relative overflow-hidden bg-navy-800 py-20">
       <div aria-hidden className="animated-gradient absolute inset-0" />
       <div aria-hidden className="grain absolute inset-0" />
+      {/* Particle trail lives here rather than in the hero: this is the most
+          static band on the page, so it's the one that gains most from
+          rewarding cursor movement. */}
+      <ParticleTrail className="pointer-events-none absolute inset-0 h-full w-full" />
       <div className="container-page relative">
         <SectionHeading
           eyebrow="Our Impact"

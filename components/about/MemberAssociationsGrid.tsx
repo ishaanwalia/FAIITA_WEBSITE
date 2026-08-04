@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Search, Users } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { MagneticField } from "@/components/effects/MagneticField";
 import { LogoImage } from "@/components/common/LogoImage";
 import { DemoBadge } from "@/components/ui/DemoBadge";
 import { cn } from "@/lib/utils";
@@ -73,7 +74,11 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
 
       <div className="mt-10">
         {filtered.length > 0 ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <MagneticField
+            radius={200}
+            strength={12}
+            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {filtered.map((m) => (
               <div key={m.slug} className="group relative h-full">
                 <Link href={`/about/member-associations/${m.slug}`} className="group block h-full">
@@ -100,7 +105,7 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
                 </Link>
               </div>
             ))}
-          </div>
+          </MagneticField>
         ) : (
           <p className="text-center text-sm text-muted-foreground">No member associations match your search.</p>
         )}
