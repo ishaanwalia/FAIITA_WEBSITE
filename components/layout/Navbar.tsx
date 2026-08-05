@@ -112,7 +112,16 @@ export function Navbar() {
 
   return (
     <>
-    <header className="fixed inset-x-0 top-0 z-50 isolate [transform:translateZ(0)] will-change-transform">
+    {/* No transform / will-change on <header> itself. Promoting a
+        position:fixed element to its own composited layer is the one thing
+        that can make it visibly lag a scroll: Lenis scrolls by calling
+        window.scrollTo on the main thread each frame, and the promoted layer
+        is repositioned a frame late, so the bar drifts down and settles when
+        the scroll stops. The home page hid it because its header is
+        transparent over a dark hero for the whole first screen. The GPU
+        promotion that mobile WebKit's backdrop-filter actually needs lives on
+        the inner div below, which is the element that has the backdrop-filter. */}
+    <header className="fixed inset-x-0 top-0 z-50 isolate">
       {/* The GPU promotion belongs on this div, not on <header>: this is the
           element that carries backdrop-filter (via .glass-dark), and it's the
           backdrop-filter layer mobile WebKit drops during momentum scroll,
@@ -216,8 +225,8 @@ export function Navbar() {
       </div>
     </header>
 
-    {/* Sibling of <header>, not a descendant — <header> carries a transform
-        for GPU-layer promotion (fixes iOS momentum-scroll detachment), and
+    {/* Sibling of <header>, not a descendant. It has to stay that way: the
+        header's inner div carries a transform for GPU promotion, and a
         transform on an ancestor creates a containing block for this panel's
         own position:fixed, which previously shrank it to the header's ~80px
         box (see git history on this file before changing this split again). */}

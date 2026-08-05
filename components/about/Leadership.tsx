@@ -50,12 +50,19 @@ const ROW_OF_THREE = [
   "Treasurer",
 ];
 
+// Row unit is 78px so the two bands can differ by a row and a half rather than
+// by double. With a 16px gap that puts GB members back at exactly their old
+// 172px (2 rows) and brings office bearers down from 360px to 266px (3 rows):
+// clearly the senior card, no longer a slab. Column spans are unchanged.
+const OFFICER_ROWS = "row-span-3";
+const MEMBER_ROWS = "row-span-2";
+
 function gridSpan(role: string) {
-  if (role === "President") return "col-span-2 row-span-2 lg:col-span-12";
-  if (ROW_OF_THREE.includes(role)) return "lg:col-span-4 lg:row-span-2";
-  if (role === "Joint Secretary") return "lg:col-span-4 lg:row-span-2 lg:col-start-3";
-  if (role === "Joint Treasurer") return "lg:col-span-4 lg:row-span-2";
-  return "lg:col-span-3";
+  if (role === "President") return `col-span-2 ${OFFICER_ROWS} lg:col-span-12`;
+  if (ROW_OF_THREE.includes(role)) return `col-span-2 ${OFFICER_ROWS} lg:col-span-4`;
+  if (role === "Joint Secretary") return `col-span-2 ${OFFICER_ROWS} lg:col-span-4 lg:col-start-3`;
+  if (role === "Joint Treasurer") return `col-span-2 ${OFFICER_ROWS} lg:col-span-4`;
+  return `${MEMBER_ROWS} lg:col-span-3`;
 }
 
 export function Leadership({ leaders }: { leaders: LeaderData[] }) {
@@ -249,7 +256,7 @@ function Band({
       radius={180}
       strength={10}
       selector="[data-magnet]"
-      className="mt-4 grid auto-rows-[172px] grid-cols-2 gap-4 lg:grid-cols-12"
+      className="mt-4 grid auto-rows-[78px] grid-cols-2 gap-4 lg:grid-cols-12"
     >
       {tiles.map((l, i) => {
         const isPresident = l.role === "President";
@@ -277,7 +284,7 @@ function Band({
                     hoverZoom
                     className={cn("mx-auto", isOfficer && "lg:h-28 lg:w-28")}
                   />
-                  <h4 className={cn("font-display font-bold text-white", isPresident ? "mt-6 text-xl" : "mt-4 text-sm")}>
+                  <h4 className={cn("font-display font-bold text-white", isPresident ? "mt-4 text-lg" : "mt-4 text-sm")}>
                     {l.name}
                   </h4>
                   <p className={cn("font-semibold text-saffron-400", isPresident ? "text-sm" : "text-xs")}>{l.role}</p>

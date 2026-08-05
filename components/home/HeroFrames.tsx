@@ -15,7 +15,7 @@ import { capabilityTier } from "@/lib/canvas-engine";
  * subsequent cycles are instant.
  */
 
-const HOLD_MS = 3000;
+const HOLD_MS = 4500;
 
 export type HeroFrame = { src: string; alt: string };
 

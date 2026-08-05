@@ -10,7 +10,7 @@ const SIZES = {
   lg: "h-20 w-20 text-2xl",
   xl: "h-28 w-28 text-4xl",
   // xl on mobile, larger on desktop — for the full-width President card.
-  "2xl": "h-28 w-28 text-4xl lg:h-44 lg:w-44",
+  "2xl": "h-24 w-24 text-3xl lg:h-32 lg:w-32",
 };
 
 export function PhotoAvatar({
@@ -46,7 +46,7 @@ export function PhotoAvatar({
           src={imageUrl as string}
           alt=""
           fill
-          sizes="176px"
+          sizes="128px"
           className="bg-white object-contain"
           onError={() => setFailed(true)}
         />
