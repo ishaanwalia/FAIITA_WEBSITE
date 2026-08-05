@@ -66,7 +66,7 @@ export async function GET(req: Request) {
         >
           <div style={{ width: "64px", height: "6px", backgroundColor: "#F97316", borderRadius: "3px" }} />
           <div style={{ width: "24px", height: "6px", backgroundColor: "#00F5FF", borderRadius: "3px" }} />
-          <div style={{ width: "12px", height: "6px", backgroundColor: "#0F8B5F", borderRadius: "3px" }} />
+          <div style={{ width: "12px", height: "6px", backgroundColor: "#17A67A", borderRadius: "3px" }} />
           <div style={{ marginLeft: "20px", color: "rgba(255,255,255,0.5)", fontSize: "22px", fontWeight: 600 }}>
             FAIITA
           </div>

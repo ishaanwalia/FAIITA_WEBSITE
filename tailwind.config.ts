@@ -79,9 +79,27 @@ const config: Config = {
           600: "#EA580C",
           700: "#C2410C",
         },
+        // Brightened from #0F8B5F — the old value read as near-black against the
+        // ink ground, so the "tricolour" third hue was doing no work. This one
+        // is too light for body text on white (~3.3:1), which is what
+        // `green-dark` is for: every on-light text usage points at that stop.
         federal: {
-          green: "#0F8B5F",
+          green: "#17A67A",
           "green-dark": "#0B6A48",
+        },
+        // Two cool partners for the orange. The accent stays orange — these
+        // never carry text or a CTA, they only appear in the blurred washes
+        // (.animated-gradient, GradientMesh, gradient-text-kinetic) where a
+        // single warm hue on ink was reading flat.
+        violet: {
+          400: "#A78BFA",
+          500: "#8B5CF6",
+          600: "#7C3AED",
+        },
+        teal: {
+          400: "#2DD4BF",
+          500: "#14B8A6",
+          600: "#0D9488",
         },
       },
       fontFamily: {
@@ -106,7 +124,7 @@ const config: Config = {
         // Accent glow for cards that need to lead (1.11). Kept in the scale so
         // nobody hand-rolls a one-off orange shadow per component.
         glow: "0 0 0 1px rgba(249,115,22,0.35), 0 12px 34px -12px rgba(249,115,22,0.45)",
-        "glow-green": "0 0 0 1px rgba(15,139,95,0.30), 0 12px 34px -12px rgba(15,139,95,0.40)",
+        "glow-green": "0 0 0 1px rgba(23,166,122,0.30), 0 12px 34px -12px rgba(23,166,122,0.40)",
       },
       keyframes: {
         "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },

@@ -27,7 +27,7 @@ export function NewsletterForm() {
 
   if (status === "success") {
     return (
-      <p className="flex items-center gap-2 text-sm text-federal-green">
+      <p className="flex items-center gap-2 text-sm text-federal-green-dark">
         <CheckCircle2 className="h-4 w-4" /> Subscribed — thank you!
       </p>
     );

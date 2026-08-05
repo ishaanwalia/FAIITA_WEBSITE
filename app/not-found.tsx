@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TypePressure } from "@/components/effects/TypePressure";
 
 export default function NotFound() {
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center bg-background px-6 text-center">
       <span className="font-mono text-sm font-semibold uppercase tracking-[0.2em] text-saffron-700">404</span>
-      <h1 className="mt-3 font-display text-3xl font-bold text-navy-800 sm:text-4xl">Page not found</h1>
+      <TypePressure
+        text="Page not found"
+        className="mt-3 font-display text-3xl font-bold text-navy-800 sm:text-4xl"
+      />
       <p className="mt-3 max-w-md text-muted-foreground">
         The page you&apos;re looking for doesn&apos;t exist or may have moved.
       </p>

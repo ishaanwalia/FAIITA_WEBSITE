@@ -4,6 +4,7 @@ import { ArrowRight, Compass, Layers, ShieldCheck, Users2 } from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { TextReveal } from "@/components/common/TextReveal";
 import { GradientMesh } from "@/components/common/GradientMesh";
+import { GlyphDecode } from "@/components/effects/GlyphDecode";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
@@ -58,7 +59,7 @@ export default async function AboutPage() {
         <GradientMesh />
         <div className="absolute inset-0 bg-network-grid opacity-10" />
         <div className="container-page relative">
-          <span className="section-eyebrow text-saffron-400">About Us</span>
+          <GlyphDecode text="About Us" className="section-eyebrow text-saffron-400" />
           <TextReveal
             text="One Federation, One National Voice"
             as="h1"

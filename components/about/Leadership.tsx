@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Award, Briefcase, Building2, Globe, History, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { PhotoAvatar } from "@/components/common/PhotoAvatar";
+import { MagneticField } from "@/components/effects/MagneticField";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { cn } from "@/lib/utils";
 
@@ -61,6 +62,8 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
   const [featuredId, setFeaturedId] = useState<string | undefined>(leaders[0]?.id);
   const featured = leaders.find((l) => l.id === featuredId) ?? leaders[0];
   const spotlightRef = useRef<HTMLDivElement>(null);
+  const officers = leaders.filter((l) => l.role !== "GB Member");
+  const members = leaders.filter((l) => l.role === "GB Member");
 
   // The spotlight card sits above the grid, so selecting a tile scrolls back
   // up to it — otherwise the selection appears to do nothing.
@@ -200,51 +203,93 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
       </AnimatePresence>
       </div>
 
-      {/* Bento grid — click a tile to feature it above; hover a tile to see
-          its photo zoom in, click the info icon to flip for contact details. */}
-      <div className="mt-8 grid auto-rows-[172px] grid-cols-2 gap-4 lg:grid-cols-12" style={{ perspective: 1400 }}>
-        {leaders.map((l, i) => {
-          const isPresident = l.role === "President";
-          // Office bearers get President-height cards on desktop, so their
-          // photos scale up too; GB Members keep the compact tile.
-          const isOfficer = !isPresident && l.role !== "GB Member";
-          const isFeatured = featured?.id === l.id;
-
-          const frontFace = (
-            <GlassCard
-              variant="dark"
-              clip
-              className={cn(
-                "flex h-full flex-col items-center justify-center text-center transition-all",
-                isFeatured && "ring-2 ring-saffron-400"
-              )}
-            >
-              <PhotoAvatar
-                initials={initials(l.name)}
-                imageUrl={l.imageUrl}
-                size={isPresident ? "2xl" : "md"}
-                hoverZoom
-                className={cn("mx-auto", isOfficer && "lg:h-28 lg:w-28")}
-              />
-              <h4 className={cn("font-display font-bold text-white", isPresident ? "mt-6 text-xl" : "mt-4 text-sm")}>
-                {l.name}
-              </h4>
-              <p className={cn("font-semibold text-saffron-400", isPresident ? "text-sm" : "text-xs")}>{l.role}</p>
-              {l.stateName && <p className={cn("mt-1 text-white/50", isPresident ? "text-sm" : "text-xs")}>{l.stateName}</p>}
-            </GlassCard>
-          );
-
-          return (
-            <ScrollReveal key={l.id} direction="up" delay={i * 0.05} className={gridSpan(l.role)}>
-              <div className="group relative h-full">
-                <button onClick={() => featureLeader(l.id)} className="block h-full w-full text-left">
-                  {frontFace}
-                </button>
-              </div>
-            </ScrollReveal>
-          );
-        })}
-      </div>
+      {/* Two bands with a drawn join between them, so the rank order the array
+          already encodes reads as a tree on the page instead of one long run
+          of tiles. Per-tile layout (gridSpan) is unchanged. */}
+      <Band tiles={officers} featuredId={featured?.id} onFeature={featureLeader} />
+      {members.length > 0 && (
+        <>
+          <TreeJoin label="Governing Body Members" />
+          <Band tiles={members} featuredId={featured?.id} onFeature={featureLeader} />
+        </>
+      )}
     </div>
+  );
+}
+
+/** The vertical rule + label that turns two tile bands into one hierarchy. */
+function TreeJoin({ label }: { label: string }) {
+  return (
+    <div className="mt-12 flex flex-col items-center">
+      <span aria-hidden className="h-10 w-px bg-gradient-to-b from-transparent to-border" />
+      <span className="section-eyebrow rounded-full border border-border bg-secondary/60 px-5 py-2 text-navy-700">
+        {label}
+      </span>
+      <span aria-hidden className="h-10 w-px bg-gradient-to-t from-transparent to-border" />
+    </div>
+  );
+}
+
+function Band({
+  tiles,
+  featuredId,
+  onFeature,
+}: {
+  tiles: LeaderData[];
+  featuredId?: string;
+  onFeature: (id: string) => void;
+}) {
+  if (tiles.length === 0) return null;
+
+  return (
+    // Tiles lean toward the cursor. The magnet drives [data-magnet], one level
+    // inside the ScrollReveal wrapper, so it never fights framer-motion for the
+    // same element's transform.
+    <MagneticField
+      radius={180}
+      strength={10}
+      selector="[data-magnet]"
+      className="mt-4 grid auto-rows-[172px] grid-cols-2 gap-4 lg:grid-cols-12"
+    >
+      {tiles.map((l, i) => {
+        const isPresident = l.role === "President";
+        // Office bearers get President-height cards on desktop, so their
+        // photos scale up too; GB Members keep the compact tile.
+        const isOfficer = !isPresident && l.role !== "GB Member";
+        const isFeatured = featuredId === l.id;
+
+        return (
+          <ScrollReveal key={l.id} direction="up" delay={i * 0.05} className={gridSpan(l.role)}>
+            <div data-magnet className="group relative h-full">
+              <button onClick={() => onFeature(l.id)} className="block h-full w-full text-left">
+                <GlassCard
+                  variant="dark"
+                  clip
+                  className={cn(
+                    "flex h-full flex-col items-center justify-center text-center transition-all",
+                    isFeatured && "ring-2 ring-saffron-400"
+                  )}
+                >
+                  <PhotoAvatar
+                    initials={initials(l.name)}
+                    imageUrl={l.imageUrl}
+                    size={isPresident ? "2xl" : "md"}
+                    hoverZoom
+                    className={cn("mx-auto", isOfficer && "lg:h-28 lg:w-28")}
+                  />
+                  <h4 className={cn("font-display font-bold text-white", isPresident ? "mt-6 text-xl" : "mt-4 text-sm")}>
+                    {l.name}
+                  </h4>
+                  <p className={cn("font-semibold text-saffron-400", isPresident ? "text-sm" : "text-xs")}>{l.role}</p>
+                  {l.stateName && (
+                    <p className={cn("mt-1 text-white/50", isPresident ? "text-sm" : "text-xs")}>{l.stateName}</p>
+                  )}
+                </GlassCard>
+              </button>
+            </div>
+          </ScrollReveal>
+        );
+      })}
+    </MagneticField>
   );
 }

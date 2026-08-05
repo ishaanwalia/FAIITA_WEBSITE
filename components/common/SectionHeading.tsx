@@ -1,3 +1,4 @@
+import { GlyphDecode } from "@/components/effects/GlyphDecode";
 import { cn } from "@/lib/utils";
 
 export function SectionHeading({
@@ -22,7 +23,10 @@ export function SectionHeading({
   return (
     <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center", className)}>
       {eyebrow && (
-        <span className={cn("section-eyebrow", light ? "text-saffron-400" : "text-saffron-700")}>{eyebrow}</span>
+        <GlyphDecode
+          text={eyebrow}
+          className={cn("section-eyebrow", light ? "text-saffron-400" : "text-saffron-700")}
+        />
       )}
       <Tag
         className={cn(

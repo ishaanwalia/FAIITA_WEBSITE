@@ -56,7 +56,7 @@ export function ContactForm({ defaultSubject }: { defaultSubject?: string }) {
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col items-center justify-center rounded-2xl border border-federal-green/20 bg-federal-green/5 p-12 text-center"
       >
-        <CheckCircle2 className="h-10 w-10 text-federal-green" />
+        <CheckCircle2 className="h-10 w-10 text-federal-green-dark" />
         <h3 className="mt-4 font-display text-lg font-bold text-navy-800">Message sent successfully</h3>
         <p className="mt-2 text-sm text-muted-foreground">
           Thank you for reaching out. Our team will get back to you shortly.

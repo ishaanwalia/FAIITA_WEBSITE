@@ -17,7 +17,7 @@ const theme = {
     colors: {
       navy: { 700: "#0B2A4A", 800: "#081E36" },
       saffron: { 500: "#F2921D", 600: "#D97A0E" },
-      federal: { green: "#0F8B5F" },
+      federal: { green: "#17A67A", "green-dark": "#0B6A48" },
       slate: { 50: "#F8FAFC", 500: "#64748B" },
     },
   },
@@ -45,7 +45,7 @@ export default function NewsletterSignupEmail({ email }: NewsletterSignupEmailPr
             </Section>
 
             <Section className="bg-white px-8 py-8 text-center">
-              <Text className="m-0 text-[11px] font-semibold uppercase tracking-wide text-federal-green">
+              <Text className="m-0 text-[11px] font-semibold uppercase tracking-wide text-federal-green-dark">
                 Newsletter
               </Text>
               <Heading className="m-0 mt-1 text-[22px] font-bold leading-snug text-navy-800">

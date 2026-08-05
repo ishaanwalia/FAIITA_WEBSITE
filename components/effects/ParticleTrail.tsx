@@ -14,13 +14,18 @@ import { pointerDriven, registerCanvasTask } from "@/lib/canvas-engine";
  * out of view and never mounts at all on touch or reduced-motion.
  */
 
-// Palette-legal hues the sparks pick from, weighted toward the accent.
+// Palette-legal hues the sparks pick from, weighted toward the accent: orange
+// is listed twice so roughly a third of the sparks are the brand colour and the
+// trail still reads as orange, while the cool hues keep it from looking like a
+// single-colour cursor artefact.
 const HUES: [number, number, number][] = [
   [249, 115, 22], // saffron-500
   [249, 115, 22],
   [251, 146, 60], // saffron-400
   [253, 186, 116], // saffron-300
-  [15, 139, 95], // federal green
+  [23, 166, 122], // federal green
+  [139, 92, 246], // violet-500
+  [45, 212, 191], // teal-400
 ];
 
 type Spark = {

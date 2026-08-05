@@ -113,9 +113,14 @@ export function Navbar() {
   return (
     <>
     <header className="fixed inset-x-0 top-0 z-50 isolate [transform:translateZ(0)] will-change-transform">
+      {/* The GPU promotion belongs on this div, not on <header>: this is the
+          element that carries backdrop-filter (via .glass-dark), and it's the
+          backdrop-filter layer mobile WebKit drops during momentum scroll,
+          making the bar go transparent mid-scroll on non-home pages. f2873e3
+          meant to land the fix here and put it one level up by mistake. */}
       <div
         className={cn(
-          "transition-all duration-500",
+          "transition-all duration-500 [transform:translateZ(0)] will-change-transform",
           scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
         )}
       >
