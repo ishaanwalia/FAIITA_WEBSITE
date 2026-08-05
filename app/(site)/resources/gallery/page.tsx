@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
-import { AlbumCarousel } from "@/components/gallery/AlbumCarousel";
+import { AlbumGrid } from "@/components/gallery/AlbumGrid";
 import { galleryAlbums } from "@/lib/gallery-albums";
 import { prisma } from "@/lib/prisma";
 
@@ -22,50 +21,51 @@ export default async function GalleryPage() {
     orderBy: { order: "asc" },
   });
 
+  // The loose DB photos become one more album rather than a second layout —
+  // one component means one set of interactions to get right.
+  const albums = [
+    ...galleryAlbums.map((a) => ({
+      key: a.slug,
+      eyebrow: a.eyebrow,
+      title: a.title,
+      description: a.description,
+      photos: a.photos,
+    })),
+    ...(items.length > 0
+      ? [
+          {
+            key: "more",
+            eyebrow: "From across the federation",
+            title: "More Moments",
+            description: undefined,
+            photos: items.map((it) => ({ src: it.imageUrl, caption: it.title })),
+          },
+        ]
+      : []),
+  ];
+
   return (
     <>
       <PageHero
         eyebrow="Resources / Gallery"
         title="Moments From Across the Federation"
-        description="A look back at elections, summits, regional meets, and leadership gatherings."
+        description="A look back at elections, summits, regional meets, and leadership gatherings. Tap any photograph to read it full-screen."
       />
 
       <section className="bg-background py-20">
-        <div className="container-page grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {galleryAlbums.map((album, i) => (
-            <ScrollReveal key={album.slug} direction="up" delay={(i % 3) * 0.08} className="h-full min-w-0">
-              <AlbumCarousel album={album} />
+        <div className="container-page space-y-12">
+          {albums.map((album, i) => (
+            <ScrollReveal key={album.key} direction="up" delay={Math.min(i, 3) * 0.06}>
+              <AlbumGrid
+                eyebrow={album.eyebrow}
+                title={album.title}
+                description={album.description}
+                photos={album.photos}
+              />
             </ScrollReveal>
           ))}
         </div>
       </section>
-
-      {items.length > 0 && (
-        <section className="bg-background pb-20">
-          <div className="container-page columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:mb-6">
-            {items.map((item, i) => (
-              <ScrollReveal key={item.id} direction="scale" delay={(i % 3) * 0.06} className="break-inside-avoid">
-                <div className="group relative">
-                  <figure className="group relative overflow-hidden rounded-2xl">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.title}
-                      width={600}
-                      height={450}
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-900/90 to-transparent p-4">
-                      <span className="text-[10px] font-semibold uppercase tracking-wide text-saffron-400">{item.category}</span>
-                      <p className="text-sm font-medium text-white">{item.title}</p>
-                    </figcaption>
-                  </figure>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </section>
-      )}
     </>
   );
 }

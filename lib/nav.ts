@@ -16,7 +16,9 @@ export const navItems: NavItem[] = [
   { label: "Leadership", href: "/about/leadership" },
   {
     label: "Resources",
+    href: "/resources",
     children: [
+      { label: "All Resources", href: "/resources", description: "News, events, gallery and the Patrika in one place" },
       { label: "News", href: "/resources/news", description: "Announcements and federation updates" },
       { label: "Events", href: "/resources/events", description: "Summits, AGMs and workshops" },
       { label: "Gallery", href: "/resources/gallery", description: "Moments from across the federation" },
