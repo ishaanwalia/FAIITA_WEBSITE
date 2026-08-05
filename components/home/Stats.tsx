@@ -1,12 +1,43 @@
 "use client";
 
-import * as Icons from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  CalendarClock,
+  MapPinned,
+  ShieldCheck,
+  Sparkles,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GradientMesh } from "@/components/common/GradientMesh";
 import { ParticleTrail } from "@/components/effects/ParticleTrail";
 import { GlyphDecode } from "@/components/effects/GlyphDecode";
 import type { StatItem } from "@/types";
+
+/**
+ * The icons a stat row is allowed to name.
+ *
+ * This was `import * as Icons` with a lookup by string, which pulled lucide's
+ * entire ~1,750-icon barrel into the bundle — a 550 KB chunk on **every page
+ * of the site**, for six icons on one band. No tree-shaking and no
+ * modularizeImports transform can see past a namespace import; only naming
+ * them fixes it.
+ *
+ * Adding a stat with a new icon means adding it here, which is the point: the
+ * set is small, deliberate, and visible.
+ */
+const ICONS: Record<string, LucideIcon> = {
+  MapPinned,
+  Building2,
+  Users,
+  Briefcase,
+  CalendarClock,
+  ShieldCheck,
+  Sparkles,
+};
 
 export function Stats({ stats }: { stats: StatItem[] }) {
   if (stats.length === 0) return null;
@@ -37,7 +68,7 @@ export function Stats({ stats }: { stats: StatItem[] }) {
 
         <div className="mt-14 grid grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-6">
           {stats.map((stat) => {
-            const Icon = (Icons as unknown as Record<string, Icons.LucideIcon>)[stat.icon ?? "Sparkles"] ?? Icons.Sparkles;
+            const Icon = ICONS[stat.icon ?? ""] ?? Sparkles;
             const figure = `${parseInt(stat.value.replace(/[^0-9]/g, ""), 10) || 0}${stat.suffix ?? ""}`;
             return (
               <div key={stat.id} className="group relative h-full">
