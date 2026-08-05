@@ -35,3 +35,5 @@ next-env.d.ts
 
 # internal planning notes — not for the shared repo
 /docs/
+
+.render-snapshots/

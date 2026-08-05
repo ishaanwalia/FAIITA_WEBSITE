@@ -8,7 +8,7 @@ import type { StateAssociation } from "@prisma/client";
  * inserts a real row with the same slug, the code-side copy is skipped and
  * the entry can be deleted.
  */
-const extraStates: StateAssociation[] = [
+export const extraStates: StateAssociation[] = [
   // AISIE — all-India manufacturers' body added July 2026 (matches seed.ts).
   {
     id: "code-aisie",
@@ -35,6 +35,7 @@ const extraStates: StateAssociation[] = [
     mapX: 37,
     mapY: 25,
     isCovered: true,
+    deletedAt: null,
     createdAt: new Date("2026-07-18"),
     updatedAt: new Date("2026-07-18"),
   },

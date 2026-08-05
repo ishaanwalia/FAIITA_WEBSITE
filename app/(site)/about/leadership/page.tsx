@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/common/PageHero";
 import { Leadership } from "@/components/about/Leadership";
-import { extraCurrentLeaders, withLeaderProfile } from "@/lib/leader-profiles";
+import type { LeaderData } from "@/components/about/Leadership";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -31,27 +31,28 @@ const officeRank = (role: string) => {
 };
 
 export default async function LeadershipPage() {
-  const allLeaders = (
+  // Reads the database and nothing else. The profile overlay, the two role
+  // corrections and the appended code-side members that used to live here were
+  // migrated into the rows themselves (scripts/migrate-content.ts) — leaving
+  // any of them in place would now double every member it added.
+  //
+  // journey and companies come back as Prisma Json, so they're narrowed to the
+  // shapes Leadership renders rather than cast blindly.
+  const current = (
     await prisma.leader.findMany({
-      where: { category: "national", isCurrent: true },
+      where: { category: "national", isCurrent: true, deletedAt: null },
       orderBy: { order: "asc" },
     })
   )
-    .map(withLeaderProfile)
-    // 2025–27 Advisor tag reads "PP" (Past President), not "IPP" — the
-    // Immediate Past President of this term is Devesh Rastogi. The past-GB
-    // record keeps "IPP", which was accurate for 2022–24.
-    .map((l) => (l.isCurrent && l.role === "Advisor, IPP" ? { ...l, role: "Advisor, PP" } : l))
-    // Devesh Rastogi is Chairman for 2025–27 — the live DB row still says
-    // "GB Member" until the next reseed (prisma/seed.ts is already corrected).
-    // His past-GB record (President, 2022–24) is untouched.
-    .map((l) => (l.isCurrent && l.name === "Devesh Rastogi" ? { ...l, role: "Chairman" } : l));
-
-  // Members not yet in the DB are appended from the code-side profile file.
-  // GB Members (equal office rank) are ordered alphabetically by name.
-  const current = [...allLeaders.filter((l) => l.isCurrent), ...extraCurrentLeaders].sort(
-    (a, b) => officeRank(a.role) - officeRank(b.role) || a.name.localeCompare(b.name)
-  );
+    .map((l) => ({
+      ...l,
+      journey: (l.journey ?? undefined) as LeaderData["journey"],
+      companies: (l.companies ?? undefined) as LeaderData["companies"],
+      location: l.location ?? undefined,
+      website: l.website ?? undefined,
+    }))
+    // GB Members (equal office rank) are ordered alphabetically by name.
+    .sort((a, b) => officeRank(a.role) - officeRank(b.role) || a.name.localeCompare(b.name));
 
   return (
     <>

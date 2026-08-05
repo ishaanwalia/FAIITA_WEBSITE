@@ -3,6 +3,7 @@
 import * as Icons from "lucide-react";
 import { SectionHeading } from "@/components/common/SectionHeading";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { GradientMesh } from "@/components/common/GradientMesh";
 import { ParticleTrail } from "@/components/effects/ParticleTrail";
 import { GlyphDecode } from "@/components/effects/GlyphDecode";
 import type { StatItem } from "@/types";
@@ -13,7 +14,13 @@ export function Stats({ stats }: { stats: StatItem[] }) {
   return (
     <section className="relative overflow-hidden bg-navy-800 py-20">
       <div aria-hidden className="animated-gradient absolute inset-0" />
-      <div aria-hidden className="grain absolute inset-0" />
+      {/* The wash alone barely registers on this band: it's a short, wide strip,
+          so the radial centres in .animated-gradient sit mostly outside the box
+          and only their faintest edges land inside. The mesh puts actual
+          blurred orbs in frame, which is what makes the violet and teal read
+          here rather than measuring correctly and looking orange. */}
+      <GradientMesh variant="zenith" />
+      <div aria-hidden className="grain absolute inset-0 opacity-20" />
       {/* Particle trail lives here rather than in the hero: this is the most
           static band on the page, so it's the one that gains most from
           rewarding cursor movement. */}

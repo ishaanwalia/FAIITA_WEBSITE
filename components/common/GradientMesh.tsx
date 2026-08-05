@@ -21,33 +21,33 @@ export const MESH_VARIANTS: MeshVariant[] = ["aurora", "dawn", "tide", "ember", 
 const ORBS: Record<MeshVariant, { className: string; delay?: string }[]> = {
   aurora: [
     { className: "-left-24 -top-24 h-96 w-96 bg-saffron-500/20 blur-[100px]" },
-    { className: "-right-24 top-1/3 h-80 w-80 bg-violet-500/[0.16] blur-[100px]", delay: "1.5s" },
-    { className: "bottom-0 left-1/3 h-72 w-72 bg-teal-500/[0.13] blur-[100px]", delay: "3s" },
+    { className: "-right-24 top-1/3 h-80 w-80 bg-violet-500/[0.28] blur-[100px]", delay: "1.5s" },
+    { className: "bottom-0 left-1/3 h-72 w-72 bg-teal-500/[0.24] blur-[100px]", delay: "3s" },
   ],
   dawn: [
     { className: "-bottom-32 left-1/4 h-[28rem] w-[28rem] bg-saffron-500/25 blur-[110px]" },
-    { className: "-right-20 -top-20 h-72 w-72 bg-violet-400/[0.14] blur-[100px]", delay: "2s" },
+    { className: "-right-20 -top-20 h-72 w-72 bg-violet-400/[0.26] blur-[100px]", delay: "2s" },
     { className: "-left-16 top-1/4 h-64 w-64 bg-navy-400/20 blur-[90px]", delay: "3.5s" },
   ],
   tide: [
-    { className: "-left-32 top-1/4 h-96 w-96 bg-teal-500/[0.16] blur-[100px]" },
+    { className: "-left-32 top-1/4 h-96 w-96 bg-teal-500/[0.26] blur-[100px]" },
     { className: "-right-32 top-1/2 h-96 w-96 bg-navy-500/30 blur-[100px]", delay: "1.5s" },
     { className: "-top-24 left-1/2 h-64 w-64 bg-saffron-500/18 blur-[90px]", delay: "3s" },
   ],
   ember: [
     { className: "-bottom-24 -right-24 h-96 w-96 bg-saffron-500/25 blur-[100px]" },
-    { className: "-top-20 left-[15%] h-72 w-72 bg-violet-600/[0.15] blur-[90px]", delay: "2s" },
+    { className: "-top-20 left-[15%] h-72 w-72 bg-violet-600/[0.28] blur-[90px]", delay: "2s" },
     { className: "left-1/2 top-1/2 h-80 w-80 bg-navy-500/25 blur-[110px]", delay: "3.5s" },
   ],
   meadow: [
     { className: "-right-24 -top-24 h-96 w-96 bg-federal-green/20 blur-[100px]" },
     { className: "-left-24 bottom-0 h-80 w-80 bg-saffron-500/15 blur-[100px]", delay: "1.5s" },
-    { className: "-bottom-16 right-1/3 h-72 w-72 bg-teal-400/[0.14] blur-[90px]", delay: "3s" },
+    { className: "-bottom-16 right-1/3 h-72 w-72 bg-teal-400/[0.24] blur-[90px]", delay: "3s" },
   ],
   zenith: [
-    { className: "-top-40 left-1/2 h-[30rem] w-[30rem] -translate-x-1/2 bg-violet-500/[0.15] blur-[120px]" },
+    { className: "-top-40 left-1/2 h-[30rem] w-[30rem] -translate-x-1/2 bg-violet-500/[0.26] blur-[120px]" },
     { className: "-bottom-12 -left-24 h-72 w-72 bg-saffron-500/18 blur-[100px]", delay: "2s" },
-    { className: "-bottom-12 -right-24 h-72 w-72 bg-teal-500/[0.13] blur-[100px]", delay: "3.5s" },
+    { className: "-bottom-12 -right-24 h-72 w-72 bg-teal-500/[0.24] blur-[100px]", delay: "3.5s" },
   ],
 };
 

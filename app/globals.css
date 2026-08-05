@@ -140,20 +140,24 @@
     animation: aurora-drift 16s ease-in-out infinite;
   }
 
-  /* Slow-breathing wash layered over ink sections. Orange leads and is still
-     the only hue strong enough to read as the accent; violet and teal sit
-     under it at roughly half its opacity, on the opposite side of the frame,
-     so the ground has somewhere cool to fall away to. A single warm hue on
-     ink was reading flat. */
+  /* Slow-breathing wash layered over ink sections.
+     Alphas are deliberately high for a wash. Two things eat them before they
+     reach the eye: the ink ground (#131C2E) leaves very little headroom for a
+     dark-ish hue, and every section using this also stacks .grain on top at
+     0.35 with mix-blend-overlay. At the 0.10–0.13 these started at, the violet
+     and teal measured correctly in the compiled CSS and were still invisible
+     on screen — which is the only test that counts. Orange stays the accent by
+     position (top-left, where the eye lands first), not by being the only hue
+     with any strength. */
   .animated-gradient {
     @apply pointer-events-none;
     background:
-      radial-gradient(60% 80% at 12% 18%, rgba(249, 115, 22, 0.16), transparent 60%),
-      radial-gradient(50% 70% at 88% 12%, rgba(139, 92, 246, 0.13), transparent 60%),
-      radial-gradient(55% 75% at 92% 62%, rgba(20, 184, 166, 0.11), transparent 60%),
-      radial-gradient(50% 70% at 26% 88%, rgba(23, 166, 122, 0.10), transparent 60%),
-      radial-gradient(70% 90% at 50% 110%, rgba(251, 146, 60, 0.10), transparent 55%),
-      radial-gradient(40% 60% at 82% 78%, rgba(71, 85, 105, 0.18), transparent 60%);
+      radial-gradient(60% 80% at 12% 18%, rgba(249, 115, 22, 0.20), transparent 60%),
+      radial-gradient(50% 70% at 88% 12%, rgba(139, 92, 246, 0.30), transparent 62%),
+      radial-gradient(55% 75% at 92% 62%, rgba(20, 184, 166, 0.24), transparent 62%),
+      radial-gradient(50% 70% at 26% 88%, rgba(23, 166, 122, 0.20), transparent 62%),
+      radial-gradient(70% 90% at 50% 110%, rgba(251, 146, 60, 0.12), transparent 55%),
+      radial-gradient(40% 60% at 82% 78%, rgba(71, 85, 105, 0.14), transparent 60%);
     background-size: 170% 170%;
     /* transform, not background-position — keeps this full-bleed layer on
        the compositor instead of repainting the whole hero every frame */

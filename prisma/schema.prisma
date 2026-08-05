@@ -38,39 +38,47 @@ model StateAssociation {
   mapY               Float // relative y position (0-100) on the illustrated map
   isCovered          Boolean             @default(true)
   memberAssociations MemberAssociation[]
+  deletedAt          DateTime?
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
 
   @@index([region])
+  @@index([deletedAt])
 }
 
 /// Individual member associations that belong to a state chapter.
 model MemberAssociation {
-  id            String           @id @default(cuid())
-  slug          String           @unique
-  name          String
-  city          String?
-  type          String // Retail | Distribution | Services | Solutions | Manufacturing
-  memberCount   Int              @default(0)
-  description   String?
-  logoUrl       String?
-  website       String?
-  presidentName String?
-  contactEmail  String?
-  contactPhone  String?
-  stateId       String
-  state         StateAssociation @relation(fields: [stateId], references: [id], onDelete: Cascade)
-  createdAt     DateTime         @default(now())
+  id             String           @id @default(cuid())
+  slug           String           @unique
+  name           String
+  city           String?
+  type           String // Retail | Distribution | Services | Solutions | Manufacturing
+  memberCount    Int              @default(0)
+  foundedYear    Int?
+  description    String?
+  logoUrl        String?
+  website        String?
+  presidentName  String?
+  contactEmail   String?
+  contactPhone   String?
+  secretaryPhone String?
+  isDemo         Boolean          @default(false)
+  stateId        String
+  state          StateAssociation @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  deletedAt      DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt
 
   @@index([stateId])
+  @@index([deletedAt])
 }
 
 /// National leadership — Governing Body / office bearers.
 model Leader {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   name            String
   role            String // President, Sr. Vice President, Secretary General, etc.
-  order           Int      @default(0)
+  order           Int       @default(0)
   bio             String?
   imageUrl        String?
   associationName String?
@@ -78,18 +86,29 @@ model Leader {
   email           String?
   phone           String?
   linkedIn        String?
-  category        String   @default("national") // national | state
-  term            String   @default("2024–2026") // e.g. "2024–2026", FAIITA GB terms run 2 years
-  isCurrent       Boolean  @default(true)
+  category        String    @default("national") // national | state
+  term            String    @default("2024–2026") // e.g. "2024–2026", FAIITA GB terms run 2 years
+  isCurrent       Boolean   @default(true)
   focusAreas      String? // comma-separated tags, shown only on the spotlight/featured card
-  createdAt       DateTime @default(now())
+  /// The digital-visiting-card fields, migrated in from lib/leader-profiles.ts.
+  /// journey and companies are JSON because they are ordered lists of small
+  /// objects ({ text, url } / { name, url }) that are only ever read and
+  /// written whole — a join table would buy nothing and cost two more screens.
+  journey         Json?
+  companies       Json?
+  location        String?
+  website         String?
+  deletedAt       DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @default(now()) @updatedAt
 
   @@index([category, order])
+  @@index([deletedAt])
 }
 
 model News {
-  id          String   @id @default(cuid())
-  slug        String   @unique
+  id          String    @id @default(cuid())
+  slug        String    @unique
   title       String
   excerpt     String
   content     String
@@ -97,11 +116,21 @@ model News {
   coverImage  String? // card/featured background image
   heroImage   String? // large image shown at the top of the article page
   sourceUrl   String? // link to original coverage (press, magazine)
-  featured    Boolean  @default(false)
-  isDemo      Boolean  @default(false) // placeholder content, remove when real content lands
-  publishedAt DateTime @default(now())
+  featured    Boolean   @default(false)
+  isDemo      Boolean   @default(false) // placeholder content, remove when real content lands
+  /// Optional deep link to the state association page a story is most about.
+  /// Two plain columns rather than a relation: the label is editorial ("in
+  /// Rajasthan", "in the North East") and doesn't always match the state's own
+  /// name, and a story can point at a state row that later gets renamed
+  /// without the link needing to change.
+  relatedStateSlug  String?
+  relatedStateLabel String?
+  publishedAt DateTime  @default(now())
+  deletedAt   DateTime?
+  updatedAt   DateTime  @default(now()) @updatedAt
 
   @@index([publishedAt])
+  @@index([deletedAt])
 }
 
 model Event {
@@ -119,35 +148,75 @@ model Event {
   registrationLink String?
   isUpcoming       Boolean   @default(true)
   isDemo           Boolean   @default(false)
+  deletedAt        DateTime?
   createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
 
   @@index([startDate])
+  @@index([deletedAt])
 }
 
 model GalleryItem {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   title     String
   imageUrl  String
   category  String // Events | Summits | Leadership | Regional Meets
   caption   String?
-  order     Int      @default(0)
-  isDemo    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  order     Int       @default(0)
+  isDemo    Boolean   @default(false)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
 
   @@index([category])
+  @@index([deletedAt])
+}
+
+/// A gallery album — one event, one set of photographs. Migrated in from
+/// lib/gallery-albums.ts. Photos are a real relation rather than JSON because
+/// the CMS reorders, captions and deletes them individually, which is exactly
+/// the case where a join table earns its keep.
+model GalleryAlbum {
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  title       String
+  eyebrow     String
+  description String
+  order       Int            @default(0)
+  photos      GalleryPhoto[]
+  deletedAt   DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @default(now()) @updatedAt
+
+  @@index([order])
+  @@index([deletedAt])
+}
+
+model GalleryPhoto {
+  id      String       @id @default(cuid())
+  albumId String
+  album   GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  src     String
+  caption String
+  order   Int          @default(0)
+
+  @@unique([albumId, src])
+  @@index([albumId, order])
 }
 
 model Newsletter {
-  id          String   @id @default(cuid())
-  slug        String   @unique
+  id          String    @id @default(cuid())
+  slug        String    @unique
   title       String
   description String?
   fileUrl     String? // Heyzine flip-book URL or /newsletters/<file>.pdf under /public
   issueNumber Int
   issueDate   DateTime
-  isDemo      Boolean  @default(false)
+  isDemo      Boolean   @default(false)
+  deletedAt   DateTime?
+  updatedAt   DateTime  @default(now()) @updatedAt
 
   @@index([issueDate])
+  @@index([deletedAt])
 }
 
 model Policy {
@@ -164,13 +233,14 @@ model Policy {
 }
 
 model Testimonial {
-  id          String  @id @default(cuid())
+  id          String    @id @default(cuid())
+  deletedAt   DateTime?
   name        String
   role        String
   association String
   quote       String
   imageUrl    String?
-  order       Int     @default(0)
+  order       Int       @default(0)
 
   @@index([order])
 }
@@ -221,4 +291,24 @@ model AdminUser {
   lastLoginAt        DateTime?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
+}
+
+/// Every write the CMS makes: who, when, and what changed field by field.
+/// Append-only — nothing in the dashboard updates or deletes a row here.
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorId     String
+  actorEmail  String
+  action      String // create | update | delete | restore
+  model       String // News, Event, GalleryAlbum, ...
+  recordId    String
+  /// Human-readable name of the record at the time of the change, so the log
+  /// still reads sensibly after the record is renamed or hard-deleted.
+  recordLabel String
+  /// { field: { from, to } } for updates; null for create and delete.
+  changes     Json?
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([model, recordId])
 }

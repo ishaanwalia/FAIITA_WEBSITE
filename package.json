@@ -18,7 +18,11 @@
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force",
     "admin:create": "tsx scripts/create-admins.ts",
-    "admin:check": "tsx scripts/check-auth.ts"
+    "admin:check": "tsx scripts/check-auth.ts",
+    "content:plan": "tsx scripts/migrate-content.ts",
+    "content:migrate": "tsx scripts/migrate-content.ts --apply",
+    "render:snap": "tsx scripts/verify-render.ts snap",
+    "render:diff": "tsx scripts/verify-render.ts diff before after"
   },
   "dependencies": {
     "@prisma/client": "^6.9.0",
