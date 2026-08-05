@@ -62,7 +62,13 @@ function parseLines(field: Field, raw: string): Row[] | null {
 
 export function parseForm(resource: Resource, form: FormLike): Row {
   const data: Row = {};
-  for (const field of resource.fields) data[field.name] = parseField(field, form);
+  for (const field of resource.fields) {
+    // A hidden field isn't on the form, so reading it would parse as blank and
+    // overwrite the stored value with null — which for `order` would drop the
+    // record to the top of the list every time somebody edited its caption.
+    if (field.hidden) continue;
+    data[field.name] = parseField(field, form);
+  }
 
   // An empty slug box is the normal case — nobody should have to invent one.
   if (resource.slugFrom && !data.slug) {

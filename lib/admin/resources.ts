@@ -35,6 +35,13 @@ export type Field = {
   /** lines — the two object keys each line maps to; the second is optional */
   keys?: [string, string];
   help?: string;
+  /**
+   * Kept out of the edit form, and never written from it. For `order` on a
+   * sortable resource: the list screen sets it by dragging, so a number box
+   * asking an editor to invent a position is both redundant and a trap — two
+   * records can hold the same number and the tie breaks arbitrarily.
+   */
+  hidden?: boolean;
 };
 
 export type Resource = {
@@ -54,6 +61,12 @@ export type Resource = {
   fields: Field[];
   /** false = no deletedAt column, so delete is permanent */
   softDelete: boolean;
+  /**
+   * Rows carry an `order` column and the list is reordered by dragging.
+   * Positions are rewritten as 1..n across the whole list on every drop, so
+   * there are never gaps or two rows claiming the same number.
+   */
+  sortable?: boolean;
   /** Arrived from the public site rather than being authored here: no Add, no
    *  editing, just read and delete. */
   readOnly?: boolean;
@@ -148,6 +161,7 @@ const GALLERY_ALBUMS: Resource = {
   orderBy: { order: "asc" },
   slugFrom: "title",
   softDelete: true,
+  sortable: true,
   children: { resource: "gallery-photos", foreignKey: "albumId", label: "Photos" },
   revalidate: ["/resources", "/resources/gallery"],
   fields: [
@@ -155,7 +169,7 @@ const GALLERY_ALBUMS: Resource = {
     SLUG,
     { name: "eyebrow", label: "Eyebrow", type: "text", required: true, help: "The small line above the title, e.g. a date or place." },
     { name: "description", label: "Description", type: "textarea", required: true },
-    { name: "order", label: "Position", type: "number", help: "Lower numbers appear first." },
+    { name: "order", label: "Position", type: "number", hidden: true },
   ],
 };
 
@@ -167,6 +181,7 @@ const GALLERY_PHOTOS: Resource = {
   labelField: "caption",
   listFields: ["src", "caption", "order"],
   orderBy: { order: "asc" },
+  sortable: true,
   softDelete: false,
   parent: { resource: "gallery", foreignKey: "albumId" },
   revalidate: ["/resources", "/resources/gallery"],
@@ -174,7 +189,7 @@ const GALLERY_PHOTOS: Resource = {
     { name: "albumId", label: "Album", type: "relation", relationTo: "gallery", required: true },
     { name: "src", label: "Photograph", type: "image", required: true },
     { name: "caption", label: "Caption", type: "text", required: true, help: "Read aloud by screen readers, so describe the picture." },
-    { name: "order", label: "Position", type: "number" },
+    { name: "order", label: "Position", type: "number", hidden: true },
   ],
 };
 
@@ -254,12 +269,13 @@ const LEADERS: Resource = {
   // Serving members first, then the previous Governing Body — otherwise the
   // two terms interleave by position number and the list reads as nonsense.
   orderBy: [{ isCurrent: "desc" }, { order: "asc" }],
+  sortable: true,
   softDelete: true,
   revalidate: ["/about/leadership"],
   fields: [
     { name: "name", label: "Name", type: "text", required: true },
     { name: "role", label: "Position", type: "text", required: true, help: "e.g. President, Secretary General, Governing Body Member." },
-    { name: "order", label: "Position", type: "number", help: "Lower numbers appear first, within this person's term. The President is 1, the eight office roles are 2–9, and Governing Body members follow. The role decides the card's size and band; this decides the position inside it." },
+    { name: "order", label: "Position", type: "number", hidden: true },
     { name: "category", label: "Level", type: "select", required: true, options: ["national", "state"] },
     { name: "term", label: "Term", type: "text", help: "e.g. 2024–2026." },
     { name: "isCurrent", label: "Currently serving", type: "boolean" },
@@ -308,6 +324,7 @@ const TESTIMONIALS: Resource = {
   labelField: "name",
   listFields: ["name", "association", "order"],
   orderBy: { order: "asc" },
+  sortable: true,
   softDelete: true,
   revalidate: ["/"],
   fields: [
@@ -316,7 +333,7 @@ const TESTIMONIALS: Resource = {
     { name: "association", label: "Association", type: "text", required: true },
     { name: "quote", label: "Quote", type: "textarea", required: true },
     { name: "imageUrl", label: "Photograph", type: "image" },
-    { name: "order", label: "Position", type: "number" },
+    { name: "order", label: "Position", type: "number", hidden: true },
   ],
 };
 

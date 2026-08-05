@@ -4,7 +4,8 @@ import { requireAdmin } from "@/lib/auth";
 import { allRelationOptions, delegate, purgeExpired, PURGE_AFTER_DAYS, type Row } from "@/lib/admin/db";
 import { fieldOf, getResource, type Resource } from "@/lib/admin/resources";
 import { formatDate } from "@/lib/utils";
-import { deleteResource, purgeResource, restoreResource } from "./actions";
+import { SortableRows } from "@/components/admin/SortableRows";
+import { deleteResource, moveResource, purgeResource, restoreResource } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -71,6 +72,9 @@ export default async function ResourceListPage({ params, searchParams }: Props) 
       : undefined;
 
   const newHref = `/admin/${resource.key}/new${filter ? `?${filter}` : ""}`;
+  // Dragging rewrites positions across the whole visible list, so it only makes
+  // sense on the live list — not on the bin, where the rows aren't on the site.
+  const draggable = Boolean(resource.sortable) && !showingDeleted;
 
   return (
     <>
@@ -124,6 +128,11 @@ export default async function ResourceListPage({ params, searchParams }: Props) 
           <table className="w-full min-w-[40rem] text-left text-sm">
             <thead className="bg-white/5 text-xs uppercase tracking-wide text-white/40">
               <tr>
+                {draggable && (
+                  <th scope="col" className="w-10 pl-4">
+                    <span className="sr-only">Reorder</span>
+                  </th>
+                )}
                 {resource.listFields.map((name) => (
                   <th key={name} scope="col" className="px-4 py-3 font-medium">
                     {fieldOf(resource, name)?.label ?? name}
@@ -134,6 +143,27 @@ export default async function ResourceListPage({ params, searchParams }: Props) 
                 </th>
               </tr>
             </thead>
+
+            {draggable ? (
+              <SortableRows
+                scope={typeof parentId === "string" ? parentId : ""}
+                moveAction={moveResource}
+                resourceKey={resource.key}
+                deleteAction={deleteResource}
+                rows={rows.map((row) => {
+                  const id = String(row.id);
+                  return {
+                    id,
+                    cells: resource.listFields.map((name) => formatCell(resource, name, row[name], relations)),
+                    editHref: `/admin/${resource.key}/${id}${filter ? `?${filter}` : ""}`,
+                    ...(resource.children && {
+                      childHref: `/admin/${resource.children.resource}?${resource.children.foreignKey}=${id}`,
+                      childLabel: resource.children.label,
+                    }),
+                  };
+                })}
+              />
+            ) : (
             <tbody>
               {rows.map((row) => {
                 const id = String(row.id);
@@ -188,6 +218,7 @@ export default async function ResourceListPage({ params, searchParams }: Props) 
                 );
               })}
             </tbody>
+            )}
           </table>
         </div>
       )}

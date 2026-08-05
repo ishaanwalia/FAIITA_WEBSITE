@@ -44,14 +44,23 @@ export function ResourceForm({ resource, id, values, relations, filter }: Props)
       <input type="hidden" name="__id" value={id} />
       <input type="hidden" name="__filter" value={filter} />
 
-      {resource.fields.map((field) => (
-        <FieldRow
-          key={field.name}
-          field={field}
-          value={values[field.name]}
-          options={relations[field.name]}
-        />
-      ))}
+      {resource.fields
+        .filter((field) => !field.hidden)
+        .map((field) => (
+          <FieldRow
+            key={field.name}
+            field={field}
+            value={values[field.name]}
+            options={relations[field.name]}
+          />
+        ))}
+
+      {resource.sortable && (
+        <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-xs text-white/40">
+          Where this appears is set by dragging it up or down on the{" "}
+          {resource.label.toLowerCase()} list, not by a number here.
+        </p>
+      )}
 
       {state.error && (
         <p role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">

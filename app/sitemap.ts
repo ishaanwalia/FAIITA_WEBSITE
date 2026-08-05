@@ -27,13 +27,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Soft-deleted rows are excluded everywhere: a URL in the sitemap that 404s
   // is worse than one Google never hears about.
   const live = { deletedAt: null };
-  const [states, members, news, events, newsletters] = await Promise.all([
-    prisma.stateAssociation.findMany({ where: live, select: { slug: true } }),
-    prisma.memberAssociation.findMany({ where: { ...live, isDemo: false }, select: { slug: true } }),
-    prisma.news.findMany({ where: live, select: { slug: true, publishedAt: true } }),
-    prisma.event.findMany({ where: live, select: { slug: true, startDate: true } }),
-    prisma.newsletter.findMany({ where: live, select: { slug: true, issueDate: true } }),
-  ]);
+
+  // The same guard the homepage uses. This route is prerendered at build time,
+  // so a momentary Neon hiccup here fails the whole deploy — and a sitemap
+  // that is briefly down to its static routes is very much better than being
+  // unable to publish anything at all. It refills on the next revalidation.
+  let states: { slug: string }[] = [];
+  let members: { slug: string }[] = [];
+  let news: { slug: string; publishedAt: Date }[] = [];
+  let events: { slug: string; startDate: Date }[] = [];
+  let newsletters: { slug: string; issueDate: Date }[] = [];
+  try {
+    [states, members, news, events, newsletters] = await Promise.all([
+      prisma.stateAssociation.findMany({ where: live, select: { slug: true } }),
+      prisma.memberAssociation.findMany({ where: { ...live, isDemo: false }, select: { slug: true } }),
+      prisma.news.findMany({ where: live, select: { slug: true, publishedAt: true } }),
+      prisma.event.findMany({ where: live, select: { slug: true, startDate: true } }),
+      prisma.newsletter.findMany({ where: live, select: { slug: true, issueDate: true } }),
+    ]);
+  } catch (error) {
+    console.error("sitemap: database unreachable, falling back to static routes", error);
+  }
 
   return [
     ...staticRoutes,
