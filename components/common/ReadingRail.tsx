@@ -17,7 +17,27 @@ export function ReadingRail({ scope = "main" }: { scope?: string }) {
   const [sections, setSections] = useState<{ id: string; text: string }[]>([]);
   const [activeId, setActiveId] = useState("");
 
+  /**
+   * The rail is `hidden xl:block` — below 1280px it does not render at all.
+   *
+   * Everything in the effect below (an IntersectionObserver per heading, plus
+   * a scroll listener whose sync() calls getBoundingClientRect() on every
+   * heading on every scroll event) was nonetheless running on phones: a forced
+   * synchronous layout on every scroll tick, for a control nobody on that
+   * device can see. That was the jank people felt scrolling on mobile.
+   */
+  const [wide, setWide] = useState(false);
   useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1280px)");
+    const sync = () => setWide(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!wide) return;
+
     // Clearing state for the new route before the async rescan below repopulates
     // it — not syncing from external state, so this is a legitimate exception to
     // the "no setState in effect" rule (same as CinematicLoader/SmoothScroll).
@@ -80,7 +100,7 @@ export function ReadingRail({ scope = "main" }: { scope?: string }) {
       clearTimeout(timer);
       cleanup();
     };
-  }, [scope, pathname]);
+  }, [scope, pathname, wide]);
 
   const jump = useCallback((id: string) => {
     const el = document.getElementById(id);
