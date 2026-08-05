@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getAdmin } from "@/lib/auth";
 import { logout } from "@/app/admin/actions";
+import { NAV_RESOURCES } from "@/lib/admin/resources";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -40,6 +41,23 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
       </header>
+      <nav aria-label="Sections" className="border-b border-white/10">
+        <ul className="mx-auto flex max-w-5xl gap-5 overflow-x-auto px-6 py-3 text-xs text-white/50">
+          {NAV_RESOURCES.map((resource) => (
+            <li key={resource.key}>
+              <Link href={`/admin/${resource.key}`} className="whitespace-nowrap hover:text-white">
+                {resource.label}
+              </Link>
+            </li>
+          ))}
+          <li>
+            <Link href="/admin/audit" className="whitespace-nowrap hover:text-white">
+              Audit log
+            </Link>
+          </li>
+        </ul>
+      </nav>
+
       <main className="mx-auto max-w-5xl px-6 py-10">{children}</main>
     </div>
   );

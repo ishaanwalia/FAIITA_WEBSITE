@@ -2,6 +2,7 @@ import "server-only";
 
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
 /**
@@ -100,4 +101,20 @@ export async function getAdmin(): Promise<AdminSession | null> {
     select: { id: true, email: true, name: true, mustChangePassword: true },
   });
   return user;
+}
+
+/**
+ * getAdmin(), but for anything that reads or writes content: not signed in
+ * goes to the login page, and still owing a password change goes to the
+ * password page.
+ *
+ * Every editing screen and every server action starts here, so neither gate
+ * can be stepped around by typing a URL or by replaying a server-action id.
+ * The one page that must not call it is /admin/password itself.
+ */
+export async function requireAdmin(): Promise<AdminSession> {
+  const admin = await getAdmin();
+  if (!admin) redirect("/admin/login");
+  if (admin.mustChangePassword) redirect("/admin/password");
+  return admin;
 }

@@ -1,106 +1,69 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { mergeNews } from "@/lib/code-news";
-import { memberAssociations } from "@/lib/member-associations";
-import { withExtraStates } from "@/lib/extra-states";
-import { excludeRemovedStates } from "@/lib/state-overrides";
+import { delegate } from "@/lib/admin/db";
+import { NAV_RESOURCES } from "@/lib/admin/resources";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminHome() {
-  const admin = await getAdmin();
-  if (!admin) redirect("/admin/login");
-  // Nothing else in here is reachable until they've replaced the password we
-  // generated for them.
-  if (admin.mustChangePassword) redirect("/admin/password");
+  const admin = await requireAdmin();
 
-  const where = { deletedAt: null };
-  const [news, events, loosePhotos, albumPhotos, newsletters, states, members, leaders] =
-    await Promise.all([
-      prisma.news.findMany({ where, select: { slug: true, publishedAt: true } }),
-      prisma.event.count({ where }),
-      prisma.galleryItem.count({ where: { isDemo: false, deletedAt: null } }),
-      prisma.galleryPhoto.count({ where: { album: { deletedAt: null } } }),
-      prisma.newsletter.count({ where }),
-      prisma.stateAssociation.findMany({ where, select: { slug: true } }),
-      prisma.memberAssociation.count({ where }),
-      prisma.leader.count({ where: { category: "national", isCurrent: true, deletedAt: null } }),
-    ]);
-
-  // Two numbers per row on purpose. `live` is what the site actually renders,
-  // which for several of these is the database plus the lib/*.ts override
-  // layer; `db` is what is in the database and therefore what a CMS screen
-  // could edit. Where they differ, the content is still in code and is not yet
-  // editable here. Migrating those (plan 5.1/5.2) is what makes every pair
-  // below match — at which point this column stops being interesting and can
-  // go.
-  const rows = [
-    { label: "News", live: mergeNews(news).length, db: news.length },
-    { label: "Events", live: events, db: events },
-    { label: "Gallery photos", live: albumPhotos + loosePhotos, db: albumPhotos + loosePhotos },
-    { label: "Newsletter issues", live: newsletters, db: newsletters },
-    {
-      label: "State associations",
-      live: excludeRemovedStates(withExtraStates(states)).length,
-      db: states.length,
-    },
-    { label: "Member associations", live: memberAssociations.length, db: members },
-    // The 8 code-side members were migrated in, so they are part of `leaders`
-    // now. Adding extraCurrentLeaders.length on top counted them twice and
-    // reported 34 for a Governing Body of 26.
-    { label: "Leaders (current GB)", live: leaders, db: leaders },
-  ];
-
-  const drifted = rows.filter((r) => r.live !== r.db);
+  const [counts, recentChanges] = await Promise.all([
+    Promise.all(
+      NAV_RESOURCES.map((resource) =>
+        delegate(resource.model).count({
+          where: resource.softDelete ? { deletedAt: null } : undefined,
+        }),
+      ),
+    ),
+    prisma.auditLog.findMany({ orderBy: { createdAt: "desc" }, take: 5 }),
+  ]);
 
   return (
     <>
       <h1 className="font-display text-2xl font-bold">Welcome, {admin.name.split(" ")[0]}</h1>
       <p className="mt-2 text-sm text-white/50">
-        Signed in as {admin.email}. The big number is what the site is serving; the line under it is
-        how much of that is in the database.
+        Signed in as {admin.email}. Everything below is live content — a change you save here is on
+        the public site within about a second.
       </p>
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {rows.map((row) => (
-          <div key={row.label} className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
-            <p className="stat-figure text-2xl font-bold">{row.live}</p>
-            <p className="mt-1 text-xs uppercase tracking-wide text-white/40">{row.label}</p>
-            <p
-              className={`mt-2 text-xs ${row.live === row.db ? "text-white/25" : "text-saffron-400"}`}
-            >
-              {row.live === row.db
-                ? "all in the database"
-                : `${row.db} in the database · ${row.live - row.db} still in code`}
-            </p>
-          </div>
+        {NAV_RESOURCES.map((resource, i) => (
+          <Link
+            key={resource.key}
+            href={`/admin/${resource.key}`}
+            className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 transition hover:border-saffron-500/40 hover:bg-white/10"
+          >
+            <p className="stat-figure text-2xl font-bold">{counts[i]}</p>
+            <p className="mt-1 text-xs uppercase tracking-wide text-white/40">{resource.label}</p>
+          </Link>
         ))}
       </div>
 
-      {drifted.length > 0 && (
-        <p className="mt-4 rounded-2xl border border-saffron-500/25 bg-saffron-500/5 px-5 py-4 text-xs leading-relaxed text-saffron-200/80">
-          <strong className="font-semibold">{drifted.length} sections are split across two
-          sources.</strong>{" "}
-          Those rows live in <code>lib/*.ts</code> rather than the database, because reseeds were
-          blocked while the site was live. Anything still in code can only be changed by a code
-          change and a deploy — it can&apos;t be edited here, and it can&apos;t update in real time.
-          Migrating it in is plan item 5.1/5.2, after which every line above reads &ldquo;all in the
-          database&rdquo;.
-        </p>
-      )}
-
       <div className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6">
-        <h2 className="font-display text-sm font-bold">Still to come</h2>
-        <ul className="mt-3 space-y-1.5 text-sm text-white/50">
-          <li>Create, edit and delete for each of the sections above</li>
-          <li>Audit log — who changed what, and when</li>
-          <li>Recently deleted, with restore</li>
-          <li>Image upload with automatic WebP/AVIF conversion</li>
-          <li>Saving an edit refreshes the live page in about a second, with no redeploy</li>
-        </ul>
-        <p className="mt-4 text-xs text-white/30">
-          See <code>docs/BUILD-PLAN.md</code> for the order these land in.
-        </p>
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="font-display text-sm font-bold">Recent changes</h2>
+          <Link href="/admin/audit" className="text-xs text-white/40 hover:text-white">
+            Full audit log →
+          </Link>
+        </div>
+
+        {recentChanges.length === 0 ? (
+          <p className="mt-3 text-sm text-white/40">Nothing has been changed yet.</p>
+        ) : (
+          <ul className="mt-3 space-y-1.5 text-sm text-white/50">
+            {recentChanges.map((log) => (
+              <li key={log.id}>
+                <span className="capitalize text-white/70">{log.action}</span> {log.recordLabel}{" "}
+                <span className="text-white/25">
+                  · {log.actorEmail.split("@")[0]} ·{" "}
+                  {log.createdAt.toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <Link href="/" className="mt-8 inline-block text-xs text-white/40 hover:text-white">
