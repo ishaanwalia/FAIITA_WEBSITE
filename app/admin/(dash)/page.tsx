@@ -3,9 +3,7 @@ import { redirect } from "next/navigation";
 import { getAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { mergeNews } from "@/lib/code-news";
-import { galleryAlbums } from "@/lib/gallery-albums";
 import { memberAssociations } from "@/lib/member-associations";
-import { extraCurrentLeaders } from "@/lib/leader-profiles";
 import { withExtraStates } from "@/lib/extra-states";
 import { excludeRemovedStates } from "@/lib/state-overrides";
 
@@ -16,15 +14,18 @@ export default async function AdminHome() {
   // generated for them.
   if (admin.mustChangePassword) redirect("/admin/password");
 
-  const [news, events, gallery, newsletters, states, members, leaders] = await Promise.all([
-    prisma.news.findMany({ select: { slug: true, publishedAt: true } }),
-    prisma.event.count(),
-    prisma.galleryItem.count({ where: { isDemo: false } }),
-    prisma.newsletter.count(),
-    prisma.stateAssociation.findMany({ select: { slug: true } }),
-    prisma.memberAssociation.count(),
-    prisma.leader.count({ where: { category: "national", isCurrent: true } }),
-  ]);
+  const where = { deletedAt: null };
+  const [news, events, loosePhotos, albumPhotos, newsletters, states, members, leaders] =
+    await Promise.all([
+      prisma.news.findMany({ where, select: { slug: true, publishedAt: true } }),
+      prisma.event.count({ where }),
+      prisma.galleryItem.count({ where: { isDemo: false, deletedAt: null } }),
+      prisma.galleryPhoto.count({ where: { album: { deletedAt: null } } }),
+      prisma.newsletter.count({ where }),
+      prisma.stateAssociation.findMany({ where, select: { slug: true } }),
+      prisma.memberAssociation.count({ where }),
+      prisma.leader.count({ where: { category: "national", isCurrent: true, deletedAt: null } }),
+    ]);
 
   // Two numbers per row on purpose. `live` is what the site actually renders,
   // which for several of these is the database plus the lib/*.ts override
@@ -36,11 +37,7 @@ export default async function AdminHome() {
   const rows = [
     { label: "News", live: mergeNews(news).length, db: news.length },
     { label: "Events", live: events, db: events },
-    {
-      label: "Gallery photos",
-      live: galleryAlbums.reduce((n, a) => n + a.photos.length, 0) + gallery,
-      db: gallery,
-    },
+    { label: "Gallery photos", live: albumPhotos + loosePhotos, db: albumPhotos + loosePhotos },
     { label: "Newsletter issues", live: newsletters, db: newsletters },
     {
       label: "State associations",
@@ -48,7 +45,10 @@ export default async function AdminHome() {
       db: states.length,
     },
     { label: "Member associations", live: memberAssociations.length, db: members },
-    { label: "Leaders (current GB)", live: leaders + extraCurrentLeaders.length, db: leaders },
+    // The 8 code-side members were migrated in, so they are part of `leaders`
+    // now. Adding extraCurrentLeaders.length on top counted them twice and
+    // reported 34 for a Governing Body of 26.
+    { label: "Leaders (current GB)", live: leaders, db: leaders },
   ];
 
   const drifted = rows.filter((r) => r.live !== r.db);

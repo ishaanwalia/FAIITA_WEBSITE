@@ -16,7 +16,7 @@ export const revalidate = 3600;
 
 export default async function StateAssociationsPage() {
   const states = withExtraStates(
-    excludeRemovedStates(await prisma.stateAssociation.findMany({ orderBy: { stateName: "asc" } }))
+    excludeRemovedStates(await prisma.stateAssociation.findMany({ where: { deletedAt: null }, orderBy: { stateName: "asc" } }))
   ).map((s) => ({ ...applyStateOverrides(s), region: normalizeZone(s.region) }));
 
   return (

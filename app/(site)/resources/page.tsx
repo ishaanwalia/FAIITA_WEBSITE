@@ -4,7 +4,6 @@ import { ArrowRight, CalendarDays, Images, Newspaper, BookOpen } from "lucide-re
 import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { galleryAlbums } from "@/lib/gallery-albums";
 import { mergeNews } from "@/lib/code-news";
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
@@ -23,7 +22,7 @@ export default async function ResourcesPage() {
   const [news, events, galleryItems, newsletters] = await Promise.all([
     prisma.news.findMany({ orderBy: { publishedAt: "desc" }, take: 3 }),
     prisma.event.findMany({ orderBy: { startDate: "asc" } }),
-    prisma.galleryItem.count(),
+    prisma.galleryAlbum.findMany({ where: { deletedAt: null }, orderBy: { order: "asc" }, include: { _count: { select: { photos: true } } } }),
     prisma.newsletter.findMany({ orderBy: { issueDate: "desc" }, take: 1 }),
   ]);
 
@@ -33,7 +32,7 @@ export default async function ResourcesPage() {
   const nextEvent = upcoming[0] ?? events[events.length - 1];
   const latestNews = allNews[0];
   const latestIssue = newsletters[0];
-  const albumPhotos = galleryAlbums.reduce((n, a) => n + a.photos.length, 0);
+  const albumPhotos = galleryItems.reduce((n, a) => n + a._count.photos, 0);
 
   const sections = [
     {
@@ -63,10 +62,10 @@ export default async function ResourcesPage() {
       icon: Images,
       title: "Gallery",
       blurb: "Moments from conclaves, expos and state chapter meets.",
-      count: `${galleryAlbums.length} albums · ${albumPhotos + galleryItems} photos`,
-      latest: galleryAlbums[0] && {
-        label: galleryAlbums[0].title,
-        meta: `${galleryAlbums[0].photos.length} photos`,
+      count: `${galleryItems.length} albums · ${albumPhotos} photos`,
+      latest: galleryItems[0] && {
+        label: galleryItems[0].title,
+        meta: `${galleryItems[0]._count.photos} photos`,
       },
     },
     {

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function NewsletterPage() {
-  const newsletters = await prisma.newsletter.findMany({ orderBy: { issueDate: "desc" } });
+  const newsletters = await prisma.newsletter.findMany({ where: { deletedAt: null }, orderBy: { issueDate: "desc" } });
 
   return (
     <>

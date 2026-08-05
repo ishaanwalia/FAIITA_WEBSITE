@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { AlbumGrid } from "@/components/gallery/AlbumGrid";
-import { galleryAlbums } from "@/lib/gallery-albums";
 import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
@@ -14,22 +13,30 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function GalleryPage() {
-  // Real albums render from code; the DB only holds future one-off photos.
-  // isDemo rows are excluded so stale placeholder images never show.
-  const items = await prisma.galleryItem.findMany({
-    where: { isDemo: false },
-    orderBy: { order: "asc" },
-  });
+  // Albums and their photographs come from the database (migrated out of
+  // lib/gallery-albums.ts), so the CMS can edit them. isDemo rows are excluded
+  // so stale placeholder images never show.
+  const [dbAlbums, items] = await Promise.all([
+    prisma.galleryAlbum.findMany({
+      where: { deletedAt: null },
+      orderBy: { order: "asc" },
+      include: { photos: { orderBy: { order: "asc" } } },
+    }),
+    prisma.galleryItem.findMany({
+      where: { isDemo: false, deletedAt: null },
+      orderBy: { order: "asc" },
+    }),
+  ]);
 
-  // The loose DB photos become one more album rather than a second layout —
+  // The loose photos become one more album rather than a second layout —
   // one component means one set of interactions to get right.
   const albums = [
-    ...galleryAlbums.map((a) => ({
+    ...dbAlbums.map((a) => ({
       key: a.slug,
       eyebrow: a.eyebrow,
       title: a.title,
       description: a.description,
-      photos: a.photos,
+      photos: a.photos.map((p) => ({ src: p.src, caption: p.caption })),
     })),
     ...(items.length > 0
       ? [

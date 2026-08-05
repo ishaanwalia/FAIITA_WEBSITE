@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function EventsPage() {
-  const events = await prisma.event.findMany({ orderBy: { startDate: "asc" } });
+  const events = await prisma.event.findMany({ where: { deletedAt: null }, orderBy: { startDate: "asc" } });
   const now = new Date();
   const upcoming = events.filter((e) => e.startDate >= now);
   const past = events.filter((e) => e.startDate < now);

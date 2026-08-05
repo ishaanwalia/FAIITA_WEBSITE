@@ -73,10 +73,10 @@ export default async function HomePage() {
   try {
     [stats, testimonials, news, events, states] = await Promise.all([
       prisma.stat.findMany({ orderBy: { order: "asc" } }),
-      prisma.testimonial.findMany({ orderBy: { order: "asc" } }),
-      prisma.news.findMany({ where: { isDemo: false }, orderBy: { publishedAt: "desc" }, take: 3 }),
-      prisma.event.findMany({ where: { isUpcoming: true }, orderBy: { startDate: "asc" }, take: 3 }),
-      prisma.stateAssociation.findMany({ select: { slug: true, stateName: true }, orderBy: { stateName: "asc" } }),
+      prisma.testimonial.findMany({ where: { deletedAt: null }, orderBy: { order: "asc" } }),
+      prisma.news.findMany({ where: { isDemo: false, deletedAt: null }, orderBy: { publishedAt: "desc" }, take: 3 }),
+      prisma.event.findMany({ where: { isUpcoming: true, deletedAt: null }, orderBy: { startDate: "asc" }, take: 3 }),
+      prisma.stateAssociation.findMany({ where: { deletedAt: null }, select: { slug: true, stateName: true }, orderBy: { stateName: "asc" } }),
     ]);
   } catch {
     stats = fallbackStats;

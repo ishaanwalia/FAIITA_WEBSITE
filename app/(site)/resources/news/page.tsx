@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function NewsPage() {
-  const news = mergeNews(await prisma.news.findMany({ orderBy: { publishedAt: "desc" } }));
+  const news = mergeNews(await prisma.news.findMany({ where: { deletedAt: null }, orderBy: { publishedAt: "desc" } }));
   const [featured, ...rest] = news;
 
   return (
