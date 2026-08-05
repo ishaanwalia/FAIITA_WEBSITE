@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { jsonLd } from "@/lib/utils";
 
 export type Crumb = { label: string; href?: string };
 
@@ -25,7 +26,7 @@ export function Breadcrumbs({ items, light = false }: { items: Crumb[]; light?: 
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(schema) }} />
       <nav aria-label="Breadcrumb" className={light ? "text-white/50" : "text-muted-foreground"}>
         <ol className="flex flex-wrap items-center gap-1.5 text-xs">
           {all.map((item, i) => {

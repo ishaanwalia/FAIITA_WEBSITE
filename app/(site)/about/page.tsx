@@ -8,8 +8,6 @@ import { GlyphDecode } from "@/components/effects/GlyphDecode";
 import { IndiaMap } from "@/components/about/IndiaMap";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
-import { withExtraStates } from "@/lib/extra-states";
-import { applyStateOverrides, excludeRemovedStates } from "@/lib/state-overrides";
 
 export const metadata: Metadata = {
   title: "About FAIITA",
@@ -28,13 +26,10 @@ const hubLinks = [
 ];
 
 export default async function AboutPage() {
-  const states = withExtraStates(
-    excludeRemovedStates(
-      await prisma.stateAssociation.findMany({
-        orderBy: { stateName: "asc" },
-      })
-    )
-  ).map(applyStateOverrides);
+  const states = await prisma.stateAssociation.findMany({
+    where: { deletedAt: null },
+    orderBy: { stateName: "asc" },
+  });
 
   const mapPoints = states.map((s) => ({
     id: s.id,

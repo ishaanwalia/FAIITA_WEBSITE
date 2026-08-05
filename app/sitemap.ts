@@ -1,8 +1,5 @@
 import type { MetadataRoute } from "next";
-import { withExtraStates } from "@/lib/extra-states";
-import { memberAssociations } from "@/lib/member-associations";
 import { prisma } from "@/lib/prisma";
-import { excludeRemovedStates } from "@/lib/state-overrides";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faiita.co.in";
 
@@ -27,17 +24,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : 0.7,
   }));
 
-  const [states, news, events, newsletters] = await Promise.all([
-    prisma.stateAssociation.findMany({ select: { slug: true } }),
-    prisma.news.findMany({ select: { slug: true, publishedAt: true } }),
-    prisma.event.findMany({ select: { slug: true, startDate: true } }),
-    prisma.newsletter.findMany({ select: { slug: true, issueDate: true } }),
+  // Soft-deleted rows are excluded everywhere: a URL in the sitemap that 404s
+  // is worse than one Google never hears about.
+  const live = { deletedAt: null };
+  const [states, members, news, events, newsletters] = await Promise.all([
+    prisma.stateAssociation.findMany({ where: live, select: { slug: true } }),
+    prisma.memberAssociation.findMany({ where: { ...live, isDemo: false }, select: { slug: true } }),
+    prisma.news.findMany({ where: live, select: { slug: true, publishedAt: true } }),
+    prisma.event.findMany({ where: live, select: { slug: true, startDate: true } }),
+    prisma.newsletter.findMany({ where: live, select: { slug: true, issueDate: true } }),
   ]);
 
   return [
     ...staticRoutes,
-    ...withExtraStates(excludeRemovedStates(states)).map((s) => ({ url: `${siteUrl}/about/state-associations/${s.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
-    ...memberAssociations.filter((m) => !m.isDemo).map((m) => ({ url: `${siteUrl}/about/member-associations/${m.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
+    ...states.map((s) => ({ url: `${siteUrl}/about/state-associations/${s.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
+    ...members.map((m) => ({ url: `${siteUrl}/about/member-associations/${m.slug}`, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...news.map((n) => ({ url: `${siteUrl}/resources/news/${n.slug}`, lastModified: n.publishedAt, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...events.map((e) => ({ url: `${siteUrl}/resources/events/${e.slug}`, lastModified: e.startDate, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...newsletters.map((n) => ({ url: `${siteUrl}/resources/newsletter/${n.slug}`, lastModified: n.issueDate, changeFrequency: "monthly" as const, priority: 0.5 })),

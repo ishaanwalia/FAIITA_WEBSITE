@@ -2,22 +2,34 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Building2, Calendar, Globe, Mail, Phone, Users } from "lucide-react";
-import { memberAssociations } from "@/lib/member-associations";
 import { LogoImage } from "@/components/common/LogoImage";
 import { DemoBadge } from "@/components/ui/DemoBadge";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
+import { prisma } from "@/lib/prisma";
 
-export function generateStaticParams() {
-  return memberAssociations.map((m) => ({ slug: m.slug }));
+export const revalidate = 3600;
+
+const findMember = (slug: string) =>
+  prisma.memberAssociation.findFirst({
+    where: { slug, deletedAt: null },
+    include: { state: { select: { stateName: true } } },
+  });
+
+export async function generateStaticParams() {
+  const members = await prisma.memberAssociation.findMany({
+    where: { deletedAt: null },
+    select: { slug: true },
+  });
+  return members.map((m) => ({ slug: m.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const member = memberAssociations.find((m) => m.slug === slug);
+  const member = await findMember(slug);
   if (!member) return { title: "Member Association" };
   return {
     title: member.name,
-    description: `${member.name} — FAIITA-affiliated IT association in ${member.city}, ${member.stateName}.`,
+    description: `${member.name} — FAIITA-affiliated IT association in ${[member.city, member.state.stateName].filter(Boolean).join(", ")}.`,
     alternates: { canonical: `/about/member-associations/${slug}` },
     openGraph: { images: [`/api/og?eyebrow=Member+Association&title=${encodeURIComponent(member.name)}`] },
   };
@@ -25,8 +37,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function MemberDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const member = memberAssociations.find((m) => m.slug === slug);
-  if (!member) notFound();
+  const row = await findMember(slug);
+  if (!row) notFound();
+  const member = { ...row, stateName: row.state.stateName };
 
   return (
     <>
@@ -41,7 +54,7 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ s
           </Link>
           <div className="mt-6 flex items-center gap-2">
             <span className="inline-block rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
-              {member.city}, {member.stateName}
+              {[member.city, member.stateName].filter(Boolean).join(", ")}
             </span>
             {member.isDemo && <DemoBadge />}
           </div>
@@ -58,8 +71,14 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ s
       <section className="bg-background py-16">
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_320px]">
           <div>
-            <h2 className="font-display text-xl font-bold text-navy-800">About the Association</h2>
-            <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{member.description}</p>
+            {member.description && (
+              <>
+                <h2 className="font-display text-xl font-bold text-navy-800">About the Association</h2>
+                <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+                  {member.description}
+                </p>
+              </>
+            )}
           </div>
 
           <aside className="space-y-4">

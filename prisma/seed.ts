@@ -9,7 +9,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { PrismaClient } from "@prisma/client";
-import { memberAssociations } from "../lib/member-associations";
 
 const prisma = new PrismaClient();
 
@@ -479,30 +478,7 @@ async function main() {
     stateIdBySlug.set(slug, state.id);
   }
 
-  for (const m of memberAssociations) {
-    if (m.isDemo) continue; // placeholder cards render from lib/ only, never seeded
-    const stateId = stateIdBySlug.get(m.stateSlug);
-    if (!stateId) {
-      console.warn(`Skipping member association ${m.slug} — no state with slug "${m.stateSlug}"`);
-      continue;
-    }
-    await prisma.memberAssociation.create({
-      data: {
-        slug: m.slug,
-        name: m.name,
-        city: m.city,
-        type: m.type,
-        memberCount: m.memberCount,
-        description: m.description,
-        website: m.website,
-        presidentName: m.presidentName,
-        contactEmail: m.contactEmail,
-        contactPhone: m.contactPhone,
-        logoUrl: m.logoUrl,
-        stateId,
-      },
-    });
-  }
+
 
   await prisma.testimonial.createMany({ data: testimonials });
   await prisma.leader.createMany({ data: [...leaders, ...pastLeaders] });

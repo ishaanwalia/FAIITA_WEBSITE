@@ -4,7 +4,6 @@ import { ArrowRight, CalendarDays, Images, Newspaper, BookOpen } from "lucide-re
 import { PageHero } from "@/components/common/PageHero";
 import { ScrollReveal } from "@/components/common/ScrollReveal";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { mergeNews } from "@/lib/code-news";
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
@@ -19,14 +18,14 @@ export const revalidate = 3600;
 export default async function ResourcesPage() {
   // One round trip rather than four sequential awaits — the four queries are
   // independent, and this page is the slowest thing on the route otherwise.
-  const [news, events, galleryItems, newsletters] = await Promise.all([
-    prisma.news.findMany({ orderBy: { publishedAt: "desc" }, take: 3 }),
-    prisma.event.findMany({ orderBy: { startDate: "asc" } }),
-    prisma.galleryAlbum.findMany({ where: { deletedAt: null }, orderBy: { order: "asc" }, include: { _count: { select: { photos: true } } } }),
-    prisma.newsletter.findMany({ orderBy: { issueDate: "desc" }, take: 1 }),
+  const live = { deletedAt: null };
+  const [allNews, events, galleryItems, newsletters] = await Promise.all([
+    prisma.news.findMany({ where: live, orderBy: { publishedAt: "desc" } }),
+    prisma.event.findMany({ where: live, orderBy: { startDate: "asc" } }),
+    prisma.galleryAlbum.findMany({ where: live, orderBy: { order: "asc" }, include: { _count: { select: { photos: true } } } }),
+    prisma.newsletter.findMany({ where: live, orderBy: { issueDate: "desc" }, take: 1 }),
   ]);
 
-  const allNews = mergeNews(news);
   const now = new Date();
   const upcoming = events.filter((e) => e.startDate >= now);
   const nextEvent = upcoming[0] ?? events[events.length - 1];

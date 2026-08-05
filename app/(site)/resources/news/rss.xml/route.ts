@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { mergeNews } from "@/lib/code-news";
 
 export const revalidate = 3600;
 
@@ -15,11 +14,13 @@ function escapeXml(value: string) {
 }
 
 export async function GET() {
-  const dbNews = await prisma.news.findMany({ where: { isDemo: false } });
-  const items = mergeNews(dbNews);
+  const items = await prisma.news.findMany({
+    where: { isDemo: false, deletedAt: null },
+    orderBy: { publishedAt: "desc" },
+    take: 30,
+  });
 
   const feedItems = items
-    .slice(0, 30)
     .map(
       (n) => `
     <item>

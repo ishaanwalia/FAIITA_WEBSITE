@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { jsonLd } from "@/lib/utils";
 
 const display = Geist({
   subsets: ["latin"],
@@ -106,7 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             (no headers() call) so every page keeps its static/ISR caching. */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(organizationSchema) }}
         />
         {children}
         <Analytics />

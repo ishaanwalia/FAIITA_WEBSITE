@@ -6,19 +6,19 @@ import { Button } from "@/components/ui/button";
 import { DemoBadge } from "@/components/ui/DemoBadge";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { CopyLinkButton } from "@/components/common/CopyLinkButton";
-import { formatDate } from "@/lib/utils";
+import { formatDate, jsonLd } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const items = await prisma.event.findMany({ select: { slug: true } });
+  const items = await prisma.event.findMany({ where: { deletedAt: null }, select: { slug: true } });
   return items.map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const item = await prisma.event.findUnique({ where: { slug } });
+  const item = await prisma.event.findFirst({ where: { slug, deletedAt: null } });
   if (!item) return { title: "Event" };
   return {
     title: item.title,
@@ -32,7 +32,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faiita.co.in";
 
 export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const item = await prisma.event.findUnique({ where: { slug } });
+  const item = await prisma.event.findFirst({ where: { slug, deletedAt: null } });
   if (!item) notFound();
 
   const eventSchema = {
@@ -54,7 +54,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
 
   return (
     <article className="bg-background py-20">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(eventSchema) }} />
       <div className="container-page max-w-3xl">
         <Breadcrumbs items={[{ label: "Events", href: "/resources/events" }, { label: item.title }]} />
         <Link href="/resources/events" className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">

@@ -10,9 +10,6 @@ import { EventsSection } from "@/components/home/EventsSection";
 import { ReadyToConnect } from "@/components/home/ReadyToConnect";
 import { ElasticStrings } from "@/components/effects/ElasticStrings";
 import { prisma } from "@/lib/prisma";
-import { excludeRemovedStates } from "@/lib/state-overrides";
-import { mergeNews } from "@/lib/code-news";
-import { mergeTestimonials } from "@/lib/code-testimonials";
 import type { StatItem } from "@/types";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -89,7 +86,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <StateMarquee states={[...new Set(excludeRemovedStates(states).map((s) => s.stateName))]} />
+      <StateMarquee states={[...new Set(states.map((s) => s.stateName))]} />
       <Stats stats={stats.map((s) => (statFixes[s.label] ? { ...s, ...statFixes[s.label] } : s))} />
       <MembershipBenefits />
       {/* Pluckable divider — it does the same structural job a 1px rule would,
@@ -97,13 +94,13 @@ export default async function HomePage() {
       <ElasticStrings strings={3} tone="light" className="h-20 w-full" />
       <JoinCta />
       <Testimonials
-        testimonials={mergeTestimonials(testimonials).map((t) => ({
+        testimonials={testimonials.map((t) => ({
           ...t,
           association: associationFixes[t.association] ?? t.association,
           imageUrl: t.imageUrl ?? testimonialImageFixes[t.name] ?? null,
         }))}
       />
-      <NewsSection news={mergeNews(news).slice(0, 3)} />
+      <NewsSection news={news} />
       <EventsSection events={events} />
       <ReadyToConnect />
     </>

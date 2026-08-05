@@ -10,13 +10,13 @@ import { prisma } from "@/lib/prisma";
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const items = await prisma.newsletter.findMany({ select: { slug: true } });
+  const items = await prisma.newsletter.findMany({ where: { deletedAt: null }, select: { slug: true } });
   return items.map((n) => ({ slug: n.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const item = await prisma.newsletter.findUnique({ where: { slug } });
+  const item = await prisma.newsletter.findFirst({ where: { slug, deletedAt: null } });
   if (!item) return { title: "Newsletter" };
   return {
     title: item.title,
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function NewsletterIssuePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const item = await prisma.newsletter.findUnique({ where: { slug } });
+  const item = await prisma.newsletter.findFirst({ where: { slug, deletedAt: null } });
   if (!item || !item.fileUrl) notFound();
 
   const isFlipbook = item.fileUrl.includes("heyzine.com");

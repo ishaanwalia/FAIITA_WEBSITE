@@ -38,3 +38,14 @@ export function slugify(input: string) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
+
+/**
+ * JSON-LD, ready for a <script> tag.
+ *
+ * JSON.stringify escapes quotes but not "</script>", and every field in these
+ * schemas is now typed into the CMS by a person. Escaping "<" means a headline
+ * can contain anything at all without being able to close the block early.
+ */
+export function jsonLd(data: unknown) {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}

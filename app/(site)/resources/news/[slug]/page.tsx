@@ -7,20 +7,21 @@ import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { CopyLinkButton } from "@/components/common/CopyLinkButton";
-import { formatDate } from "@/lib/utils";
+import { formatDate, jsonLd } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
-import { codeNews, findCodeNews } from "@/lib/code-news";
 
 export const revalidate = 3600;
 
+const findStory = (slug: string) => prisma.news.findFirst({ where: { slug, deletedAt: null } });
+
 export async function generateStaticParams() {
-  const items = await prisma.news.findMany({ select: { slug: true } });
-  return [...items, ...codeNews].map((n) => ({ slug: n.slug }));
+  const items = await prisma.news.findMany({ where: { deletedAt: null }, select: { slug: true } });
+  return items.map((n) => ({ slug: n.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const item = (await prisma.news.findUnique({ where: { slug } })) ?? findCodeNews(slug);
+  const item = await findStory(slug);
   if (!item) return { title: "News" };
   return {
     title: item.title,
@@ -34,9 +35,13 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faiita.co.in";
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const item = (await prisma.news.findUnique({ where: { slug } })) ?? findCodeNews(slug);
+  const item = await findStory(slug);
   if (!item) notFound();
-  const relatedState = findCodeNews(slug)?.relatedState;
+
+  const relatedState =
+    item.relatedStateSlug && item.relatedStateLabel
+      ? { slug: item.relatedStateSlug, label: item.relatedStateLabel }
+      : null;
 
   const image = item.heroImage ?? item.coverImage;
   const articleSchema = {
@@ -53,7 +58,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <article className="bg-background py-20">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(articleSchema) }} />
       <div className="container-page max-w-3xl">
         <Breadcrumbs items={[{ label: "News", href: "/resources/news" }, { label: item.title }]} />
         <Link href="/resources/news" className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-navy-700">

@@ -3,24 +3,26 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Building2, Calendar, Globe, Mail, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { findExtraState, withExtraStates } from "@/lib/extra-states";
-import { applyStateOverrides, excludeRemovedStates, isRemovedStateSlug } from "@/lib/state-overrides";
 import { normalizeZone } from "@/lib/utils";
 import { LogoImage } from "@/components/common/LogoImage";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 
 export const revalidate = 3600;
 
+const findState = (slug: string) =>
+  prisma.stateAssociation.findFirst({ where: { slug, deletedAt: null } });
+
 export async function generateStaticParams() {
-  const states = await prisma.stateAssociation.findMany({ select: { slug: true } });
-  return withExtraStates(excludeRemovedStates(states)).map((s) => ({ slug: s.slug }));
+  const states = await prisma.stateAssociation.findMany({
+    where: { deletedAt: null },
+    select: { slug: true },
+  });
+  return states.map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const state = isRemovedStateSlug(slug)
-    ? null
-    : (await prisma.stateAssociation.findUnique({ where: { slug } })) ?? findExtraState(slug);
+  const state = await findState(slug);
   if (!state) return { title: "State Association" };
   return {
     title: state.stateName,
@@ -32,12 +34,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function StateDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const row = isRemovedStateSlug(slug)
-    ? null
-    : (await prisma.stateAssociation.findUnique({ where: { slug } })) ?? findExtraState(slug);
-
-  if (!row) notFound();
-  const state = applyStateOverrides(row);
+  const state = await findState(slug);
+  if (!state) notFound();
 
   return (
     <>
