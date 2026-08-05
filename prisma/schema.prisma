@@ -17,50 +17,50 @@ datasource db {
 /// One row per Indian state/UT covered by FAIITA — powers the interactive map,
 /// /about/state-associations, and the /about/state-associations/[slug] pages.
 model StateAssociation {
-  id               String   @id @default(cuid())
-  slug             String   @unique
-  stateName        String
-  stateCode        String // e.g. "MH", "DL" — matches map region ids
-  region           String // North | South | East | West | Central (NECTA/North-East sits under East)
-  associationName  String
-  foundedYear      Int?
-  memberCount      Int      @default(0)
-  presidentName    String?
-  secretaryName    String?
-  contactEmail     String?
-  secretaryEmail   String?
-  contactPhone     String?
-  websiteUrl       String?
-  address          String?
-  description      String?
-  logoUrl          String?
-  mapX             Float // relative x position (0-100) on the illustrated map
-  mapY             Float // relative y position (0-100) on the illustrated map
-  isCovered        Boolean  @default(true)
+  id                 String              @id @default(cuid())
+  slug               String              @unique
+  stateName          String
+  stateCode          String // e.g. "MH", "DL" — matches map region ids
+  region             String // North | South | East | West | Central (NECTA/North-East sits under East)
+  associationName    String
+  foundedYear        Int?
+  memberCount        Int                 @default(0)
+  presidentName      String?
+  secretaryName      String?
+  contactEmail       String?
+  secretaryEmail     String?
+  contactPhone       String?
+  websiteUrl         String?
+  address            String?
+  description        String?
+  logoUrl            String?
+  mapX               Float // relative x position (0-100) on the illustrated map
+  mapY               Float // relative y position (0-100) on the illustrated map
+  isCovered          Boolean             @default(true)
   memberAssociations MemberAssociation[]
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 
   @@index([region])
 }
 
 /// Individual member associations that belong to a state chapter.
 model MemberAssociation {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  name        String
-  city        String?
-  type        String // Retail | Distribution | Services | Solutions | Manufacturing
-  memberCount Int      @default(0)
-  description String?
-  logoUrl     String?
-  website     String?
+  id            String           @id @default(cuid())
+  slug          String           @unique
+  name          String
+  city          String?
+  type          String // Retail | Distribution | Services | Solutions | Manufacturing
+  memberCount   Int              @default(0)
+  description   String?
+  logoUrl       String?
+  website       String?
   presidentName String?
   contactEmail  String?
   contactPhone  String?
-  stateId     String
-  state       StateAssociation @relation(fields: [stateId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
+  stateId       String
+  state         StateAssociation @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  createdAt     DateTime         @default(now())
 
   @@index([stateId])
 }
@@ -88,38 +88,38 @@ model Leader {
 }
 
 model News {
-  id            String   @id @default(cuid())
-  slug          String   @unique
-  title         String
-  excerpt       String
-  content       String
-  category      String // Events | Policy | Initiative | Press Release
-  coverImage    String? // card/featured background image
-  heroImage     String? // large image shown at the top of the article page
-  sourceUrl     String? // link to original coverage (press, magazine)
-  featured      Boolean  @default(false)
-  isDemo        Boolean  @default(false) // placeholder content, remove when real content lands
-  publishedAt   DateTime @default(now())
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String
+  category    String // Events | Policy | Initiative | Press Release
+  coverImage  String? // card/featured background image
+  heroImage   String? // large image shown at the top of the article page
+  sourceUrl   String? // link to original coverage (press, magazine)
+  featured    Boolean  @default(false)
+  isDemo      Boolean  @default(false) // placeholder content, remove when real content lands
+  publishedAt DateTime @default(now())
 
   @@index([publishedAt])
 }
 
 model Event {
-  id                 String   @id @default(cuid())
-  slug               String   @unique
-  title              String
-  description        String
-  category           String // AGM | Summit | Workshop | Conference
-  startDate          DateTime
-  endDate            DateTime?
-  city               String
-  state              String
-  venue              String?
-  coverImage         String?
-  registrationLink   String?
-  isUpcoming         Boolean  @default(true)
-  isDemo             Boolean  @default(false)
-  createdAt          DateTime @default(now())
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  title            String
+  description      String
+  category         String // AGM | Summit | Workshop | Conference
+  startDate        DateTime
+  endDate          DateTime?
+  city             String
+  state            String
+  venue            String?
+  coverImage       String?
+  registrationLink String?
+  isUpcoming       Boolean   @default(true)
+  isDemo           Boolean   @default(false)
+  createdAt        DateTime  @default(now())
 
   @@index([startDate])
 }
@@ -176,12 +176,12 @@ model Testimonial {
 }
 
 model Stat {
-  id       String @id @default(cuid())
-  label    String
-  value    String // stored as string to allow "29", "100+", "5L+"
-  suffix   String?
-  icon     String? // lucide icon name
-  order    Int    @default(0)
+  id     String  @id @default(cuid())
+  label  String
+  value  String // stored as string to allow "29", "100+", "5L+"
+  suffix String?
+  icon   String? // lucide icon name
+  order  Int     @default(0)
 
   @@index([order])
 }
@@ -201,4 +201,24 @@ model NewsletterSubscriber {
   id           String   @id @default(cuid())
   email        String   @unique
   subscribedAt DateTime @default(now())
+}
+
+/// CMS administrator. Three rows only (president, secretary, ishaan) — this is
+/// not a public sign-up surface, so there is no registration flow and no role
+/// column yet: every admin can do everything. Add roles when the first person
+/// needs less than full access, not before.
+model AdminUser {
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  name               String
+  /// scrypt, stored as "salt:hash" in hex. See lib/auth.ts.
+  passwordHash       String
+  /// Set on the accounts created by scripts/create-admins.ts, whose passwords
+  /// were generated and shown once. Cleared the first time they choose their
+  /// own. Login succeeds but every admin page redirects to /admin/password
+  /// until it is false.
+  mustChangePassword Boolean   @default(true)
+  lastLoginAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }

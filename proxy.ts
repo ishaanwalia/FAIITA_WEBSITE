@@ -2,7 +2,9 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 8;
-const RATE_LIMITED_PATHS = ["/api/contact", "/api/newsletter"];
+// /admin/login is here because the login server action POSTs to that URL, so
+// the same counter that stops contact-form spam also caps password guessing.
+const RATE_LIMITED_PATHS = ["/api/contact", "/api/newsletter", "/admin/login"];
 
 // In-memory only — resets on cold start and isn't shared across serverless
 // instances, so it's a first line of defense against casual scripted spam,
