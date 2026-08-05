@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatDate, IST } from "@/lib/utils";
 
 type CalendarEvent = {
   id: string;
@@ -31,7 +31,7 @@ export function EventCalendar({ events }: { events: CalendarEvent[] }) {
     return map;
   }, [events]);
 
-  const monthLabel = cursor.toLocaleDateString("en-IN", { month: "long", year: "numeric" });
+  const monthLabel = cursor.toLocaleDateString("en-IN", { month: "long", year: "numeric", timeZone: IST });
 
   const days = useMemo(() => {
     const year = cursor.getFullYear();
@@ -105,7 +105,7 @@ export function EventCalendar({ events }: { events: CalendarEvent[] }) {
 
       <div className="rounded-2xl bg-secondary/60 p-5">
         <h4 className="font-display text-sm font-bold text-navy-800">
-          {selected ? new Date(selected).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "Select a highlighted date"}
+          {selected ? formatDate(new Date(selected)) : "Select a highlighted date"}
         </h4>
         <div className="mt-4 space-y-3">
           {selectedEvents.length === 0 && (

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { DemoBadge } from "@/components/ui/DemoBadge";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { CopyLinkButton } from "@/components/common/CopyLinkButton";
-import { formatDate, jsonLd } from "@/lib/utils";
+import { formatDate, jsonLd, metaDescription } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 
 export const revalidate = 3600;
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!item) return { title: "News" };
   return {
     title: item.title,
-    description: item.excerpt,
+    description: metaDescription(item.excerpt),
     alternates: { canonical: `/resources/news/${slug}` },
     openGraph: { images: [`/api/og?eyebrow=News&title=${encodeURIComponent(item.title)}`] },
   };

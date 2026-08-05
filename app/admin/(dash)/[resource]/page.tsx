@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { allRelationOptions, delegate, purgeExpired, PURGE_AFTER_DAYS, type Row } from "@/lib/admin/db";
 import { fieldOf, getResource, type Resource } from "@/lib/admin/resources";
+import { formatDate } from "@/lib/utils";
 import { deleteResource, purgeResource, restoreResource } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +32,7 @@ function formatCell(
   }
   if (typeof value === "boolean") return value ? "Yes" : "No";
   if (value instanceof Date) {
-    return value.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    return formatDate(value, { month: "short" });
   }
 
   const text = String(value);
@@ -99,7 +100,7 @@ export default async function ResourceListPage({ params, searchParams }: Props) 
               {showingDeleted ? "← Back to the list" : "Recently deleted"}
             </Link>
           )}
-          {!showingDeleted && (
+          {!showingDeleted && !resource.readOnly && (
             <Link
               href={newHref}
               className="rounded-full bg-saffron-500 px-4 py-2 font-semibold text-navy-900 hover:bg-saffron-400"
@@ -114,7 +115,9 @@ export default async function ResourceListPage({ params, searchParams }: Props) 
         <p className="mt-10 rounded-2xl border border-white/10 bg-white/5 px-5 py-8 text-center text-sm text-white/40">
           {showingDeleted
             ? "Nothing has been deleted recently."
-            : `No ${resource.plural ?? `${resource.singular}s`} yet. Use “Add ${resource.singular}” to create the first one.`}
+            : resource.readOnly
+              ? `No ${resource.plural ?? `${resource.singular}s`} yet. These arrive from the public site.`
+              : `No ${resource.plural ?? `${resource.singular}s`} yet. Use “Add ${resource.singular}” to create the first one.`}
         </p>
       ) : (
         <div className="mt-8 overflow-x-auto rounded-2xl border border-white/10">

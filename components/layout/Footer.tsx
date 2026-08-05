@@ -39,7 +39,7 @@ export function Footer() {
         <FooterColumn title="Resources" links={resourceLinks} />
 
         <div>
-          <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-white">Contact Us</h3>
+          <h2 className="font-display text-sm font-semibold uppercase tracking-wide text-white">Contact Us</h2>
 
           <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-saffron-400">President Office</p>
           <ul className="mt-2 space-y-2 text-sm text-white/50">
@@ -95,7 +95,7 @@ export function Footer() {
 function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <div>
-      <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-white">{title}</h3>
+      <h2 className="font-display text-sm font-semibold uppercase tracking-wide text-white">{title}</h2>
       <ul className="mt-5 space-y-3 text-sm text-white/50">
         {links.map((link) => (
           <li key={link.href}>

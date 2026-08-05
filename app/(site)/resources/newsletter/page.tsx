@@ -27,9 +27,12 @@ export default async function NewsletterPage() {
         description="The federation's e-bulletin — policy updates, association spotlights, and news from across India's IT trade. Read every issue right here."
       />
 
-      <section className="bg-background py-20">
+      <section className="bg-background py-20" aria-labelledby="all-issues">
         <div className="container-page grid gap-10 lg:grid-cols-[1fr_320px]">
           <div className="space-y-4">
+            <h2 id="all-issues" className="sr-only">
+              Every issue
+            </h2>
             {newsletters.map((n, i) => (
               <ScrollReveal key={n.id} direction="up" delay={i * 0.06}>
                 <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-6">

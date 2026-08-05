@@ -66,6 +66,8 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            type="search"
+            aria-label="Search state associations by state or association name"
             placeholder="Search state or association..."
             className="w-full rounded-full border border-border bg-card py-2 pl-9 pr-4 text-sm focus:border-navy-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
           />

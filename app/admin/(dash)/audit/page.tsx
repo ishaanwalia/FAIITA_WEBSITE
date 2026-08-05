@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { formatDateTime } from "@/lib/utils";
 import { fieldOf, RESOURCES } from "@/lib/admin/resources";
 
 export const dynamic = "force-dynamic";
@@ -55,14 +56,7 @@ export default async function AuditPage() {
                 </div>
 
                 <p className="mt-1 text-xs text-white/35">
-                  {log.actorEmail} ·{" "}
-                  {log.createdAt.toLocaleString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "2-digit",
-                  })}
+                  {log.actorEmail} · {formatDateTime(log.createdAt)} IST
                 </p>
 
                 {changes && (

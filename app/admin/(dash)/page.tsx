@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { delegate } from "@/lib/admin/db";
 import { NAV_RESOURCES } from "@/lib/admin/resources";
+import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +59,7 @@ export default async function AdminHome() {
                 <span className="capitalize text-white/70">{log.action}</span> {log.recordLabel}{" "}
                 <span className="text-white/25">
                   · {log.actorEmail.split("@")[0]} ·{" "}
-                  {log.createdAt.toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
+                  {formatDate(log.createdAt, { month: "short", year: undefined })}
                 </span>
               </li>
             ))}

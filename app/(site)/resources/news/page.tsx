@@ -11,7 +11,8 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "News",
-  description: "The latest news and announcements from FAIITA.",
+  description:
+    "News, policy wins and press releases from FAIITA — the federation of IT associations representing 50,000+ channel partners, retailers and distributors across India.",
   alternates: {
     canonical: "/resources/news",
     types: { "application/rss+xml": "/resources/news/rss.xml" },

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useLenis } from "lenis/react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 /**
@@ -31,19 +32,36 @@ export function Lightbox({
   const ref = useRef<HTMLDialogElement>(null);
   const [i, setI] = useState(startIndex);
   const dragFrom = useRef<number | null>(null);
+  const lenis = useLenis();
 
   const go = (delta: number) => setI((n) => (n + delta + photos.length) % photos.length);
 
   useEffect(() => {
     ref.current?.showModal();
-    // showModal() blocks interaction but not scrolling — without this the page
-    // behind still scrolls under the overlay.
+
+    // showModal() blocks interaction but not scrolling, so the page behind
+    // would still scroll under the overlay.
+    //
+    // Stop Lenis rather than setting `body { overflow: hidden }`. Lenis drives
+    // the window scroll, so overriding body overflow underneath it changes
+    // which box is scrolling while it is mid-flight — and WebKit resolves a
+    // position:fixed header against that box. Closing the lightbox then left
+    // the header adrift on the gallery page in Safari. lenis.stop() is the
+    // library's own answer and touches no global styles at all.
+    //
+    // Lenis is deliberately not running on narrow screens or under
+    // prefers-reduced-motion (see SmoothScroll), so the overflow lock stays as
+    // the fallback for exactly those cases.
+    if (lenis) {
+      lenis.stop();
+      return () => lenis.start();
+    }
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previous;
     };
-  }, []);
+  }, [lenis]);
 
   const photo = photos[i];
 

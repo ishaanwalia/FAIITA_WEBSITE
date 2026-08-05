@@ -49,10 +49,14 @@ export type Resource = {
   /** Field used to name a row in the list, the audit log and page titles */
   labelField: string;
   listFields: string[];
-  orderBy: Record<string, "asc" | "desc">;
+  /** A single key, or several applied in turn. */
+  orderBy: Record<string, "asc" | "desc"> | Record<string, "asc" | "desc">[];
   fields: Field[];
   /** false = no deletedAt column, so delete is permanent */
   softDelete: boolean;
+  /** Arrived from the public site rather than being authored here: no Add, no
+   *  editing, just read and delete. */
+  readOnly?: boolean;
   /** Paths purged after every write. Paths containing [ ] revalidate as pages. */
   revalidate: string[];
   /** Fill an empty slug box from this field on save */
@@ -246,14 +250,16 @@ const LEADERS: Resource = {
   label: "Leadership",
   singular: "leader",
   labelField: "name",
-  listFields: ["name", "role", "term", "isCurrent", "order"],
-  orderBy: { order: "asc" },
+  listFields: ["order", "name", "role", "term", "isCurrent"],
+  // Serving members first, then the previous Governing Body — otherwise the
+  // two terms interleave by position number and the list reads as nonsense.
+  orderBy: [{ isCurrent: "desc" }, { order: "asc" }],
   softDelete: true,
   revalidate: ["/about/leadership"],
   fields: [
     { name: "name", label: "Name", type: "text", required: true },
     { name: "role", label: "Position", type: "text", required: true, help: "e.g. President, Secretary General, Governing Body Member." },
-    { name: "order", label: "Position in the list", type: "number", help: "Lower numbers appear first. Office bearers come before Governing Body members." },
+    { name: "order", label: "Position", type: "number", help: "Lower numbers appear first, within this person's term. The President is 1, the eight office roles are 2–9, and Governing Body members follow. The role decides the card's size and band; this decides the position inside it." },
     { name: "category", label: "Level", type: "select", required: true, options: ["national", "state"] },
     { name: "term", label: "Term", type: "text", help: "e.g. 2024–2026." },
     { name: "isCurrent", label: "Currently serving", type: "boolean" },
@@ -314,6 +320,50 @@ const TESTIMONIALS: Resource = {
   ],
 };
 
+/**
+ * What the public forms sent in. Nobody authors these — they are read, acted
+ * on, and eventually deleted — so they reuse the list and detail screens with
+ * every field locked.
+ */
+const CONTACT: Resource = {
+  key: "messages",
+  model: "contactSubmission",
+  label: "Contact messages",
+  singular: "message",
+  labelField: "name",
+  listFields: ["createdAt", "name", "email", "subject", "organization"],
+  orderBy: { createdAt: "desc" },
+  softDelete: false,
+  readOnly: true,
+  revalidate: [],
+  fields: [
+    { name: "createdAt", label: "Received", type: "date" },
+    { name: "name", label: "Name", type: "text" },
+    { name: "email", label: "Email", type: "text" },
+    { name: "phone", label: "Phone", type: "text" },
+    { name: "organization", label: "Organisation", type: "text" },
+    { name: "subject", label: "Subject", type: "text" },
+    { name: "message", label: "Message", type: "textarea" },
+  ],
+};
+
+const SUBSCRIBERS: Resource = {
+  key: "subscribers",
+  model: "newsletterSubscriber",
+  label: "Patrika subscribers",
+  singular: "subscriber",
+  labelField: "email",
+  listFields: ["subscribedAt", "email"],
+  orderBy: { subscribedAt: "desc" },
+  softDelete: false,
+  readOnly: true,
+  revalidate: [],
+  fields: [
+    { name: "subscribedAt", label: "Subscribed", type: "date" },
+    { name: "email", label: "Email", type: "text" },
+  ],
+};
+
 export const RESOURCES: Resource[] = [
   NEWS,
   EVENTS,
@@ -324,6 +374,8 @@ export const RESOURCES: Resource[] = [
   LEADERS,
   NEWSLETTERS,
   TESTIMONIALS,
+  CONTACT,
+  SUBSCRIBERS,
 ];
 
 /** The order they appear in the admin nav. Gallery photos are reached through their album. */

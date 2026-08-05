@@ -28,8 +28,11 @@ export default async function StateAssociationsPage() {
         description="Every state association operates independently while sharing in FAIITA's national advocacy and resources."
       />
 
-      <section className="bg-background py-20">
+      <section className="bg-background py-20" aria-labelledby="all-state-associations">
         <div className="container-page">
+          <h2 id="all-state-associations" className="sr-only">
+            All state associations
+          </h2>
           <StateAssociationsGrid states={states} />
         </div>
       </section>

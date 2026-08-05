@@ -40,18 +40,20 @@ export const metadata: Metadata = {
     "IT federation",
     "India IT trade",
   ],
+  // Only site-level fields here. Setting og:title/og:description/og:url or
+  // twitter:title/twitter:description at the root makes every child page
+  // inherit them — which shipped a homepage og:url on all 60 pages, so a share
+  // of /about/leadership told Facebook and LinkedIn it was the front page, and
+  // every X card read "Uniting 50,000+ IT entrepreneurs…" whatever the page.
+  // Left unset, Next derives og:* from each page's own title and description,
+  // and twitter:* from og:*.
   openGraph: {
-    title: "FAIITA — Federation of All India Information Technology Associations",
-    description: "Uniting 50,000+ IT entrepreneurs across 26 states under one national federation.",
-    url: siteUrl,
     siteName: "FAIITA",
     type: "website",
     locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: "FAIITA — Federation of All India Information Technology Associations",
-    description: "Uniting 50,000+ IT entrepreneurs across 26 states under one national federation.",
   },
   icons: {
     icon: [
@@ -93,6 +95,25 @@ const organizationSchema = {
   ],
 };
 
+// A @graph rather than two loose blocks, so `publisher` on every article and
+// event page resolves to this same @id instead of a second, unrelated
+// Organization node. Without the ids, each page asserted its own copy of
+// FAIITA and nothing tied them together.
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { ...organizationSchema, "@context": undefined, "@id": `${siteUrl}/#organization` },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "FAIITA",
+      inLanguage: "en-IN",
+      publisher: { "@id": `${siteUrl}/#organization` },
+    },
+  ],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-IN" className={`${display.variable} ${body.variable} ${mono.variable}`}>
@@ -107,7 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             (no headers() call) so every page keeps its static/ISR caching. */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLd(organizationSchema) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(siteSchema) }}
         />
         {children}
         <Analytics />

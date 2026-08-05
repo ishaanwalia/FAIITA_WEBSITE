@@ -6,7 +6,8 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Gallery",
-  description: "Moments from FAIITA elections, summits, AGMs, and regional meets.",
+  description:
+    "Photographs from FAIITA elections, national summits, annual general meetings and regional gatherings — a record of the federation's work across India since 2020.",
   alternates: { canonical: "/resources/gallery" },
 };
 

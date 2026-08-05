@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Building2, Calendar, Globe, Mail, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { normalizeZone } from "@/lib/utils";
+import { jsonLd, normalizeZone } from "@/lib/utils";
 import { LogoImage } from "@/components/common/LogoImage";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 
@@ -32,13 +32,44 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.faiita.co.in";
+
 export default async function StateDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const state = await findState(slug);
   if (!state) notFound();
 
+  // Each state chapter is a real organisation, not just a page about one.
+  // memberOf points at the same @id the root layout publishes, so a crawler
+  // reads 33 associations belonging to one federation rather than 33
+  // unconnected bodies. Optional fields are omitted rather than sent empty —
+  // an Organization asserting `email: ""` is worse than one that stays quiet.
+  const associationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${siteUrl}/about/state-associations/${slug}#organization`,
+    name: state.associationName,
+    url: `${siteUrl}/about/state-associations/${slug}`,
+    description: state.description ?? `${state.associationName} — FAIITA's IT trade association in ${state.stateName}.`,
+    memberOf: { "@id": `${siteUrl}/#organization` },
+    areaServed: { "@type": "State", name: state.stateName },
+    ...(state.logoUrl && { logo: state.logoUrl.startsWith("http") ? state.logoUrl : `${siteUrl}${state.logoUrl}` }),
+    ...(state.foundedYear && { foundingDate: String(state.foundedYear) }),
+    ...(state.contactEmail && { email: state.contactEmail }),
+    ...(state.contactPhone && { telephone: state.contactPhone }),
+    ...(state.websiteUrl && { sameAs: [state.websiteUrl] }),
+    ...(state.address && {
+      address: { "@type": "PostalAddress", streetAddress: state.address, addressRegion: state.stateName, addressCountry: "IN" },
+    }),
+    // Deliberately no office bearers here. The page itself withholds president
+    // names and phone numbers because they rotate per association on different
+    // cycles (see the note further down) — publishing them in structured data
+    // would leak exactly what the page is choosing not to say.
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(associationSchema) }} />
       <section className="bg-navy-800 py-20">
         <div className="container-page">
           <Breadcrumbs

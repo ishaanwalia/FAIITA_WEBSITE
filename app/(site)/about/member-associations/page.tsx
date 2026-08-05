@@ -6,7 +6,8 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Member Associations",
-  description: "City and district IT associations affiliated to FAIITA across India.",
+  description:
+    "City and district IT associations affiliated to FAIITA, the bodies that operate under each state chapter and form the federation's grassroots network across India.",
   alternates: { canonical: "/about/member-associations" },
 };
 

@@ -81,10 +81,13 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
 
   return (
     <div>
+      {/* An h2, not a styled span: it is the real section heading under the
+          page's h1, and without it a screen reader jumps h1 → h3 into the
+          spotlight card with no sense of which band it is in. */}
       <div className="mx-auto w-fit rounded-full border border-border bg-secondary/60 px-6 py-2.5">
-        <span className="text-sm font-semibold uppercase tracking-wide text-navy-700">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-navy-700">
           The Governing Body 2025–27
-        </span>
+        </h2>
       </div>
 
       {/* Spotlight — longer card, with extra info not shown on the grid tiles.
@@ -229,9 +232,9 @@ function TreeJoin({ label }: { label: string }) {
   return (
     <div className="mt-12 flex flex-col items-center">
       <span aria-hidden className="h-10 w-px bg-gradient-to-b from-transparent to-border" />
-      <span className="section-eyebrow rounded-full border border-border bg-secondary/60 px-5 py-2 text-navy-700">
+      <h2 className="section-eyebrow rounded-full border border-border bg-secondary/60 px-5 py-2 text-navy-700">
         {label}
-      </span>
+      </h2>
       <span aria-hidden className="h-10 w-px bg-gradient-to-t from-transparent to-border" />
     </div>
   );

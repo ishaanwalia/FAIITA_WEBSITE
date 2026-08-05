@@ -68,7 +68,13 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="border-b border-border bg-background py-16">
+      <section className="border-b border-border bg-background py-16" aria-labelledby="explore-faiita">
+        {/* The four cards are h3s. Without an h2 above them a screen reader
+            jumps straight from the page title into card titles with nothing
+            naming the group. */}
+        <h2 id="explore-faiita" className="sr-only">
+          Explore FAIITA
+        </h2>
         <div className="container-page grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubLinks.map((l) => (
             <Link key={l.href} href={l.href}>

@@ -10,7 +10,8 @@ import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Events",
-  description: "FAIITA's summits, AGMs, workshops and regional meets.",
+  description:
+    "FAIITA's calendar of annual general meetings, national summits, workshops and regional meets, with dates, venues and registration for IT associations across India.",
   alternates: { canonical: "/resources/events" },
 };
 
@@ -30,8 +31,11 @@ export default async function EventsPage() {
         description="Summits, AGMs, workshops, and regional meets across the federation."
       />
 
-      <section className="bg-background pb-8 pt-20">
+      <section className="bg-background pb-8 pt-20" aria-labelledby="events-calendar">
         <div className="container-page">
+          <h2 id="events-calendar" className="sr-only">
+            Calendar
+          </h2>
           <ScrollReveal direction="scale">
             <EventCalendar events={events} />
           </ScrollReveal>

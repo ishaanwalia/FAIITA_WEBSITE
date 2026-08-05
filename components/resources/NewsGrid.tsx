@@ -40,6 +40,8 @@ export function NewsGrid({ news }: { news: NewsRow[] }) {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            type="search"
+            aria-label="Search news stories"
             placeholder="Search news..."
             className="w-full rounded-full border border-border bg-card py-2 pl-9 pr-4 text-sm focus:border-navy-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
           />

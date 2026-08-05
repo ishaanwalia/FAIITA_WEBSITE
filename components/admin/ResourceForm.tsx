@@ -21,6 +21,23 @@ type Props = {
 export function ResourceForm({ resource, id, values, relations, filter }: Props) {
   const [state, action] = useActionState<FormState, FormData>(saveResource, {});
 
+  // Contact messages and Patrika sign-ups arrive from the public site — there
+  // is nothing to author, so the same screen just reads them out.
+  if (resource.readOnly) {
+    return (
+      <dl className="mt-8 max-w-2xl space-y-5">
+        {resource.fields.map((field) => (
+          <div key={field.name}>
+            <dt className="text-xs uppercase tracking-wide text-white/40">{field.label}</dt>
+            <dd className="mt-1 whitespace-pre-line text-sm text-white">
+              {String(values[field.name] ?? "") || "—"}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    );
+  }
+
   return (
     <form action={action} className="mt-8 max-w-2xl space-y-6">
       <input type="hidden" name="__resource" value={resource.key} />
