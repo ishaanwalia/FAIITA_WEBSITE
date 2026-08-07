@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, Search, X } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { navItems } from "@/lib/nav";
@@ -205,7 +205,14 @@ export function Navbar() {
           })}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-2 lg:flex">
+          <Link
+            href="/search"
+            aria-label="Search the site"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            <Search className="h-5 w-5" />
+          </Link>
           <MagneticButton asChild variant="accent" size="default">
             <Link href="/contact?intent=membership">Join FAIITA</Link>
           </MagneticButton>
@@ -251,6 +258,11 @@ export function Navbar() {
             exit="hidden"
             variants={{ show: { transition: { staggerChildren: 0.06 } } }}
           >
+            <motion.div variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}>
+              <Link href="/search" className="flex items-center gap-2 py-3 text-2xl font-display font-semibold text-white/90 hover:text-saffron-400">
+                <Search className="h-5 w-5" /> Search
+              </Link>
+            </motion.div>
             {navItems.map((item) => (
               <MobileNavGroup key={item.label} item={item} />
             ))}

@@ -23,7 +23,7 @@ export default async function ResourcesPage() {
     prisma.news.findMany({ where: live, orderBy: { publishedAt: "desc" } }),
     prisma.event.findMany({ where: live, orderBy: { startDate: "asc" } }),
     prisma.galleryAlbum.findMany({ where: live, orderBy: { order: "asc" }, include: { _count: { select: { photos: true } } } }),
-    prisma.newsletter.findMany({ where: live, orderBy: { issueDate: "desc" }, take: 1 }),
+    prisma.newsletter.findMany({ where: live, orderBy: { issueDate: "desc" } }),
   ]);
 
   const now = new Date();

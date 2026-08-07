@@ -6,6 +6,7 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 
 export function NewsletterForm() {
   const [email, setEmail] = useState("");
+  const [companyUrl, setCompanyUrl] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -15,7 +16,7 @@ export function NewsletterForm() {
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, company_url: companyUrl }),
       });
       if (!res.ok) throw new Error();
       setStatus("success");
@@ -35,6 +36,15 @@ export function NewsletterForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex gap-2">
+      <input
+        type="text"
+        value={companyUrl}
+        onChange={(e) => setCompanyUrl(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+      />
       <label htmlFor="newsletter-email" className="sr-only">
         Your email address
       </label>

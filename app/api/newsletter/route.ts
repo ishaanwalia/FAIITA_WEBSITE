@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 
-const schema = z.object({ email: z.string().email() });
+const schema = z.object({
+  email: z.string().email(),
+  // Honeypot — real users never see this field. A non-empty value means a
+  // bot filled every input it found; report success without subscribing.
+  company_url: z.string().optional(),
+});
 
 export async function POST(req: Request) {
   try {
@@ -10,6 +15,10 @@ export async function POST(req: Request) {
     const parsed = schema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json({ error: "Please enter a valid email" }, { status: 400 });
+    }
+
+    if (parsed.data.company_url) {
+      return NextResponse.json({ success: true }, { status: 201 });
     }
 
     const existing = await prisma.newsletterSubscriber.findUnique({
