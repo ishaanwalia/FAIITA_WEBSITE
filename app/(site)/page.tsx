@@ -91,7 +91,7 @@ export default async function HomePage() {
       <MembershipBenefits />
       {/* Pluckable divider — it does the same structural job a 1px rule would,
           so nothing is lost if the physics never runs. */}
-      <ElasticStrings strings={3} tone="light" className="h-20 w-full" />
+      <ElasticStrings strings={3} tone="light" className="h-10 w-full sm:h-20" />
       <JoinCta />
       <Testimonials
         testimonials={testimonials.map((t) => ({
