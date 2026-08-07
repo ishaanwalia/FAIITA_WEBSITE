@@ -36,7 +36,7 @@ export function SearchClient({ index }: { index: SearchEntry[] }) {
       ) : results.length > 0 ? (
         <ul className="mx-auto mt-10 max-w-2xl divide-y divide-navy-700/10">
           {results.map((entry) => (
-            <li key={entry.href}>
+            <li key={`${entry.type}-${entry.href}-${entry.title}`}>
               <Link
                 href={entry.href}
                 className="group flex items-start justify-between gap-4 py-4 hover:bg-navy-700/5"
