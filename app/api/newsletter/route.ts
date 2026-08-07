@@ -25,7 +25,12 @@ export async function POST(req: Request) {
       where: { email: parsed.data.email },
     });
 
-    if (!existing) {
+    if (existing?.deletedAt) {
+      // Soft-deleted (removed by an admin, or a future unsubscribe) — the
+      // unique email means create() would just fail, so undo the deletion
+      // instead of leaving them silently unable to ever resubscribe.
+      await prisma.newsletterSubscriber.update({ where: { id: existing.id }, data: { deletedAt: null } });
+    } else if (!existing) {
       await prisma.newsletterSubscriber.create({ data: { email: parsed.data.email } });
 
       // Notify FAIITA's official inboxes of new subscribers, same recipients

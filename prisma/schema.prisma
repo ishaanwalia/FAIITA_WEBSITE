@@ -192,15 +192,17 @@ model GalleryAlbum {
 }
 
 model GalleryPhoto {
-  id      String       @id @default(cuid())
-  albumId String
-  album   GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
-  src     String
-  caption String
-  order   Int          @default(0)
+  id        String       @id @default(cuid())
+  albumId   String
+  album     GalleryAlbum @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  src       String
+  caption   String
+  order     Int          @default(0)
+  deletedAt DateTime?
 
   @@unique([albumId, src])
   @@index([albumId, order])
+  @@index([deletedAt])
 }
 
 model Newsletter {
@@ -257,20 +259,26 @@ model Stat {
 }
 
 model ContactSubmission {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   name         String
   email        String
   phone        String?
   organization String?
   subject      String?
   message      String
-  createdAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
+  deletedAt    DateTime?
+
+  @@index([deletedAt])
 }
 
 model NewsletterSubscriber {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  subscribedAt DateTime @default(now())
+  id           String    @id @default(cuid())
+  email        String    @unique
+  subscribedAt DateTime  @default(now())
+  deletedAt    DateTime?
+
+  @@index([deletedAt])
 }
 
 /// CMS administrator. Three rows only (president, secretary, ishaan) — this is

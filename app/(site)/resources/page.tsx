@@ -22,7 +22,7 @@ export default async function ResourcesPage() {
   const [allNews, events, galleryItems, newsletters] = await Promise.all([
     prisma.news.findMany({ where: live, orderBy: { publishedAt: "desc" } }),
     prisma.event.findMany({ where: live, orderBy: { startDate: "asc" } }),
-    prisma.galleryAlbum.findMany({ where: live, orderBy: { order: "asc" }, include: { _count: { select: { photos: true } } } }),
+    prisma.galleryAlbum.findMany({ where: live, orderBy: { order: "asc" }, include: { _count: { select: { photos: { where: { deletedAt: null } } } } } }),
     prisma.newsletter.findMany({ where: live, orderBy: { issueDate: "desc" } }),
   ]);
 

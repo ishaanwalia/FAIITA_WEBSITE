@@ -21,7 +21,7 @@ export default async function GalleryPage() {
     prisma.galleryAlbum.findMany({
       where: { deletedAt: null },
       orderBy: { order: "asc" },
-      include: { photos: { orderBy: { order: "asc" } } },
+      include: { photos: { where: { deletedAt: null }, orderBy: { order: "asc" } } },
     }),
     prisma.galleryItem.findMany({
       where: { isDemo: false, deletedAt: null },

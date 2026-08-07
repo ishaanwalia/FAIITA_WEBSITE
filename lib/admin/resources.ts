@@ -182,7 +182,7 @@ const GALLERY_PHOTOS: Resource = {
   listFields: ["src", "caption", "order"],
   orderBy: { order: "asc" },
   sortable: true,
-  softDelete: false,
+  softDelete: true,
   parent: { resource: "gallery", foreignKey: "albumId" },
   revalidate: ["/resources", "/resources/gallery"],
   fields: [
@@ -350,7 +350,7 @@ const CONTACT: Resource = {
   labelField: "name",
   listFields: ["createdAt", "name", "email", "subject", "organization"],
   orderBy: { createdAt: "desc" },
-  softDelete: false,
+  softDelete: true,
   readOnly: true,
   revalidate: [],
   fields: [
@@ -372,7 +372,7 @@ const SUBSCRIBERS: Resource = {
   labelField: "email",
   listFields: ["subscribedAt", "email"],
   orderBy: { subscribedAt: "desc" },
-  softDelete: false,
+  softDelete: true,
   readOnly: true,
   revalidate: [],
   fields: [
