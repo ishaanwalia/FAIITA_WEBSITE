@@ -4,7 +4,7 @@ export type SearchEntry = {
   title: string;
   description: string;
   href: string;
-  type: "Page" | "State Association" | "Member Association" | "News" | "Event" | "Newsletter";
+  type: "Page" | "State Association" | "Member Association" | "News" | "Event" | "Newsletter" | "Leader";
 };
 
 const STATIC_PAGES: SearchEntry[] = [
@@ -22,12 +22,16 @@ const STATIC_PAGES: SearchEntry[] = [
 
 export async function getSearchIndex(): Promise<SearchEntry[]> {
   const live = { deletedAt: null };
-  const [states, members, news, events, newsletters] = await Promise.all([
+  const [states, members, news, events, newsletters, leaders] = await Promise.all([
     prisma.stateAssociation.findMany({ where: live, select: { stateName: true, associationName: true, slug: true } }),
     prisma.memberAssociation.findMany({ where: live, select: { name: true, city: true, slug: true } }),
     prisma.news.findMany({ where: live, select: { title: true, excerpt: true, slug: true } }),
     prisma.event.findMany({ where: live, select: { title: true, description: true, slug: true } }),
     prisma.newsletter.findMany({ where: live, select: { title: true, description: true, slug: true } }),
+    prisma.leader.findMany({
+      where: { ...live, category: "national", isCurrent: true },
+      select: { name: true, role: true, associationName: true },
+    }),
   ]);
 
   return [
@@ -61,6 +65,14 @@ export async function getSearchIndex(): Promise<SearchEntry[]> {
       description: n.description ?? "",
       href: `/resources/newsletter/${n.slug}`,
       type: "Newsletter",
+    })),
+    // No individual leader pages exist — every card lives on one shared
+    // page, so a name match still has to land somewhere useful.
+    ...leaders.map((l): SearchEntry => ({
+      title: l.name,
+      description: [l.role, l.associationName].filter(Boolean).join(" — "),
+      href: "/about/leadership",
+      type: "Leader",
     })),
   ];
 }
