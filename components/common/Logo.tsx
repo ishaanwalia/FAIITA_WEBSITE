@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,10 @@ import { cn } from "@/lib/utils";
  *
  * The mark is lifted on dark surfaces with a brightness/contrast filter
  * only — no panels, glows or backgrounds — applied everywhere it renders.
+ *
+ * The source file is 3508x1798 (a print-resolution export) for a mark that
+ * never renders past 64px tall — next/image downscales and serves it as
+ * AVIF/WebP instead of shipping the full 230KB PNG on every page.
  */
 export function Logo({ variant = "light", className }: { variant?: "light" | "dark"; className?: string }) {
   const [imgFailed, setImgFailed] = useState(false);
@@ -18,10 +23,12 @@ export function Logo({ variant = "light", className }: { variant?: "light" | "da
   return (
     <Link href="/" className={cn("flex shrink-0 items-center", className)} aria-label="FAIITA — Home">
       {!imgFailed ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src="/logo.png"
           alt="FAIITA"
+          width={3508}
+          height={1798}
+          priority
           className="h-14 w-auto object-contain brightness-[1.35] contrast-[1.1] sm:h-16"
           onError={() => setImgFailed(true)}
         />

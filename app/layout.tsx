@@ -56,10 +56,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
   },
   icons: {
-    icon: [
-      { url: "/favicon.jpg" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
+    // favicon.jpg used to be listed here unqualified (no sizes/type) — a
+    // 554x554, 36KB JPEG for a browser-tab icon, when this properly-sized
+    // PNG already covers the same slot.
+    icon: [{ url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" }],
     apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",
