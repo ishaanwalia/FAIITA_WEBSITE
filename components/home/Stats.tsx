@@ -14,7 +14,7 @@ import { SectionHeading } from "@/components/common/SectionHeading";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GradientMesh } from "@/components/common/GradientMesh";
 import { ParticleTrail } from "@/components/effects/ParticleTrail";
-import { GlyphDecode } from "@/components/effects/GlyphDecode";
+import { CountUp } from "@/components/effects/CountUp";
 import type { StatItem } from "@/types";
 
 /**
@@ -69,7 +69,7 @@ export function Stats({ stats }: { stats: StatItem[] }) {
         <div className="mt-14 grid grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-6">
           {stats.map((stat) => {
             const Icon = ICONS[stat.icon ?? ""] ?? Sparkles;
-            const figure = `${parseInt(stat.value.replace(/[^0-9]/g, ""), 10) || 0}${stat.suffix ?? ""}`;
+            const numericValue = parseInt(stat.value.replace(/[^0-9]/g, ""), 10) || 0;
             return (
               <div key={stat.id} className="group relative h-full">
                 <GlassCard
@@ -79,7 +79,7 @@ export function Stats({ stats }: { stats: StatItem[] }) {
                 >
                   <Icon className="h-6 w-6 text-saffron-400" />
                   <div className="stat-figure mt-4 text-3xl font-bold text-white sm:text-4xl">
-                    <GlyphDecode text={figure} stagger={0.07} />
+                    <CountUp value={numericValue} suffix={stat.suffix ?? ""} />
                   </div>
                   <p className="mt-2 text-xs font-medium uppercase tracking-wide text-white/50">{stat.label}</p>
                 </GlassCard>
