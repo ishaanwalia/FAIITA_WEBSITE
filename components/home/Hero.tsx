@@ -20,11 +20,6 @@ const FRAMES: HeroFrame[] = [
   { src: "/hero-frames/faiita-agm-2020-ahmedabad-06.jpg", alt: "FAIITA AGM 2020, Ahmedabad" },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  show: (delay = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] as const } }),
-};
-
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
@@ -45,46 +40,28 @@ export function Hero() {
       </motion.div>
 
       <motion.div style={{ y: contentY, opacity: contentOpacity }} className="container-page relative z-10 py-32">
+        {/* Plain tags, not motion.* with an opacity:0 initial state: this is
+            the hero's LCP element (measured — the subheadline specifically),
+            and gating it behind React hydration + framer-motion's boot cost
+            was adding ~4s of pure render delay on top of nothing. It paints
+            with the rest of the SSR HTML now; the parallax above still moves
+            it once the page is actually interactive. */}
         <div className="max-w-3xl">
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0.15}
-            className="mb-4 font-mono text-sm font-medium uppercase tracking-[0.2em] text-saffron-400 sm:text-base"
-          >
+          <p className="mb-4 font-mono text-sm font-medium uppercase tracking-[0.2em] text-saffron-400 sm:text-base">
             Uniting India&apos;s IT Fraternity Since 2014
-          </motion.p>
+          </p>
 
-          <motion.h1
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0.3}
-            className="mb-6 text-balance font-display text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl"
-          >
+          <h1 className="mb-6 text-balance font-display text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
             Federation of All India{" "}
             <span className="gradient-text-kinetic">Information Technology</span> Associations
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0.45}
-            className="mb-10 max-w-2xl text-balance text-lg leading-relaxed text-white/70"
-          >
+          <p className="mb-10 max-w-2xl text-balance text-lg leading-relaxed text-white/70">
             Uniting 50,000+ IT entrepreneurs across 26 states — one federated
             voice driving growth in Retail, Distribution, Services &amp; Solutions.
-          </motion.p>
+          </p>
 
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0.6}
-            className="flex flex-wrap items-center gap-4"
-          >
+          <div className="flex flex-wrap items-center gap-4">
             <MagneticButton asChild variant="accent" size="lg">
               <Link href="/about">
                 Explore FAIITA <ArrowRight className="h-4 w-4" />
@@ -93,7 +70,7 @@ export function Hero() {
             <MagneticButton asChild variant="outline" size="lg">
               <Link href="/about/state-associations">Our State Associations</Link>
             </MagneticButton>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
 
