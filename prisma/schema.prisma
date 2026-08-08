@@ -297,6 +297,11 @@ model AdminUser {
   /// until it is false.
   mustChangePassword Boolean   @default(true)
   lastLoginAt        DateTime?
+  /// Login throttling. Reset to 0 on a successful login. See lib/auth.ts.
+  failedLoginAttempts Int      @default(0)
+  /// Set once failedLoginAttempts crosses the threshold; login is refused
+  /// until this passes, regardless of password correctness.
+  lockedUntil        DateTime?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 }

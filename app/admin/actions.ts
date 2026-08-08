@@ -7,6 +7,11 @@ import { prisma } from "@/lib/prisma";
 
 export type FormState = { error?: string };
 
+// After this many wrong passwords in a row, the account is locked out rather
+// than scrypt's per-attempt cost being the only thing slowing a guesser down.
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS = 15 * 60 * 1000;
+
 export async function login(_prev: FormState, formData: FormData): Promise<FormState> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
@@ -18,9 +23,28 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
   // them apart is a free list of which addresses are admins.
   const invalid = { error: "Those details don't match an admin account." };
   if (!user) return invalid;
-  if (!(await verifyPassword(password, user.passwordHash))) return invalid;
 
-  await prisma.adminUser.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } });
+  if (user.lockedUntil && user.lockedUntil > new Date()) {
+    const minutes = Math.ceil((user.lockedUntil.getTime() - Date.now()) / 60000);
+    return { error: `Too many failed attempts. Try again in ${minutes} minute${minutes === 1 ? "" : "s"}.` };
+  }
+
+  if (!(await verifyPassword(password, user.passwordHash))) {
+    const attempts = user.failedLoginAttempts + 1;
+    await prisma.adminUser.update({
+      where: { id: user.id },
+      data: {
+        failedLoginAttempts: attempts,
+        lockedUntil: attempts >= MAX_ATTEMPTS ? new Date(Date.now() + LOCKOUT_MS) : user.lockedUntil,
+      },
+    });
+    return invalid;
+  }
+
+  await prisma.adminUser.update({
+    where: { id: user.id },
+    data: { lastLoginAt: new Date(), failedLoginAttempts: 0, lockedUntil: null },
+  });
   await startSession(user.id);
   redirect(user.mustChangePassword ? "/admin/password" : "/admin");
 }
