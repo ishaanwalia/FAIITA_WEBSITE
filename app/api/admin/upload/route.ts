@@ -1,6 +1,7 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { getAdmin } from "@/lib/auth";
+import { sniffImageType } from "@/lib/admin/image-sniff";
 import { slugify } from "@/lib/admin/resources";
 
 /**
@@ -49,11 +50,19 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: "That picture is over 8 MB. Try a smaller one." }, { status: 413 });
   }
 
+  // The declared type only decides what error message to show if it's
+  // obviously wrong. What actually gets stored, and the Content-Type it's
+  // served with, comes from the real bytes.
+  const actualType = await sniffImageType(file);
+  if (!actualType || !ALLOWED.has(actualType)) {
+    return NextResponse.json({ error: "That file isn't a picture we can use." }, { status: 415 });
+  }
+
   const stem = slugify(file.name.replace(/\.[^.]+$/, "")) || "image";
-  const blob = await put(`cms/${stem}.${EXTENSIONS[file.type]}`, file, {
+  const blob = await put(`cms/${stem}.${EXTENSIONS[actualType]}`, file, {
     access: "public",
     addRandomSuffix: true,
-    contentType: file.type,
+    contentType: actualType,
   });
 
   return NextResponse.json({ url: blob.url });

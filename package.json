@@ -20,6 +20,7 @@
     "admin:create": "tsx scripts/create-admins.ts",
     "admin:check": "tsx scripts/check-auth.ts",
     "admin:forms": "tsx scripts/check-admin-forms.ts",
+    "admin:upload-check": "tsx scripts/check-upload.ts",
     "render:snap": "tsx scripts/verify-render.ts snap",
     "render:diff": "tsx scripts/verify-render.ts diff before after"
   },
