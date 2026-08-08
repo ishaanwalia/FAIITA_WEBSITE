@@ -72,18 +72,20 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialItem[]
                 className="absolute inset-0 cursor-grab active:cursor-grabbing"
               >
                 <GlassCard variant="light" className="flex h-full flex-col gap-4">
-                  <Quote className="h-7 w-7 text-saffron-500/60" />
-                  <blockquote className="flex-1 text-sm leading-relaxed text-navy-800/90">
-                    &ldquo;{t.quote}&rdquo;
-                  </blockquote>
-                  <figcaption className="flex items-center gap-3 border-t border-navy-700/10 pt-4">
-                    <PhotoAvatar initials={initials(t.name)} imageUrl={t.imageUrl} size="sm" />
-                    <div>
-                      <p className="text-sm font-semibold text-navy-800">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
-                      <p className="text-xs text-saffron-700">{t.association}</p>
-                    </div>
-                  </figcaption>
+                  <figure className="flex h-full flex-col gap-4">
+                    <Quote className="h-7 w-7 text-saffron-500/60" />
+                    <blockquote className="flex-1 text-sm leading-relaxed text-navy-800/90">
+                      &ldquo;{t.quote}&rdquo;
+                    </blockquote>
+                    <figcaption className="flex items-center gap-3 border-t border-navy-700/10 pt-4">
+                      <PhotoAvatar initials={initials(t.name)} imageUrl={t.imageUrl} size="sm" />
+                      <div>
+                        <p className="text-sm font-semibold text-navy-800">{t.name}</p>
+                        <p className="text-xs text-muted-foreground">{t.role}</p>
+                        <p className="text-xs text-saffron-700">{t.association}</p>
+                      </div>
+                    </figcaption>
+                  </figure>
                 </GlassCard>
               </motion.div>
             </AnimatePresence>
