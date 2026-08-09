@@ -91,14 +91,32 @@
   .glass-dark {
     background: linear-gradient(135deg, rgba(19, 28, 46, 0.82), rgba(11, 18, 32, 0.9));
     border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(16px) saturate(140%);
+    /* -webkit- first: the build's CSS minifier collapses these two
+       declarations and keeps whichever is textually last, so with the
+       standard property second every browser — not just Safari — actually
+       gets a backdrop-filter. Verified against the compiled output; the
+       previous order shipped `none` to Chrome/Firefox on both desktop and
+       mobile. */
     -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
   }
   .glass-light {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.45));
     border: 1px solid rgba(11, 18, 32, 0.08);
-    backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+  }
+
+  /* Grid pages (state/member associations, news, events) render dozens of
+     .glass-light cards on screen at once — each backdrop-filter is its own
+     GPU compositing pass, and mobile GPUs choke on that count in a way
+     desktop never shows. Halving the blur radius keeps the glass look at a
+     fraction of the sampling cost. */
+  @media (max-width: 768px) {
+    .glass-dark, .glass-light {
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
+      backdrop-filter: blur(8px) saturate(120%);
+    }
   }
 
   .clip-corner {

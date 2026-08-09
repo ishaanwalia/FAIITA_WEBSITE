@@ -56,14 +56,14 @@ export function EventCalendar({ events }: { events: CalendarEvent[] }) {
           <div className="flex gap-1">
             <button
               onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-navy-700 hover:bg-secondary"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-navy-700 hover:bg-secondary"
               aria-label="Previous month"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-navy-700 hover:bg-secondary"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-navy-700 hover:bg-secondary"
               aria-label="Next month"
             >
               <ChevronRight className="h-4 w-4" />

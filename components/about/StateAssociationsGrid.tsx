@@ -69,7 +69,7 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
             type="search"
             aria-label="Search state associations by state or association name"
             placeholder="Search state or association..."
-            className="w-full rounded-full border border-border bg-card py-2 pl-9 pr-4 text-sm focus:border-navy-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
+            className="w-full rounded-full border border-border bg-card py-2 pl-9 pr-4 text-base focus:border-navy-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2 sm:text-sm"
           />
         </div>
       </div>

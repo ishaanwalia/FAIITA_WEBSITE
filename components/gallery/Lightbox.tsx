@@ -94,7 +94,7 @@ export function Lightbox({
           <button
             onClick={() => ref.current?.close()}
             aria-label="Close photo viewer"
-            className="rounded-full p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron-400"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron-400"
           >
             <X className="h-5 w-5" />
           </button>
@@ -121,7 +121,7 @@ export function Lightbox({
           <button
             onClick={() => go(-1)}
             aria-label="Previous photo"
-            className="shrink-0 rounded-full border border-white/15 p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron-400"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron-400"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -129,7 +129,7 @@ export function Lightbox({
           <button
             onClick={() => go(1)}
             aria-label="Next photo"
-            className="shrink-0 rounded-full border border-white/15 p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron-400"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-saffron-400"
           >
             <ChevronRight className="h-4 w-4" />
           </button>

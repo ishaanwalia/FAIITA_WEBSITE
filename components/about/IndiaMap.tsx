@@ -322,7 +322,7 @@ function StateDetailCard({ group, onClose }: { group: StateGroup; onClose: () =>
     <div className="relative max-h-[480px] overflow-y-auto rounded-3xl border border-border bg-card p-7">
       <button
         onClick={onClose}
-        className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary"
+        className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary"
         aria-label="Close details"
       >
         ×

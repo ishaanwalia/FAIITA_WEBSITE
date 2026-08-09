@@ -69,7 +69,7 @@ export function MemberAssociationsGrid({ members }: { members: MemberRow[] }) {
             type="search"
             aria-label="Search member associations by name, city or state"
             placeholder="Search by name, city, state..."
-            className="w-full rounded-full border border-border bg-card py-2 pl-9 pr-4 text-sm focus:border-navy-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2"
+            className="w-full rounded-full border border-border bg-card py-2 pl-9 pr-4 text-base focus:border-navy-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-700 focus-visible:ring-offset-2 sm:text-sm"
           />
         </div>
       </div>

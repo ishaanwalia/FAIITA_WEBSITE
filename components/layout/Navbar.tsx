@@ -129,7 +129,13 @@ export function Navbar() {
           meant to land the fix here and put it one level up by mistake. */}
       <div
         className={cn(
-          "transition-all duration-500 [transform:translateZ(0)] will-change-transform",
+          // Explicit properties, not transition-all: that was animating
+          // backdrop-filter itself over 500ms on every scroll-threshold
+          // crossing, which is the one CSS property mobile GPUs are slowest
+          // to interpolate — the visible "hang" when tapping the header
+          // shortly after a scroll. The blur now snaps in/out instantly;
+          // only the cheap properties (background/border/shadow) animate.
+          "transition-[background-color,border-color,box-shadow] duration-500 [transform:translateZ(0)] will-change-transform",
           scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
         )}
       >
