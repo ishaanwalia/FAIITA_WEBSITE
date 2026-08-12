@@ -96,6 +96,14 @@ export default async function ResourceListPage({ params, searchParams }: Props) 
         </div>
 
         <div className="flex items-center gap-3 text-xs">
+          {resource.readOnly && rows.length > 0 && !showingDeleted && (
+            <a
+              href={`/admin/${resource.key}/export`}
+              className="rounded-full border border-white/15 px-4 py-2 text-white/60 hover:text-white"
+            >
+              Download (Excel)
+            </a>
+          )}
           {resource.softDelete && (
             <Link
               href={`/admin/${resource.key}${showingDeleted ? "" : "?deleted=1"}`}
