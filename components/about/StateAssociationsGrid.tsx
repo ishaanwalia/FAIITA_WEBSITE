@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Search, Users } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { LogoImage } from "@/components/common/LogoImage";
@@ -21,6 +22,7 @@ type StateRow = {
 const ZONE_ORDER = ["North", "East", "Central", "West", "South"];
 
 export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
 
   const regions = useMemo(
@@ -30,12 +32,14 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
 
   // The zone lives in the URL (not local state) so that browser/swipe back
   // from an association's page restores the same filtered view instead of
-  // resetting to "All". Read/written via the native History API rather than
-  // next/navigation's router: a useSearchParams() consumer on this
-  // statically-generated page forces its Suspense boundary into
+  // resetting to "All". The *initial* read is plain window.location, not
+  // useSearchParams(): a useSearchParams() consumer on this statically
+  // generated page forced its Suspense boundary into
   // BAILOUT_TO_CLIENT_SIDE_RENDERING, which on a hard navigation never
-  // resolved client-side either — the whole grid stayed blank. Plain
-  // location/history sidesteps that machinery entirely.
+  // resolved client-side either — the whole grid stayed blank. Writes go
+  // through router.replace() (not raw history.replaceState) — bypassing
+  // Next's router desynced its own history bookkeeping from the real
+  // browser history stack, so Back skipped straight past this page.
   const [region, setRegionState] = useState("All");
   useEffect(() => {
     const zone = new URLSearchParams(window.location.search).get("zone");
@@ -52,7 +56,7 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
     else params.set("zone", r.toLowerCase());
     const qs = params.toString();
     const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
-    window.history.replaceState(null, "", url);
+    router.replace(url, { scroll: false });
   };
 
   // A-Z by association name; "All" shows one flat list, a zone tab shows only
