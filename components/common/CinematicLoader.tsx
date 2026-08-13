@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { INDIA_DOTS, INDIA_HUBS } from "@/lib/india-dots";
 
@@ -16,9 +16,9 @@ import { INDIA_DOTS, INDIA_HUBS } from "@/lib/india-dots";
  *
  *  - sessionStorage is claimed on mount, not on completion, so reloading
  *    mid-intro no longer replays it;
- *  - the overlay renders on first paint instead of appearing after the page
- *    has already painted underneath it;
- *  - 1.6s total instead of 2.7s;
+ *  - the overlay defaults to shown (in the SSR markup itself, not behind a
+ *    client-only state flag) so it's part of the very first paint, ahead of
+ *    the header and everything else on the page it's meant to be masking;
  *  - brand tokens instead of three hardcoded off-palette hex values;
  *  - a resize handler;
  *  - the rAF loop stops when the animation is over rather than running through
@@ -27,9 +27,9 @@ import { INDIA_DOTS, INDIA_HUBS } from "@/lib/india-dots";
 
 const SESSION_KEY = "faiita-intro-played";
 
-// Beats (ms). Deliberately short — an intro is a threshold, not a feature.
-const ASSEMBLE = 900;
-const HOLD = 350;
+// Beats (ms).
+const ASSEMBLE = 1900;
+const HOLD = 3350;
 const EXIT = 350;
 
 const INK = "#0B1220";
@@ -39,15 +39,18 @@ const ORANGE_LIGHT = "251, 146, 60";
 export function CinematicLoader() {
   const prefersReduced = useReducedMotion();
 
-  // Resolved during the first render, not in an effect: deciding *after* mount
-  // meant the page painted first and was then covered, which is the worst of
-  // both worlds. `null` = undecided (SSR), so nothing renders until the client
-  // knows — and the client knows on its very first pass.
-  const [show, setShow] = useState<boolean | null>(null);
+  // Defaults to shown, both on the server and on the client's first pass, so
+  // the overlay is part of the very first HTML the browser paints — before
+  // React hydrates, before the header or anything behind it is visible. The
+  // decision to skip it (already played this session, or reduced motion)
+  // can only be made client-side, so it happens in a layout effect: that
+  // still runs before the browser paints the *hydrated* tree, so a repeat
+  // visit hides the overlay before it's ever shown rather than after.
+  const [show, setShow] = useState(true);
   const [exiting, setExiting] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (prefersReduced) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setShow(false);
@@ -57,7 +60,7 @@ export function CinematicLoader() {
     // Claimed up front. The old version only wrote this once the animation
     // finished, so any reload during the intro replayed it.
     sessionStorage.setItem(SESSION_KEY, "1");
-    setShow(!played);
+    if (played) setShow(false);
   }, [prefersReduced]);
 
   useEffect(() => {
