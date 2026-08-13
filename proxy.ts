@@ -65,7 +65,10 @@ export function proxy(request: NextRequest) {
   // — that's the scenario where 'unsafe-inline' actually matters.
   const csp = [
     `default-src 'self'`,
-    `script-src 'self' 'unsafe-inline'`,
+    // 'unsafe-eval' is dev-only: React's development build uses eval() for
+    // callstack reconstruction, and without it hydration dies on localhost —
+    // the page renders but nothing is interactive. Never sent in production.
+    `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: https://images.unsplash.com https://*.public.blob.vercel-storage.com`,
     `font-src 'self'`,

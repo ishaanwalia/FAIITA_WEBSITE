@@ -256,18 +256,22 @@ a:focus-visible,
   border-radius: 4px;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .cursor-none-desktop {
-    cursor: none;
-  }
-}
-
 /* Global cursor hide when the custom cursor is active (desktop, fine pointer only) */
 @media (hover: hover) and (pointer: fine) {
   html.custom-cursor-active,
   html.custom-cursor-active a,
   html.custom-cursor-active button {
     cursor: none;
+  }
+
+  /* …except inside a modal <dialog>. showModal() paints it in the top layer,
+     which sits above every z-index on the page — the custom cursor's included.
+     Hiding the native one there leaves no cursor at all, which is how the
+     gallery photo viewer ended up with none. */
+  html.custom-cursor-active dialog:modal,
+  html.custom-cursor-active dialog:modal a,
+  html.custom-cursor-active dialog:modal button {
+    cursor: auto;
   }
 }
 
