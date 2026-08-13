@@ -2,7 +2,6 @@ import { CinematicLoader } from "@/components/common/CinematicLoader";
 import { SmoothScroll } from "@/components/common/SmoothScroll";
 import { ScrollReset } from "@/components/common/ScrollReset";
 import { CustomCursor } from "@/components/common/CustomCursor";
-import { ScrollProgress } from "@/components/common/ScrollProgress";
 import { PageTransition } from "@/components/common/PageTransition";
 import { BackToTop } from "@/components/common/BackToTop";
 import { ReadingRail } from "@/components/common/ReadingRail";
@@ -21,7 +20,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       </a>
       <CinematicLoader />
       <CustomCursor />
-      <ScrollProgress />
       <Navbar />
       <ReadingRail />
       {/* -mt-20 cancels the flow-height the sticky header (see Navbar.tsx)

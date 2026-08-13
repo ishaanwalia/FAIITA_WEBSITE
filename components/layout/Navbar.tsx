@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Menu, Search, X } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
+import { ScrollProgress } from "@/components/common/ScrollProgress";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { navItems } from "@/lib/nav";
 import { cn } from "@/lib/utils";
@@ -258,6 +259,7 @@ export function Navbar() {
         </div>
       </div>
       </div>
+      <ScrollProgress />
     </header>
 
     {/* Sibling of <header>, not a descendant — keep it that way even though
