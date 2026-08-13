@@ -18,7 +18,12 @@ export function parseField(field: Field, form: FormLike): unknown {
   // tell "off" from "not on this form".
   if (field.type === "boolean") return form.get(field.name) !== null;
 
-  const raw = String(form.get(field.name) ?? "").trim();
+  // Browsers submit textareas with CRLF line endings — the HTML spec mandates
+  // it. Stored raw, the news page's `content.split(/\n{2,}/)` never matches, so
+  // every paragraph break an editor typed collapses into one wall of text.
+  const raw = String(form.get(field.name) ?? "")
+    .replace(/\r\n/g, "\n")
+    .trim();
 
   if (raw === "") {
     if (field.required) throw new Error(`${field.label} is required.`);

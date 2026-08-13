@@ -51,6 +51,16 @@ assert.throws(
 // site's `?? fallback` branches behave.
 assert.equal(generated.sourceUrl, null);
 
+// A textarea arrives CRLF-delimited from the browser. It must land in the
+// column as plain \n or the news page's paragraph split silently matches
+// nothing and the whole article renders as one block.
+assert.equal(
+  parseForm(news, form({ title: "t", excerpt: "x", content: "One.\r\n\r\nTwo.", category: "Policy", publishedAt: "2026-08-05" }))
+    .content,
+  "One.\n\nTwo.",
+  "CRLF from a textarea is normalised before it is stored",
+);
+
 // --- checkboxes -----------------------------------------------------------
 
 // An unchecked box submits nothing at all — absence must read as false, not as
