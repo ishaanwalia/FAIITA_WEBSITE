@@ -44,9 +44,20 @@ export function PageHero({
     <section ref={ref} className="relative overflow-hidden bg-navy-800 py-24">
       <motion.div style={{ y }} className="absolute inset-0">
         <div aria-hidden className="animated-gradient absolute inset-0" />
-        <GradientMesh variant={variant} />
+        {/* GradientMesh's three orbs and the aurora orb below are each a
+            continuously CSS-animated 60-100px blur — cheap one at a time, but
+            stacked and running for as long as the visitor is on the page,
+            they're a real compositor cost that mobile GPUs measurably drop
+            frames on, which is what made the fixed header above visibly lag
+            behind fast scrolling on every page carrying a PageHero (i.e.
+            every page except home, which uses its own lighter Hero). Hidden
+            below md rather than throttled — this content is decorative
+            (aria-hidden) so there's nothing to preserve. */}
+        <div className="hidden md:block">
+          <GradientMesh variant={variant} />
+        </div>
         <div className="absolute inset-0 bg-network-grid opacity-10" />
-        <div aria-hidden className={`aurora-orb ${ACCENT_ORB[variant]}`} />
+        <div aria-hidden className={`hidden md:block aurora-orb ${ACCENT_ORB[variant]}`} />
         <div aria-hidden className="grain absolute inset-0" />
       </motion.div>
       <div className="container-page relative">
