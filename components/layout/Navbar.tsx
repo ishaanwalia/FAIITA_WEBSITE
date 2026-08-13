@@ -112,21 +112,20 @@ export function Navbar() {
 
   return (
     <>
-    {/* No transform / will-change on <header> itself. Promoting a
-        position:fixed element to its own composited layer is the one thing
-        that can make it visibly lag a scroll: Lenis scrolls by calling
-        window.scrollTo on the main thread each frame, and the promoted layer
-        is repositioned a frame late, so the bar drifts down and settles when
-        the scroll stops. The home page hid it because its header is
-        transparent over a dark hero for the whole first screen. The GPU
-        promotion that mobile WebKit's backdrop-filter actually needs lives on
-        the inner div below, which is the element that has the backdrop-filter. */}
+    {/* No transform / will-change on <header> itself — see the inner div's
+        comment for why. The home page hid the drift because its header is
+        transparent over a dark hero for the whole first screen. */}
     <header className="fixed inset-x-0 top-0 z-50 isolate">
       {/* The GPU promotion belongs on this div, not on <header>: this is the
           element that carries backdrop-filter (via .glass-dark), and it's the
           backdrop-filter layer mobile WebKit drops during momentum scroll,
           making the bar go transparent mid-scroll on non-home pages. f2873e3
-          meant to land the fix here and put it one level up by mistake. */}
+          meant to land the fix here and put it one level up by mistake.
+          But that promotion is scoped to WebKit only (.webkit-gpu-promote,
+          globals.css): a promoted compositor layer nested in a fixed header
+          visibly lags a frame behind fast/JS-driven scroll and drags the
+          whole header down until scrolling stops — reported on Chrome,
+          where nothing needed the backdrop-filter promotion to begin with. */}
       <div
         className={cn(
           // Explicit properties, not transition-all: that was animating
@@ -135,7 +134,7 @@ export function Navbar() {
           // to interpolate — the visible "hang" when tapping the header
           // shortly after a scroll. The blur now snaps in/out instantly;
           // only the cheap properties (background/border/shadow) animate.
-          "transition-[background-color,border-color,box-shadow] duration-500 [transform:translateZ(0)] will-change-transform",
+          "webkit-gpu-promote transition-[background-color,border-color,box-shadow] duration-500",
           scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
         )}
       >

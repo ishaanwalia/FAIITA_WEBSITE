@@ -107,6 +107,20 @@
     backdrop-filter: blur(16px) saturate(160%);
   }
 
+  /* GPU-promote an element only on WebKit — needed so mobile Safari's
+     backdrop-filter (e.g. the Navbar's glass background) doesn't drop
+     during momentum scroll. On other engines this promotion buys nothing
+     and costs a compositor layer that visibly lags a frame behind
+     JS-driven or fast native scroll, dragging a fixed header down until
+     scrolling stops. `-webkit-touch-callout` is a WebKit-only property
+     with no effect here beyond gating this rule. */
+  @supports (-webkit-touch-callout: none) {
+    .webkit-gpu-promote {
+      transform: translateZ(0);
+      will-change: transform;
+    }
+  }
+
   /* Grid pages (state/member associations, news, events) render dozens of
      .glass-light cards on screen at once — each backdrop-filter is its own
      GPU compositing pass, and mobile GPUs choke on that count in a way
