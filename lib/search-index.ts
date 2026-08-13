@@ -30,7 +30,7 @@ export async function getSearchIndex(): Promise<SearchEntry[]> {
     prisma.newsletter.findMany({ where: live, select: { title: true, description: true, slug: true } }),
     prisma.leader.findMany({
       where: { ...live, category: "national", isCurrent: true },
-      select: { name: true, role: true, associationName: true },
+      select: { name: true, role: true, associationName: true, stateName: true },
     }),
   ]);
 
@@ -70,7 +70,7 @@ export async function getSearchIndex(): Promise<SearchEntry[]> {
     // page, so a name match still has to land somewhere useful.
     ...leaders.map((l): SearchEntry => ({
       title: l.name,
-      description: [l.role, l.associationName].filter(Boolean).join(" — "),
+      description: [l.role, l.associationName, l.stateName].filter(Boolean).join(" — "),
       href: "/about/leadership",
       type: "Leader",
     })),

@@ -38,7 +38,11 @@ async function record(
  */
 function publish(resource: Resource): void {
   for (const path of resource.revalidate) {
-    if (path.includes("[")) revalidatePath(path, "page");
+    // Dynamic pages live under the `(site)` route group. revalidatePath's
+    // pattern matching works against the file structure, not the URL, so the
+    // group segment must be included here or the purge silently matches
+    // nothing — see node_modules/next/dist/docs/.../revalidatePath.md.
+    if (path.includes("[")) revalidatePath(`/(site)${path}`, "page");
     else revalidatePath(path);
   }
 }

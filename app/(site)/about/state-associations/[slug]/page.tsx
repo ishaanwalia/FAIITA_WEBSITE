@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, Building2, Calendar, Globe, Mail, Users } from "lucide-react";
+import { Building2, Calendar, Globe, Mail, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { jsonLd, normalizeZone } from "@/lib/utils";
 import { LogoImage } from "@/components/common/LogoImage";
-import { Breadcrumbs } from "@/components/common/Breadcrumbs";
+import { StateBackNav } from "@/components/about/StateBackNav";
 
 export const revalidate = 3600;
 
@@ -72,13 +71,7 @@ export default async function StateDetailPage({ params }: { params: Promise<{ sl
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(associationSchema) }} />
       <section className="bg-navy-800 py-20">
         <div className="container-page">
-          <Breadcrumbs
-            light
-            items={[{ label: "State Associations", href: "/about/state-associations" }, { label: state.stateName }]}
-          />
-          <Link href="/about/state-associations" className="mt-4 flex items-center gap-1.5 text-sm text-white/60 hover:text-white">
-            <ArrowLeft className="h-3.5 w-3.5" /> All state associations
-          </Link>
+          <StateBackNav stateName={state.stateName} />
           <span className="mt-6 inline-block rounded-full bg-saffron-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-saffron-400">
             {normalizeZone(state.region)} Zone
           </span>

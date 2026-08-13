@@ -265,7 +265,7 @@ const LEADERS: Resource = {
   label: "Leadership",
   singular: "leader",
   labelField: "name",
-  listFields: ["order", "name", "role", "term", "isCurrent"],
+  listFields: ["order", "name", "role", "stateName", "term", "isCurrent"],
   // Serving members first, then the previous Governing Body — otherwise the
   // two terms interleave by position number and the list reads as nonsense.
   orderBy: [{ isCurrent: "desc" }, { order: "asc" }],

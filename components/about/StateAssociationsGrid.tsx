@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Search, Users } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { LogoImage } from "@/components/common/LogoImage";
@@ -21,13 +22,29 @@ type StateRow = {
 const ZONE_ORDER = ["North", "East", "Central", "West", "South"];
 
 export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
-  const [region, setRegion] = useState("All");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
 
   const regions = useMemo(
     () => ["All", ...ZONE_ORDER.filter((z) => states.some((s) => s.region === z))],
     [states]
   );
+
+  // The zone lives in the URL (not local state) so that browser/swipe back
+  // from an association's page restores the same filtered view instead of
+  // resetting to "All".
+  const zoneParam = searchParams.get("zone");
+  const region = regions.find((r) => r.toLowerCase() === zoneParam?.toLowerCase()) ?? "All";
+
+  const setRegion = (r: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (r === "All") params.delete("zone");
+    else params.set("zone", r.toLowerCase());
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
 
   // A-Z by association name; "All" shows one flat list, a zone tab shows only
   // that zone under a single heading.
@@ -83,7 +100,10 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((s) => (
                 <div key={s.id} className="group relative h-full">
-                  <Link href={`/about/state-associations/${s.slug}`} className="group block h-full">
+                  <Link
+                    href={`/about/state-associations/${s.slug}${region !== "All" ? `?zone=${region.toLowerCase()}` : ""}`}
+                    className="group block h-full"
+                  >
                     <GlassCard variant="light" glow="cool" bloom={false} className="flex h-full flex-col">
                       <div className="flex items-start gap-3">
                         <LogoImage logoUrl={s.logoUrl} alt={s.associationName} size="sm" />

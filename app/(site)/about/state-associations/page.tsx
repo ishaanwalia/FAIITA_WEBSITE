@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PageHero } from "@/components/common/PageHero";
 import { StateAssociationsGrid } from "@/components/about/StateAssociationsGrid";
 import { prisma } from "@/lib/prisma";
@@ -33,7 +34,9 @@ export default async function StateAssociationsPage() {
           <h2 id="all-state-associations" className="sr-only">
             All state associations
           </h2>
-          <StateAssociationsGrid states={states} />
+          <Suspense fallback={null}>
+            <StateAssociationsGrid states={states} />
+          </Suspense>
         </div>
       </section>
     </>

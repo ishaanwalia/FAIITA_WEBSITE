@@ -31,7 +31,18 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   return (
     <ReactLenis
       root
-      options={{ lerp: smooth ? 0.1 : 1, duration: smooth ? 1.2 : 0, syncTouch: false, autoRaf: smooth }}
+      options={{
+        lerp: smooth ? 0.1 : 1,
+        duration: smooth ? 1.2 : 0,
+        syncTouch: false,
+        // Below the smoothing threshold, wheel input must bypass Lenis's
+        // animated scroll entirely, not just run it at duration 0 — Lenis
+        // still requires autoRaf (off here) to render that animation, so a
+        // wheel scroll could get stuck applied-but-unpainted until a native
+        // scroll event (dragging the scrollbar) resynced it.
+        smoothWheel: smooth,
+        autoRaf: smooth,
+      }}
     >
       {children}
     </ReactLenis>
