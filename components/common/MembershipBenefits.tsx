@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   Landmark,
   Network,
@@ -51,6 +54,8 @@ const benefits = [
 ];
 
 export function MembershipBenefits({ eyebrow = "Why FAIITA" }: { eyebrow?: string }) {
+  const router = useRouter();
+
   return (
     <section className="bg-background py-24">
       <div className="container-page">
@@ -75,7 +80,16 @@ export function MembershipBenefits({ eyebrow = "Why FAIITA" }: { eyebrow?: strin
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-navy-900/70 to-transparent" />
-                    <div className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-xl bg-saffron-500 text-navy-900">
+                    <div
+                      className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-xl bg-saffron-500 text-navy-900"
+                      // Mobile/no-mouse equivalent of the string-clicking CMS
+                      // shortcut on the homepage divider (ElasticStrings needs
+                      // a fine pointer, so it's unreachable on touch). Double
+                      // tap/click works as a native gesture on both.
+                      {...(b.title === "Strategic Networking" && {
+                        onDoubleClick: () => router.push("/admin/login"),
+                      })}
+                    >
                       <b.icon className="h-5 w-5" />
                     </div>
                   </div>

@@ -27,12 +27,23 @@ export function ElasticStrings({
   strings = 3,
   tone = "light",
   className,
+  onStringClick,
 }: {
   strings?: number;
   tone?: Tone;
   className?: string;
+  /** Fires on click (not hover) with the clicked string's position, 1 = topmost. */
+  onStringClick?: (position: number) => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Mirrored in a ref rather than the effect below depending on it directly:
+  // an inline callback from the caller gets a new identity every render, and
+  // this effect owns the spring state — restarting it on every parent render
+  // would reset every string's physics mid-wobble.
+  const onStringClickRef = useRef(onStringClick);
+  useEffect(() => {
+    onStringClickRef.current = onStringClick;
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -101,6 +112,24 @@ export function ElasticStrings({
     canvas.addEventListener("pointermove", onMove as EventListener);
     canvas.addEventListener("pointerleave", onLeave);
 
+    const onClick = (e: MouseEvent) => {
+      if (!onStringClickRef.current) return;
+      const r = canvas.getBoundingClientRect();
+      const y = e.clientY - r.top;
+      const gap = h / (strings + 1);
+      let closest = 0;
+      let closestDist = Infinity;
+      for (let i = 0; i < strings; i++) {
+        const dist = Math.abs(y - gap * (i + 1));
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = i;
+        }
+      }
+      if (closestDist < gap * 0.9) onStringClickRef.current(closest + 1);
+    };
+    canvas.addEventListener("click", onClick);
+
     const stop = registerCanvasTask(canvas, (dt) => {
       const gap = h / (strings + 1);
       state.forEach((s, i) => {
@@ -127,6 +156,7 @@ export function ElasticStrings({
       window.removeEventListener("resize", resize);
       canvas.removeEventListener("pointermove", onMove as EventListener);
       canvas.removeEventListener("pointerleave", onLeave);
+      canvas.removeEventListener("click", onClick);
     };
   }, [strings, tone]);
 

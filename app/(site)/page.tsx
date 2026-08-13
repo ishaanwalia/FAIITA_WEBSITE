@@ -8,7 +8,7 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { NewsSection } from "@/components/home/NewsSection";
 import { EventsSection } from "@/components/home/EventsSection";
 import { ReadyToConnect } from "@/components/home/ReadyToConnect";
-import { ElasticStrings } from "@/components/effects/ElasticStrings";
+import { SecretDivider } from "@/components/effects/SecretDivider";
 import { prisma } from "@/lib/prisma";
 import type { StatItem } from "@/types";
 
@@ -90,8 +90,9 @@ export default async function HomePage() {
       <Stats stats={stats.map((s) => (statFixes[s.label] ? { ...s, ...statFixes[s.label] } : s))} />
       <MembershipBenefits />
       {/* Pluckable divider — it does the same structural job a 1px rule would,
-          so nothing is lost if the physics never runs. */}
-      <ElasticStrings strings={3} tone="light" className="h-10 w-full sm:h-20" />
+          so nothing is lost if the physics never runs. Also a hidden CMS
+          shortcut, see SecretDivider. */}
+      <SecretDivider className="h-10 w-full sm:h-20" />
       <JoinCta />
       <Testimonials
         testimonials={testimonials.map((t) => ({
