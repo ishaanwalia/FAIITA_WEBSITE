@@ -112,20 +112,19 @@ export function Navbar() {
 
   return (
     <>
-    {/* No transform / will-change on <header> itself — see the inner div's
-        comment for why. The home page hid the drift because its header is
-        transparent over a dark hero for the whole first screen. */}
+    {/* No transform / will-change anywhere in this header, on <header> or the
+        inner div below. It was on the inner div (the one carrying
+        backdrop-filter via .glass-dark) to stop iOS Safari dropping the
+        blur during momentum scroll — see f2873e3 and the WebKit-only
+        .webkit-gpu-promote attempt that followed it. But confirmed against
+        a real iPhone: promoting that layer is *why* fast/"hard" scrolls
+        visibly drag the header down until scrolling settles — a well-known
+        iOS Safari behavior where an extra compositor layer nested inside a
+        position:fixed element desyncs from it during fast momentum scroll.
+        A header that occasionally shows its background solid instead of
+        blurred beats one that visibly detaches from the top of the screen,
+        so the promotion is gone rather than re-scoped again. */}
     <header className="fixed inset-x-0 top-0 z-50 isolate">
-      {/* The GPU promotion belongs on this div, not on <header>: this is the
-          element that carries backdrop-filter (via .glass-dark), and it's the
-          backdrop-filter layer mobile WebKit drops during momentum scroll,
-          making the bar go transparent mid-scroll on non-home pages. f2873e3
-          meant to land the fix here and put it one level up by mistake.
-          But that promotion is scoped to WebKit only (.webkit-gpu-promote,
-          globals.css): a promoted compositor layer nested in a fixed header
-          visibly lags a frame behind fast/JS-driven scroll and drags the
-          whole header down until scrolling stops — reported on Chrome,
-          where nothing needed the backdrop-filter promotion to begin with. */}
       <div
         className={cn(
           // Explicit properties, not transition-all: that was animating
@@ -134,7 +133,7 @@ export function Navbar() {
           // to interpolate — the visible "hang" when tapping the header
           // shortly after a scroll. The blur now snaps in/out instantly;
           // only the cheap properties (background/border/shadow) animate.
-          "webkit-gpu-promote transition-[background-color,border-color,box-shadow] duration-500",
+          "transition-[background-color,border-color,box-shadow] duration-500",
           scrolled ? "glass-dark border-b shadow-lg shadow-black/10" : "bg-transparent border-b border-transparent"
         )}
       >
