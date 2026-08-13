@@ -29,7 +29,7 @@ const SESSION_KEY = "faiita-intro-played";
 
 // Beats (ms).
 const ASSEMBLE = 1900;
-const HOLD = 3350;
+const HOLD = 2350;
 const EXIT = 350;
 
 const INK = "#0B1220";
