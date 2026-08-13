@@ -24,7 +24,12 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <ScrollProgress />
       <Navbar />
       <ReadingRail />
-      <main id="main">
+      {/* -mt-20 cancels the flow-height the sticky header (see Navbar.tsx)
+          now reserves, so every page's content still starts at y=0 with the
+          header floating transparently over it — the same look `position:
+          fixed` gave for free, just achieved from a header that's back in
+          normal document flow. */}
+      <main id="main" className="-mt-20">
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer />

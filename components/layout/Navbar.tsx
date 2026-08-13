@@ -52,6 +52,20 @@ export function Navbar() {
     setOpenDropdown(null);
   }, [pathname]);
 
+  // The mobile panel is its own position:fixed overlay (see the note by its
+  // JSX below) — if the page behind it can still scroll while it's open,
+  // it's exposed to the same iOS Safari fixed-position desync the header
+  // just moved off of. Locking body scroll for as long as the panel is
+  // shown means there's no scroll for it to desync from.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
+
   // Escape closes whichever nav surface is open; on the mobile panel it also
   // returns focus to the toggle button so keyboard users aren't left stranded.
   useEffect(() => {
@@ -112,19 +126,20 @@ export function Navbar() {
 
   return (
     <>
-    {/* No transform / will-change anywhere in this header, on <header> or the
-        inner div below. It was on the inner div (the one carrying
-        backdrop-filter via .glass-dark) to stop iOS Safari dropping the
-        blur during momentum scroll — see f2873e3 and the WebKit-only
-        .webkit-gpu-promote attempt that followed it. But confirmed against
-        a real iPhone: promoting that layer is *why* fast/"hard" scrolls
-        visibly drag the header down until scrolling settles — a well-known
-        iOS Safari behavior where an extra compositor layer nested inside a
-        position:fixed element desyncs from it during fast momentum scroll.
-        A header that occasionally shows its background solid instead of
-        blurred beats one that visibly detaches from the top of the screen,
-        so the promotion is gone rather than re-scoped again. */}
-    <header className="fixed inset-x-0 top-0 z-50 isolate">
+    {/* sticky, not fixed — see the note above this component's other history
+        of position tweaks. Removing the inner div's GPU-layer promotion
+        (previous fix, still true and still worth keeping — see
+        f2873e3/.webkit-gpu-promote history) cut how often iOS Safari
+        desynced this header from the viewport during scroll, but confirmed
+        against a real iPhone across several pages that fixed positioning
+        itself is what iOS occasionally loses track of mid-scroll, appearing
+        to drag the header down until the page settles or hits the top. This
+        is a long-documented WebKit engine behavior, not specific to any CSS
+        we add to the element — sticky is the standard, more reliable
+        alternative on iOS, at the cost of the header now occupying real
+        space in the layout: (site)/layout.tsx cancels that with -mt-20 on
+        <main>, so every page's content still starts at the same y=0 look. */}
+    <header className="sticky top-0 z-50 isolate w-full">
       <div
         className={cn(
           // Explicit properties, not transition-all: that was animating
@@ -222,25 +237,38 @@ export function Navbar() {
           </MagneticButton>
         </div>
 
-        <button
-          ref={mobileToggleRef}
-          className="flex h-11 w-11 items-center justify-center rounded-full text-white lg:hidden"
-          onClick={() => setMobileOpen((v) => !v)}
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-nav-panel"
-        >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-1 lg:hidden">
+          <Link
+            href="/search"
+            aria-label="Search the site"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            <Search className="h-5 w-5" />
+          </Link>
+          <button
+            ref={mobileToggleRef}
+            className="flex h-11 w-11 items-center justify-center rounded-full text-white"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-panel"
+          >
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
       </div>
     </header>
 
-    {/* Sibling of <header>, not a descendant. It has to stay that way: the
-        header's inner div carries a transform for GPU promotion, and a
-        transform on an ancestor creates a containing block for this panel's
-        own position:fixed, which previously shrank it to the header's ~80px
-        box (see git history on this file before changing this split again). */}
+    {/* Sibling of <header>, not a descendant — keep it that way even though
+        <header> no longer carries a transform. A transform on an ancestor
+        creates a containing block for this panel's own position:fixed,
+        which previously shrank it to the header's ~80px box the one time
+        that changed (see git history on this file). This panel stays fixed
+        rather than following <header> to sticky — it's a full-screen
+        overlay, not something meant to scroll into place — with the body
+        scroll lock above standing in for the reliability sticky buys the
+        header. */}
     <AnimatePresence>
       {mobileOpen && (
         <motion.div
