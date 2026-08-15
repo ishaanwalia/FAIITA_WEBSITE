@@ -67,7 +67,13 @@ export function CinematicLoader() {
     if (!show) return;
     const timers = [
       window.setTimeout(() => setExiting(true), ASSEMBLE + HOLD),
-      window.setTimeout(() => setShow(false), ASSEMBLE + HOLD + EXIT),
+      window.setTimeout(() => {
+        setShow(false);
+        // The homepage poster waits for this rather than guessing at the beat
+        // total, so retuning ASSEMBLE/HOLD/EXIT can never leave it opening
+        // underneath a black screen. See components/common/PopupPoster.tsx.
+        window.dispatchEvent(new Event("faiita:intro-done"));
+      }, ASSEMBLE + HOLD + EXIT),
     ];
     return () => timers.forEach(clearTimeout);
   }, [show]);
@@ -153,6 +159,7 @@ export function CinematicLoader() {
 
   return (
     <motion.div
+      id="intro-loader"
       className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: INK }}
       animate={{ opacity: exiting ? 0 : 1 }}

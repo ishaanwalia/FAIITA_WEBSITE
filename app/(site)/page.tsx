@@ -9,7 +9,9 @@ import { NewsSection } from "@/components/home/NewsSection";
 import { EventsSection } from "@/components/home/EventsSection";
 import { ReadyToConnect } from "@/components/home/ReadyToConnect";
 import { SecretDivider } from "@/components/effects/SecretDivider";
+import { PopupPoster } from "@/components/common/PopupPoster";
 import { prisma } from "@/lib/prisma";
+import { isLive } from "@/lib/popups";
 import type { StatItem } from "@/types";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -56,6 +58,7 @@ type Stats = Awaited<ReturnType<typeof prisma.stat.findMany>>;
 type Testimonials = Awaited<ReturnType<typeof prisma.testimonial.findMany>>;
 type News = Awaited<ReturnType<typeof prisma.news.findMany>>;
 type Events = Awaited<ReturnType<typeof prisma.event.findMany>>;
+type Popups = Awaited<ReturnType<typeof prisma.popup.findMany>>;
 type States = Awaited<ReturnType<typeof prisma.stateAssociation.findMany<{
   select: { slug: true; stateName: true };
   orderBy: { stateName: "asc" };
@@ -67,13 +70,18 @@ export default async function HomePage() {
   let news: News;
   let events: Events;
   let states: States;
+  let popups: Popups;
   try {
-    [stats, testimonials, news, events, states] = await Promise.all([
+    [stats, testimonials, news, events, states, popups] = await Promise.all([
       prisma.stat.findMany({ orderBy: { order: "asc" } }),
       prisma.testimonial.findMany({ where: { deletedAt: null }, orderBy: { order: "asc" } }),
       prisma.news.findMany({ where: { isDemo: false, deletedAt: null }, orderBy: { publishedAt: "desc" }, take: 3 }),
       prisma.event.findMany({ where: { isUpcoming: true, deletedAt: null }, orderBy: { startDate: "asc" }, take: 3 }),
       prisma.stateAssociation.findMany({ where: { deletedAt: null }, select: { slug: true, stateName: true }, orderBy: { stateName: "asc" } }),
+      // Whether a poster is inside its run is arithmetic on two columns, which
+      // Postgres cannot index anyway — and this table holds a handful of rows,
+      // so the window is applied below in JS rather than as a clever query.
+      prisma.popup.findMany({ where: { isActive: true }, orderBy: { startsAt: "desc" } }),
     ]);
   } catch {
     stats = fallbackStats;
@@ -81,6 +89,7 @@ export default async function HomePage() {
     news = [];
     events = [];
     states = [];
+    popups = [];
   }
 
   return (
@@ -104,6 +113,7 @@ export default async function HomePage() {
       <NewsSection news={news} />
       <EventsSection events={events} />
       <ReadyToConnect />
+      <PopupPoster posters={popups.filter((p) => isLive(p))} />
     </>
   );
 }

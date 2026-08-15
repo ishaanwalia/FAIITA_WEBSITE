@@ -325,3 +325,30 @@ model AuditLog {
   @@index([createdAt])
   @@index([model, recordId])
 }
+
+/// A full-screen poster shown once per browser session over the homepage —
+/// festival greetings, announcements. Two images because one artwork cannot be
+/// both 9:16 and 16:9; the browser picks by viewport orientation.
+///
+/// Runs for `days` from `startsAt`, then a daily cron deletes the row *and* its
+/// two blobs (app/api/cron/popups/route.ts). That is why there is no deletedAt:
+/// an expired poster is meant to leave nothing behind, which is also the reason
+/// the CMS delete on this one model is permanent rather than restorable.
+model Popup {
+  id             String   @id @default(cuid())
+  /// Internal name — never shown to visitors, only in the CMS list.
+  title          String
+  /// 9:16 artwork, shown to portrait viewports (phones held upright).
+  imagePortrait  String
+  /// 16:9 artwork, shown to landscape viewports (desktops, tablets).
+  imageLandscape String
+  /// Optional — makes the poster itself a link.
+  linkUrl        String?
+  startsAt       DateTime @default(now())
+  days           Int      @default(7)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+
+  @@index([startsAt])
+}

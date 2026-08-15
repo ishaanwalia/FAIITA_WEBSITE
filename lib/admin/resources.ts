@@ -337,6 +337,30 @@ const TESTIMONIALS: Resource = {
   ],
 };
 
+const POPUPS: Resource = {
+  key: "popups",
+  model: "popup",
+  label: "Pop-up posters",
+  singular: "poster",
+  labelField: "title",
+  listFields: ["title", "startsAt", "days", "isActive"],
+  orderBy: { startsAt: "desc" },
+  // No deletedAt on this model: an expired poster is deleted outright, images
+  // and all, by the nightly cron — a "recently deleted" bin for something the
+  // site is already throwing away on a timer would only be confusing.
+  softDelete: false,
+  revalidate: ["/"],
+  fields: [
+    { name: "title", label: "Poster name", type: "text", required: true, help: "Only ever seen here, e.g. “Independence Day 2026”." },
+    { name: "imagePortrait", label: "Poster — tall (9:16)", type: "image", required: true, help: "Shown on phones held upright." },
+    { name: "imageLandscape", label: "Poster — wide (16:9)", type: "image", required: true, help: "Shown on laptops, desktops and tablets." },
+    { name: "startsAt", label: "Starts", type: "date", required: true },
+    { name: "days", label: "Show for (days)", type: "number", required: true, help: "Counted from the start date. When it runs out the poster stops appearing and both pictures are deleted for good." },
+    { name: "linkUrl", label: "Link when tapped", type: "text", help: "Optional. A full https:// address, or a path on this site like /resources/events." },
+    { name: "isActive", label: "Live", type: "boolean", help: "Untick to hold a poster back without changing its dates." },
+  ],
+};
+
 /**
  * What the public forms sent in. Nobody authors these — they are read, acted
  * on, and eventually deleted — so they reuse the list and detail screens with
@@ -391,6 +415,7 @@ export const RESOURCES: Resource[] = [
   LEADERS,
   NEWSLETTERS,
   TESTIMONIALS,
+  POPUPS,
   CONTACT,
   SUBSCRIBERS,
 ];

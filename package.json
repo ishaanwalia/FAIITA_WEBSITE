@@ -21,6 +21,7 @@
     "admin:check": "tsx scripts/check-auth.ts",
     "admin:forms": "tsx scripts/check-admin-forms.ts",
     "admin:upload-check": "tsx scripts/check-upload.ts",
+    "popups:check": "tsx scripts/check-popups.ts",
     "render:snap": "tsx scripts/verify-render.ts snap",
     "render:diff": "tsx scripts/verify-render.ts diff before after"
   },
