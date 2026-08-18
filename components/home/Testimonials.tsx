@@ -53,7 +53,17 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialItem[]
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          <div className="relative h-[280px] sm:h-[240px]">
+          {/*
+            Fixed height so slides don't jump as the carousel advances — and
+            because GlassCard clips overflow, it also decides how long a quote
+            may be. Sized for the 250-character cap the testimonial form
+            enforces: chrome (48 padding + 28 quote icon + 32 gaps + 69
+            figcaption) = 177px, plus 3 lines at 22.75px on desktop and 9 on a
+            320px phone. Change this and TESTIMONIAL_MAX_CHARS in
+            forms/create-faiita-forms.gs together, or quotes start getting cut
+            off mid-sentence.
+          */}
+          <div className="relative h-[380px] sm:h-[260px]">
             <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
                 key={t.id}
