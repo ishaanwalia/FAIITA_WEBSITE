@@ -100,7 +100,7 @@ export default async function ContactPage({
           <div className="rounded-3xl border border-border bg-card p-8">
             <h2 className="font-display text-xl font-bold text-navy-800">Send Us a Message</h2>
             <p className="mt-1.5 text-sm text-muted-foreground">
-              Fill out the form and our team will respond within 2 business days.
+              Fill out the form and our team will respond at the earliest.
             </p>
             <div className="mt-6">
               <ContactForm defaultSubject={copy?.subject} />
