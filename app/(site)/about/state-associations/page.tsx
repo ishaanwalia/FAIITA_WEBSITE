@@ -12,7 +12,12 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-export default async function StateAssociationsPage() {
+export default async function StateAssociationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ zone?: string }>;
+}) {
+  const { zone } = await searchParams;
   const states = (
     await prisma.stateAssociation.findMany({
       where: { deletedAt: null },
@@ -33,7 +38,7 @@ export default async function StateAssociationsPage() {
           <h2 id="all-state-associations" className="sr-only">
             All state associations
           </h2>
-          <StateAssociationsGrid states={states} />
+          <StateAssociationsGrid states={states} initialZone={zone} />
         </div>
       </section>
     </>

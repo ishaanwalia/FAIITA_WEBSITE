@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Search, Users } from "lucide-react";
@@ -21,7 +21,7 @@ type StateRow = {
 // NECTA (the North-East association) is grouped under the East zone.
 const ZONE_ORDER = ["North", "East", "Central", "West", "South"];
 
-export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
+export function StateAssociationsGrid({ states, initialZone }: { states: StateRow[]; initialZone?: string }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
 
@@ -30,24 +30,15 @@ export function StateAssociationsGrid({ states }: { states: StateRow[] }) {
     [states]
   );
 
-  // The zone lives in the URL (not local state) so that browser/swipe back
-  // from an association's page restores the same filtered view instead of
-  // resetting to "All". The *initial* read is plain window.location, not
-  // useSearchParams(): a useSearchParams() consumer on this statically
-  // generated page forced its Suspense boundary into
-  // BAILOUT_TO_CLIENT_SIDE_RENDERING, which on a hard navigation never
-  // resolved client-side either — the whole grid stayed blank. Writes go
-  // through router.replace() (not raw history.replaceState) — bypassing
-  // Next's router desynced its own history bookkeeping from the real
-  // browser history stack, so Back skipped straight past this page.
-  const [region, setRegionState] = useState("All");
-  useEffect(() => {
-    const zone = new URLSearchParams(window.location.search).get("zone");
-    const match = regions.find((r) => r.toLowerCase() === zone?.toLowerCase());
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (match) setRegionState(match);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Initial zone comes from the server (searchParams), so it's always correct
+  // regardless of navigation type — no window.location race on soft-nav.
+  // Writes go through router.replace() so the browser history stack stays in
+  // sync and Back from an association page restores the right zone filter.
+  const [region, setRegionState] = useState(() => {
+    if (!initialZone) return "All";
+    const normalized = initialZone.charAt(0).toUpperCase() + initialZone.slice(1).toLowerCase();
+    return ZONE_ORDER.includes(normalized) ? normalized : "All";
+  });
 
   const setRegion = (r: string) => {
     setRegionState(r);
