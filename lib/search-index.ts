@@ -67,11 +67,11 @@ export async function getSearchIndex(): Promise<SearchEntry[]> {
       type: "Newsletter",
     })),
     // No individual leader pages exist — every card lives on one shared
-    // page, so a name match still has to land somewhere useful.
+    // page. The ?member= param pre-selects the spotlight card for that person.
     ...leaders.map((l): SearchEntry => ({
       title: l.name,
       description: [l.role, l.associationName, l.stateName].filter(Boolean).join(" — "),
-      href: "/about/leadership",
+      href: `/about/leadership?member=${l.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`,
       type: "Leader",
     })),
   ];

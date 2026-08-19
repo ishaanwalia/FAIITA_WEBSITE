@@ -29,6 +29,10 @@ export type LeaderData = {
   website?: string;
 };
 
+function nameSlug(name: string) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 /** "https://www.anjalirajkot.com" → "anjalirajkot.com" for display */
 function prettyUrl(url: string) {
   return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
@@ -66,7 +70,18 @@ function gridSpan(role: string) {
 }
 
 export function Leadership({ leaders }: { leaders: LeaderData[] }) {
-  const [featuredId, setFeaturedId] = useState<string | undefined>(leaders[0]?.id);
+  const [featuredId, setFeaturedId] = useState<string | undefined>(() => {
+    // Lazy initialiser: runs once on the client, never on the server.
+    // Reads ?member= to pre-select the spotlight card (e.g. from site search).
+    if (typeof window !== "undefined") {
+      const slug = new URLSearchParams(window.location.search).get("member");
+      if (slug) {
+        const match = leaders.find((l) => nameSlug(l.name) === slug);
+        if (match) return match.id;
+      }
+    }
+    return leaders[0]?.id;
+  });
   const featured = leaders.find((l) => l.id === featuredId) ?? leaders[0];
   const spotlightRef = useRef<HTMLDivElement>(null);
   const officers = leaders.filter((l) => l.role !== "GB Member");
@@ -76,6 +91,12 @@ export function Leadership({ leaders }: { leaders: LeaderData[] }) {
   // up to it — otherwise the selection appears to do nothing.
   const featureLeader = (id: string) => {
     setFeaturedId(id);
+    const leader = leaders.find((l) => l.id === id);
+    if (leader) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("member", nameSlug(leader.name));
+      history.replaceState(null, "", url.toString());
+    }
     requestAnimationFrame(() => spotlightRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
