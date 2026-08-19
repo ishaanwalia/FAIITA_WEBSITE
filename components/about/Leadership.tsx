@@ -69,19 +69,8 @@ function gridSpan(role: string) {
   return `${MEMBER_ROWS} lg:col-span-3`;
 }
 
-export function Leadership({ leaders }: { leaders: LeaderData[] }) {
-  const [featuredId, setFeaturedId] = useState<string | undefined>(() => {
-    // Lazy initialiser: runs once on the client, never on the server.
-    // Reads ?member= to pre-select the spotlight card (e.g. from site search).
-    if (typeof window !== "undefined") {
-      const slug = new URLSearchParams(window.location.search).get("member");
-      if (slug) {
-        const match = leaders.find((l) => nameSlug(l.name) === slug);
-        if (match) return match.id;
-      }
-    }
-    return leaders[0]?.id;
-  });
+export function Leadership({ leaders, initialLeaderId }: { leaders: LeaderData[]; initialLeaderId?: string }) {
+  const [featuredId, setFeaturedId] = useState<string | undefined>(initialLeaderId ?? leaders[0]?.id);
   const featured = leaders.find((l) => l.id === featuredId) ?? leaders[0];
   const spotlightRef = useRef<HTMLDivElement>(null);
   const officers = leaders.filter((l) => l.role !== "GB Member");

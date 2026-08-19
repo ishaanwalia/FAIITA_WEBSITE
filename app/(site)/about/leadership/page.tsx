@@ -16,7 +16,16 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-export default async function LeadershipPage() {
+function nameSlug(name: string) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+export default async function LeadershipPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ member?: string }>;
+}) {
+  const { member } = await searchParams;
   // Ordered by the `order` column and nothing else.
   //
   // This page used to re-sort by a hardcoded list of role names, which meant
@@ -79,7 +88,10 @@ export default async function LeadershipPage() {
 
       <section className="bg-background py-24">
         <div className="container-page">
-          <Leadership leaders={current} />
+          <Leadership
+            leaders={current}
+            initialLeaderId={member ? current.find((l) => nameSlug(l.name) === member)?.id : undefined}
+          />
         </div>
       </section>
     </>
