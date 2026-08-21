@@ -38,7 +38,7 @@ export default async function StateAssociationsPage({
           <h2 id="all-state-associations" className="sr-only">
             All state associations
           </h2>
-          <StateAssociationsGrid states={states} initialZone={zone} key={zone ?? "all"} />
+          <StateAssociationsGrid states={states} initialZone={zone} key={zone ?? ""} />
         </div>
       </section>
     </>

@@ -30,19 +30,24 @@ export function StateAssociationsGrid({ states, initialZone }: { states: StateRo
     [states]
   );
 
-  // Initial zone comes from the server (searchParams), so it's always correct
-  // regardless of navigation type — no window.location race on soft-nav.
-  // Writes go through router.replace() so the browser history stack stays in
-  // sync and Back from an association page restores the right zone filter.
-  const [region, setRegionState] = useState(() => {
-    if (!initialZone) return "All";
-    const normalized = initialZone.charAt(0).toUpperCase() + initialZone.slice(1).toLowerCase();
-    return ZONE_ORDER.includes(normalized) ? normalized : "All";
-  });
+  // Zone is purely server-driven: the server reads searchParams and passes
+  // initialZone as a prop. We never call setRegionState on a click — that
+  // would snapshot a stale "North" into the router cache for the "All" URL,
+  // causing Back to restore the wrong filter. Instead, every zone button is
+  // just a router.push; the key prop in page.tsx forces a fresh remount on
+  // each navigation so the initializer always runs with the correct value.
+  const region = useMemo(() => {
+    if (!initialZone || initialZone.toLowerCase() === "all") return "All";
+    const cap = initialZone.charAt(0).toUpperCase() + initialZone.slice(1).toLowerCase();
+    return ZONE_ORDER.includes(cap) ? cap : "All";
+  }, [initialZone]);
 
+  // "All" gets its own ?zone=all URL so every zone (including All) is a
+  // distinct history entry and Back always lands on the right filter.
   const setRegion = (r: string) => {
-    setRegionState(r);
-    const url = r === "All" ? "/about/state-associations" : `/about/state-associations?zone=${r.toLowerCase()}`;
+    const url = r === "All"
+      ? "/about/state-associations?zone=all"
+      : `/about/state-associations?zone=${r.toLowerCase()}`;
     router.push(url, { scroll: false });
   };
 
