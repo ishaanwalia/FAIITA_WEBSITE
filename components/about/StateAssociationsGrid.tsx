@@ -42,12 +42,8 @@ export function StateAssociationsGrid({ states, initialZone }: { states: StateRo
 
   const setRegion = (r: string) => {
     setRegionState(r);
-    const params = new URLSearchParams(window.location.search);
-    if (r === "All") params.delete("zone");
-    else params.set("zone", r.toLowerCase());
-    const qs = params.toString();
-    const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
-    router.replace(url, { scroll: false });
+    const url = r === "All" ? "/about/state-associations" : `/about/state-associations?zone=${r.toLowerCase()}`;
+    router.push(url, { scroll: false });
   };
 
   // A-Z by association name; "All" shows one flat list, a zone tab shows only
