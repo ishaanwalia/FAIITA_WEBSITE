@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Loader2, Send, CheckCircle2 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { NEWSLETTER_PURPOSE } from "@/lib/dpdp";
 
 export function NewsletterForm() {
   const [email, setEmail] = useState("");
@@ -28,13 +30,23 @@ export function NewsletterForm() {
 
   if (status === "success") {
     return (
-      <p className="flex items-center gap-2 text-sm text-federal-green-dark">
-        <CheckCircle2 className="h-4 w-4" /> Subscribed — thank you!
-      </p>
+      <div className="space-y-2">
+        <p className="flex items-center gap-2 text-sm text-federal-green-dark">
+          <CheckCircle2 className="h-4 w-4" /> Subscribed — thank you!
+        </p>
+        <p className="text-xs text-white/60">
+          Changed your mind?{" "}
+          <Link href="/unsubscribe" className="underline hover:text-white">
+            Unsubscribe
+          </Link>
+          .
+        </p>
+      </div>
     );
   }
 
   return (
+    <>
     <form onSubmit={onSubmit} className="flex gap-2">
       <input
         type="text"
@@ -68,5 +80,24 @@ export function NewsletterForm() {
         {status === "loading" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
       </MagneticButton>
     </form>
+
+    {/* Notice at the point of collection — DPDP Sec. 5.
+        Typing an address into a box labelled "subscribe" is already a clear
+        affirmative action for that purpose, so a separate checkbox is not what
+        was missing. What was missing is telling the person what the address is
+        used for and how to stop — and, under Sec. 6(4), a way out that is as
+        easy as the way in. `/unsubscribe` mirrors this form exactly. */}
+    <p className="mt-3 text-xs leading-relaxed text-white/60">
+      {NEWSLETTER_PURPOSE}{" "}
+      <Link href="/unsubscribe" className="underline hover:text-white">
+        Unsubscribe
+      </Link>{" "}
+      or read our{" "}
+      <Link href="/privacy" className="underline hover:text-white">
+        privacy policy
+      </Link>
+      .
+    </p>
+    </>
   );
 }
